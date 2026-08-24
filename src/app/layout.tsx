@@ -7,6 +7,7 @@ import { site } from "@/lib/site-data";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bloko.com.pt";
+const isProduction = siteUrl === "https://bloko.com.pt";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
   ],
   applicationName: "BLOKO",
   alternates: { canonical: "/" },
-  robots: { index: true, follow: true },
+  robots: { index: isProduction, follow: isProduction },
   icons: { icon: "/icon.svg" },
   openGraph: {
     type: "website",

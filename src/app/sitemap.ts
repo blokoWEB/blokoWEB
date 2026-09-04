@@ -11,6 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/padel/aulas", priority: 0.7, changeFrequency: "weekly" },
     { path: "/academia", priority: 0.7, changeFrequency: "weekly" },
     { path: "/torneios", priority: 0.7, changeFrequency: "weekly" },
+    { path: "/sobre", priority: 0.6, changeFrequency: "monthly" },
+    { path: "/sobre/eventos", priority: 0.6, changeFrequency: "monthly" },
     { path: "/blokos", priority: 0.6, changeFrequency: "monthly" },
     { path: "/patrocinadores", priority: 0.5, changeFrequency: "monthly" },
     { path: "/contactos", priority: 0.6, changeFrequency: "monthly" },

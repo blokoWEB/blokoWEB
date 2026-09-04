@@ -2,12 +2,25 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ArrowRight, Sparkles, Trophy, X } from "lucide-react";
+import { ArrowRight, Images, Sparkles, Trophy, X } from "lucide-react";
 import type { TournamentEntry } from "@/lib/site-data";
+import GalleryLightbox from "./GalleryLightbox";
 
-export default function TournamentCard({ tournament }: { tournament: TournamentEntry }) {
+export default function TournamentCard({
+  tournament,
+  galleryType = "torneios",
+}: {
+  tournament: TournamentEntry;
+  galleryType?: "torneios" | "eventos";
+}) {
   const [open, setOpen] = useState(false);
-  const hasMore = !!(tournament.details?.length || tournament.poster || tournament.registerUrl);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const hasMore = !!(
+    tournament.details?.length ||
+    tournament.poster ||
+    tournament.registerUrl ||
+    tournament.gallerySlug
+  );
 
   return (
     <>
@@ -84,18 +97,38 @@ export default function TournamentCard({ tournament }: { tournament: TournamentE
                 ))}
               </ul>
             )}
-            {tournament.registerUrl && (
-              <a
-                href={tournament.registerUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors"
-              >
-                Inscrever <ArrowRight size={15} />
-              </a>
-            )}
+            <div className="flex flex-wrap gap-3">
+              {tournament.registerUrl && (
+                <a
+                  href={tournament.registerUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors"
+                >
+                  Inscrever <ArrowRight size={15} />
+                </a>
+              )}
+              {tournament.gallerySlug && (
+                <button
+                  onClick={() => setGalleryOpen(true)}
+                  className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+                >
+                  <Images size={15} /> Ver Galeria
+                </button>
+              )}
+            </div>
           </div>
         </div>
+      )}
+
+      {tournament.gallerySlug && (
+        <GalleryLightbox
+          open={galleryOpen}
+          onClose={() => setGalleryOpen(false)}
+          type={galleryType}
+          slug={tournament.gallerySlug}
+          title={tournament.name}
+        />
       )}
     </>
   );

@@ -38,6 +38,11 @@ export type NavLink = {
 
 export const navLinks: NavLink[] = [
   {
+    href: "/sobre",
+    label: "Sobre",
+    submenu: [{ href: "/sobre/eventos", label: "Eventos" }],
+  },
+  {
     href: "/ginasio",
     label: "Ginásio",
     submenu: [{ href: "/aulas?categoria=ginasio", label: "Aulas de Ginásio" }],
@@ -187,6 +192,8 @@ export type TournamentEntry = {
   registerUrl?: string;
   example?: boolean;
   comingSoon?: boolean;
+  /** Folder name under the "gallery" Supabase Storage bucket for this entry's photos. */
+  gallerySlug?: string;
 };
 
 // Torneios Sociais — os grandes eventos do clube, 3 a 4 por ano.
@@ -219,6 +226,7 @@ export const pastTournaments: TournamentEntry[] = [
     ],
     poster: "/images/posters/poster-residentes-braganca.jpg",
     registerUrl: "https://wa.me/351912129102",
+    gallerySlug: "residentes-braganca-2026",
   },
   {
     slug: "big-padel-masters-ii",
@@ -228,6 +236,7 @@ export const pastTournaments: TournamentEntry[] = [
     summary: "2º Torneio Social McDonald's Bragança.",
     details: ["Categorias: M4, M5, M6, F6, MX"],
     poster: "/images/posters/poster-big-padel-masters-ii.jpg",
+    gallerySlug: "big-padel-masters-ii",
   },
   {
     slug: "big-padel-masters",
@@ -237,6 +246,7 @@ export const pastTournaments: TournamentEntry[] = [
     summary: "1º Torneio Social McDonald's Bragança.",
     details: ["Categorias: M4, M5, M6, Mx"],
     poster: "/images/posters/poster-big-padel-masters.jpg",
+    gallerySlug: "big-padel-masters",
   },
   {
     slug: "liga-corporativa-grandson",
@@ -245,6 +255,7 @@ export const pastTournaments: TournamentEntry[] = [
     tag: "Liga",
     summary: "Liga corporativa em parceria com a Grandson Interiores.",
     poster: "/images/posters/poster-liga-corporativa-grandson.jpg",
+    gallerySlug: "liga-corporativa-grandson",
   },
   {
     slug: "torneio-social-mudda-domus",
@@ -254,29 +265,38 @@ export const pastTournaments: TournamentEntry[] = [
     summary: "Mais de 700€ em prémios.",
     details: ["Categorias: M4, M5, M6, F6, MX"],
     poster: "/images/posters/poster-torneio-social-mudda-domus.jpg",
+    gallerySlug: "torneio-social-mudda-domus",
   },
+  { slug: "torneio-50-anos", name: "Torneio 50 Anos", dates: "", tag: "Torneio Social", summary: "" },
+];
+
+// Eventos sociais/temáticos do clube — distintos dos Torneios (sem formato
+// competitivo/ranking): festas, aniversários, edições especiais.
+export const events: TournamentEntry[] = [
   {
     slug: "bloko-em-festa",
     name: "BLOKO em Festa — Torneio Duplo Padel",
     dates: "5 de Julho",
-    tag: "Torneio Social",
+    tag: "Evento",
     summary: "8 duplas masculinas + 8 duplas femininas. Mais de 100€ em prémios.",
     poster: "/images/posters/poster-bloko-em-festa.jpg",
+    gallerySlug: "bloko-em-festa",
   },
-  { slug: "torneio-50-anos", name: "Torneio 50 Anos", dates: "", tag: "Torneio Social", summary: "" },
   {
     slug: "i-aniversario-bloko",
     name: "I Aniversário BLOKO",
     dates: "",
-    tag: "Torneio Social",
+    tag: "Aniversário",
     summary: "",
+    gallerySlug: "i-aniversario-bloko",
   },
   {
     slug: "bloko-especial-halloween",
-    name: "BLOKO Especial Halloween",
+    name: "BLOKO Especial Halloween — Edição Luz Negra",
     dates: "",
-    tag: "Torneio Social",
-    summary: "",
+    tag: "Halloween",
+    summary: "Edição especial de Halloween em luz negra, no padel e no ginásio.",
+    gallerySlug: "bloko-especial-halloween",
   },
 ];
 

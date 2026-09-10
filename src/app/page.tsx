@@ -16,7 +16,7 @@ const gymClasses = classTypes.filter((c) => c.category === "ginasio");
 export default function Home() {
   return (
     <div>
-      <ParallaxDive image="/images/real-hero-venue.jpg">
+      <ParallaxDive image="/images/real-hero-venue.jpg" mobilePosition="55% 30%">
         <p className="font-display text-xs md:text-sm tracking-[0.4em] uppercase text-[var(--color-lime)] mb-6">
           Bragança
         </p>

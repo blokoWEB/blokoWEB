@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { CalendarClock, Check, Clock, Loader2, MapPin, Users, X } from "lucide-react";
+import Portal from "@/components/Portal";
 import ScrollReveal from "@/components/ScrollReveal";
 import { classCategories, classTypes, type ClassCategoryKey } from "@/lib/site-data";
 import type { ClassSessionWithCount } from "@/lib/types";
@@ -323,6 +324,7 @@ function BookingModal({
   }
 
   return (
+    <Portal>
     <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/70 backdrop-blur-sm">
       <div className="glass-card w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-8 relative">
         <button
@@ -412,5 +414,6 @@ function BookingModal({
         )}
       </div>
     </div>
+    </Portal>
   );
 }

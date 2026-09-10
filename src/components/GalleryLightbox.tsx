@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Download, ImageOff, Loader2, X } from "lucide-react";
+import Portal from "./Portal";
 
 type GalleryImage = { name: string; thumb: string; full: string; original: string };
 
@@ -81,6 +82,7 @@ export default function GalleryLightbox({
   if (!open) return null;
 
   return (
+    <Portal>
     <div className="fixed inset-0 z-[80] bg-black/90 backdrop-blur-sm flex flex-col">
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
         <h3 className="font-display uppercase text-sm text-white truncate pr-4">
@@ -137,6 +139,7 @@ export default function GalleryLightbox({
         />
       )}
     </div>
+    </Portal>
   );
 }
 

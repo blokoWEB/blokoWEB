@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowRight, FileText, Images, PlayCircle, Sparkles, Trophy, Users, X } from "lucide-react";
 import type { TournamentEntry } from "@/lib/site-data";
 import GalleryLightbox from "./GalleryLightbox";
+import Portal from "./Portal";
 import VideoModal from "./VideoModal";
 
 export default function TournamentCard({
@@ -88,6 +89,7 @@ export default function TournamentCard({
       </button>
 
       {open && (
+        <Portal>
         <div
           className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-sm"
           onClick={() => setOpen(false)}
@@ -181,6 +183,7 @@ export default function TournamentCard({
             </div>
           </div>
         </div>
+        </Portal>
       )}
 
       {tournament.gallerySlug && (

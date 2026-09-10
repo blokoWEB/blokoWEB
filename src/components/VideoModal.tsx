@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Loader2, VideoOff, X } from "lucide-react";
+import Portal from "./Portal";
 
 type VideoItem = { name: string; url: string };
 
@@ -46,6 +47,7 @@ export default function VideoModal({
   const current = videos[index];
 
   return (
+    <Portal>
     <div className="fixed inset-0 z-[85] bg-black/95 flex flex-col">
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
         <h3 className="font-display uppercase text-sm text-white truncate pr-4">Vídeo — {title}</h3>
@@ -103,5 +105,6 @@ export default function VideoModal({
         )}
       </div>
     </div>
+    </Portal>
   );
 }

@@ -190,6 +190,8 @@ export type TournamentEntry = {
   details?: string[];
   poster?: string | null;
   registerUrl?: string;
+  regulamentoUrl?: string;
+  partnerUrl?: string;
   example?: boolean;
   comingSoon?: boolean;
   /** Folder name under the "gallery" Supabase Storage bucket for this entry's photos. */
@@ -209,6 +211,9 @@ export const upcomingTournaments: TournamentEntry[] = [
     summary: "Brevemente mais info.",
     poster: null,
     comingSoon: true,
+    registerUrl: "#",
+    regulamentoUrl: "#",
+    partnerUrl: site.whatsappCommunityUrl,
   },
 ];
 

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ArrowRight, Images, PlayCircle, Sparkles, Trophy, X } from "lucide-react";
+import { ArrowRight, FileText, Images, PlayCircle, Sparkles, Trophy, Users, X } from "lucide-react";
 import type { TournamentEntry } from "@/lib/site-data";
 import GalleryLightbox from "./GalleryLightbox";
 import VideoModal from "./VideoModal";
@@ -140,6 +140,26 @@ export default function TournamentCard({
                   className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors"
                 >
                   Inscrever <ArrowRight size={15} />
+                </a>
+              )}
+              {tournament.regulamentoUrl && (
+                <a
+                  href={tournament.regulamentoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+                >
+                  <FileText size={15} /> Regulamento
+                </a>
+              )}
+              {tournament.partnerUrl && (
+                <a
+                  href={tournament.partnerUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+                >
+                  <Users size={15} /> Encontrar Parceiro
                 </a>
               )}
               {tournament.gallerySlug && (

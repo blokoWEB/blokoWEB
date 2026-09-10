@@ -174,7 +174,7 @@ export default function TorneiosPage() {
       </section>
 
       {/* Regulamento */}
-      <section className="bg-[var(--color-bg-elevated)] py-24">
+      <section id="regulamento" className="bg-[var(--color-bg-elevated)] py-24">
         <div className="container-bloko">
           <ScrollReveal className="max-w-2xl mb-14">
             <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">

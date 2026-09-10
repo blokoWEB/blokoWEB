@@ -16,7 +16,7 @@ export const metadata = pageMetadata({
 export default function EventosPage() {
   return (
     <div>
-      <ParallaxDive image="/images/real-tournament.jpg">
+      <ParallaxDive image="https://jucvqopkwuwgkvguupqy.supabase.co/storage/v1/object/public/gallery/eventos/bloko-em-festa-edicao-2/full/IMG_4403.jpg">
         <p className="font-display text-xs tracking-[0.4em] uppercase text-[var(--color-lime)] mb-4">
           Comunidade
         </p>

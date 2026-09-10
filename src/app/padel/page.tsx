@@ -25,20 +25,20 @@ export default function PadelPage() {
         </h1>
         <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
           <a
-            href={site.playtomicUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex font-display uppercase tracking-wide px-8 py-4 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
-          >
-            Reservar via Playtomic
-          </a>
-          <a
             href={site.whatsappBookingUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 font-display uppercase text-xs tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white/70 hover:border-white/40 hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
           >
-            <MessageCircle size={15} /> Ou marca via WhatsApp
+            <MessageCircle size={17} /> Reservar via WhatsApp
+          </a>
+          <a
+            href={site.playtomicUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex font-display uppercase text-xs tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white/70 hover:border-white/40 hover:text-white transition-colors"
+          >
+            Ou via Playtomic
           </a>
         </div>
       </ParallaxDive>

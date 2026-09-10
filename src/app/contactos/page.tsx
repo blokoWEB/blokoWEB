@@ -12,8 +12,6 @@ export const metadata = pageMetadata({
 });
 
 export default function ContactosPage() {
-  const mapQuery = encodeURIComponent(site.address);
-
   return (
     <div>
       <ParallaxDive image="/images/real-exterior.jpg">
@@ -117,7 +115,7 @@ export default function ContactosPage() {
             <div className="rounded-2xl overflow-hidden glow-blue h-full min-h-[380px]">
               <iframe
                 title="Localização BLOKO"
-                src={`https://maps.google.com/maps?q=${mapQuery}&output=embed`}
+                src="https://maps.google.com/maps?q=BLOKO+-+Padel,+Gym+%26+Lounge&ll=41.7895488,-6.7826855&z=17&output=embed"
                 className="w-full h-full min-h-[380px] border-0"
                 loading="lazy"
               />

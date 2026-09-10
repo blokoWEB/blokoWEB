@@ -15,11 +15,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Parâmetros type/slug inválidos." }, { status: 400 });
   }
 
-  const path = `${type}/${slug}`;
+  const base = `${type}/${slug}`;
 
   try {
     const supabase = getSupabaseAdmin();
-    const { data, error } = await supabase.storage.from(BUCKET).list(path, {
+    const { data, error } = await supabase.storage.from(BUCKET).list(`${base}/thumb`, {
       limit,
       offset,
       sortBy: { column: "name", order: "asc" },
@@ -33,8 +33,13 @@ export async function GET(req: NextRequest) {
     const files = (data ?? []).filter((f) => f.id !== null); // exclude placeholder folder entries
 
     const images = files.map((f) => {
-      const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(`${path}/${f.name}`);
-      return { name: f.name, url: pub.publicUrl };
+      const thumb = supabase.storage.from(BUCKET).getPublicUrl(`${base}/thumb/${f.name}`).data
+        .publicUrl;
+      const full = supabase.storage.from(BUCKET).getPublicUrl(`${base}/full/${f.name}`).data
+        .publicUrl;
+      const original = supabase.storage.from(BUCKET).getPublicUrl(`${base}/original/${f.name}`)
+        .data.publicUrl;
+      return { name: f.name, thumb, full, original };
     });
 
     return NextResponse.json({ images, hasMore: files.length === limit });

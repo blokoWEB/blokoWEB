@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Download, ImageOff, Loader2, X } from "lucide-react";
 
-type GalleryImage = { name: string; url: string };
+type GalleryImage = { name: string; thumb: string; full: string; original: string };
 
 const LIMIT = 24;
 
@@ -113,7 +113,7 @@ export default function GalleryLightbox({
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={img.url}
+                      src={img.thumb}
                       alt={`${title} — foto ${i + 1}`}
                       loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -185,13 +185,13 @@ function SinglePhotoView({
 
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={img.url}
+        src={img.full}
         alt={`${title} — foto ${index + 1}`}
         className="max-w-full max-h-[75vh] object-contain rounded-lg"
       />
 
       <a
-        href={img.url}
+        href={img.original}
         download={img.name}
         target="_blank"
         rel="noreferrer"

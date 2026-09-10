@@ -194,6 +194,8 @@ export type TournamentEntry = {
   comingSoon?: boolean;
   /** Folder name under the "gallery" Supabase Storage bucket for this entry's photos. */
   gallerySlug?: string;
+  /** Whether a recap video exists under gallery/<type>/<gallerySlug>/video/. */
+  hasVideo?: boolean;
 };
 
 // Torneios Sociais — os grandes eventos do clube, 3 a 4 por ano.
@@ -211,7 +213,29 @@ export const upcomingTournaments: TournamentEntry[] = [
 ];
 
 // Torneios Sociais já realizados — nomes reais dos eventos do clube.
+// Ordenados do mais recente para o mais antigo.
 export const pastTournaments: TournamentEntry[] = [
+  {
+    slug: "big-padel-masters-ii",
+    name: "Big Padel Masters II",
+    dates: "10 a 12 de Abril",
+    tag: "Torneio Social",
+    summary: "2º Torneio Social McDonald's Bragança.",
+    details: ["Categorias: M4, M5, M6, F6, MX"],
+    poster: "/images/posters/poster-big-padel-masters-ii.jpg",
+    gallerySlug: "big-padel-masters-ii",
+  },
+  {
+    slug: "torneio-social-mudda-domus",
+    name: "Torneio Social — Rede Imobiliária Mudda Domus",
+    dates: "9 a 11 de Janeiro",
+    tag: "Torneio Social",
+    summary: "Mais de 700€ em prémios.",
+    details: ["Categorias: M4, M5, M6, F6, MX"],
+    poster: "/images/posters/poster-torneio-social-mudda-domus.jpg",
+    gallerySlug: "torneio-social-mudda-domus",
+    hasVideo: true,
+  },
   {
     slug: "residentes-braganca-2026",
     name: "Torneio de Padel — Residentes no Distrito de Bragança",
@@ -229,16 +253,6 @@ export const pastTournaments: TournamentEntry[] = [
     gallerySlug: "residentes-braganca-2026",
   },
   {
-    slug: "big-padel-masters-ii",
-    name: "Big Padel Masters II",
-    dates: "10 a 12 de Abril",
-    tag: "Torneio Social",
-    summary: "2º Torneio Social McDonald's Bragança.",
-    details: ["Categorias: M4, M5, M6, F6, MX"],
-    poster: "/images/posters/poster-big-padel-masters-ii.jpg",
-    gallerySlug: "big-padel-masters-ii",
-  },
-  {
     slug: "big-padel-masters",
     name: "Big Padel Masters",
     dates: "2 a 4 de Maio",
@@ -247,6 +261,7 @@ export const pastTournaments: TournamentEntry[] = [
     details: ["Categorias: M4, M5, M6, Mx"],
     poster: "/images/posters/poster-big-padel-masters.jpg",
     gallerySlug: "big-padel-masters",
+    hasVideo: true,
   },
   {
     slug: "liga-corporativa-grandson",
@@ -257,37 +272,31 @@ export const pastTournaments: TournamentEntry[] = [
     poster: "/images/posters/poster-liga-corporativa-grandson.jpg",
     gallerySlug: "liga-corporativa-grandson",
   },
-  {
-    slug: "torneio-social-mudda-domus",
-    name: "Torneio Social — Rede Imobiliária Mudda Domus",
-    dates: "9 a 11 de Janeiro",
-    tag: "Torneio Social",
-    summary: "Mais de 700€ em prémios.",
-    details: ["Categorias: M4, M5, M6, F6, MX"],
-    poster: "/images/posters/poster-torneio-social-mudda-domus.jpg",
-    gallerySlug: "torneio-social-mudda-domus",
-  },
-  { slug: "torneio-50-anos", name: "Torneio 50 Anos", dates: "", tag: "Torneio Social", summary: "" },
 ];
 
 // Eventos sociais/temáticos do clube — distintos dos Torneios (sem formato
 // competitivo/ranking): festas, aniversários, edições especiais.
+// Ordenados do mais recente para o mais antigo.
 export const events: TournamentEntry[] = [
   {
-    slug: "bloko-em-festa",
-    name: "BLOKO em Festa — Torneio Duplo Padel",
-    dates: "5 de Julho",
-    tag: "Evento",
-    summary: "8 duplas masculinas + 8 duplas femininas. Mais de 100€ em prémios.",
-    poster: "/images/posters/poster-bloko-em-festa.jpg",
-    gallerySlug: "bloko-em-festa",
+    slug: "bloko-em-festa-edicao-2",
+    name: "BLOKO em Festa — 1ª Maratona de Padel",
+    dates: "5 e 6 de Setembro",
+    tag: "Maratona",
+    summary: "Maratona de padel masculinos e femininos, com jantar incluído na inscrição.",
+    poster:
+      "https://jucvqopkwuwgkvguupqy.supabase.co/storage/v1/object/public/gallery/eventos/bloko-em-festa-edicao-2/full/780748558_18030587834834522_6720622019271501258_n.jpg",
+    gallerySlug: "bloko-em-festa-edicao-2",
+    hasVideo: true,
   },
   {
     slug: "i-aniversario-bloko",
     name: "I Aniversário BLOKO",
-    dates: "",
+    dates: "22 de Novembro",
     tag: "Aniversário",
-    summary: "",
+    summary: "Acesso gratuito ao ginásio, torneio especial de padel, sorteios e giveaways.",
+    poster:
+      "https://jucvqopkwuwgkvguupqy.supabase.co/storage/v1/object/public/gallery/eventos/i-aniversario-bloko/full/583138688_17997259907834522_3626510149372453328_n.jpg",
     gallerySlug: "i-aniversario-bloko",
   },
   {
@@ -296,7 +305,20 @@ export const events: TournamentEntry[] = [
     dates: "",
     tag: "Halloween",
     summary: "Edição especial de Halloween em luz negra, no padel e no ginásio.",
+    poster:
+      "https://jucvqopkwuwgkvguupqy.supabase.co/storage/v1/object/public/gallery/eventos/bloko-especial-halloween/full/DSC08736-Enhanced-NR-2.jpg",
     gallerySlug: "bloko-especial-halloween",
+    hasVideo: true,
+  },
+  {
+    slug: "bloko-em-festa",
+    name: "BLOKO em Festa — Edição 1",
+    dates: "5 de Julho",
+    tag: "Evento",
+    summary: "Torneio Duplo Padel — 8 duplas masculinas + 8 duplas femininas. Mais de 100€ em prémios.",
+    poster: "/images/posters/poster-bloko-em-festa.jpg",
+    gallerySlug: "bloko-em-festa",
+    hasVideo: true,
   },
 ];
 

@@ -23,7 +23,7 @@ export const metadata = pageMetadata({
 export default function GinasioPrecarioPage() {
   return (
     <div>
-      <ParallaxDive image="/images/real-gym-interior.jpg">
+      <ParallaxDive image="/images/real-gym-only-hero.jpg">
         <p className="font-display text-xs tracking-[0.4em] uppercase text-[var(--color-lime)] mb-4">
           Preçário
         </p>

@@ -43,6 +43,31 @@ export default function GinasioPage() {
         <VideoShowcase src="/videos/bloko-ginasio.mp4" poster="/images/real-gym-interior.jpg" />
       </section>
 
+      <section className="container-bloko py-24 grid lg:grid-cols-2 gap-16 items-center">
+        <ScrollReveal>
+          <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
+            Equipamento
+          </p>
+          <h2 className="font-display font-bold text-3xl md:text-4xl uppercase mb-6">
+            Zona de cardio
+          </h2>
+          <p className="text-[var(--color-text-muted)] leading-relaxed">
+            Passadeiras, bicicletas e remos de última geração, lado a lado com os campos de padel
+            — treina sem perderes o jogo de vista.
+          </p>
+        </ScrollReveal>
+        <ScrollReveal delay={0.15}>
+          <div className="relative aspect-[9/16] sm:aspect-[4/5] rounded-2xl overflow-hidden">
+            <Image
+              src="/images/real-ginasio-treadmills.jpg"
+              alt="Zona de cardio do Ginásio BLOKO, com vista para os campos de padel"
+              fill
+              className="object-cover"
+            />
+          </div>
+        </ScrollReveal>
+      </section>
+
       <section className="container-bloko py-24">
         <ScrollReveal className="max-w-2xl mb-16">
           <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">

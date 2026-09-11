@@ -134,6 +134,12 @@ export default function Home() {
             <p className="text-[var(--color-text-muted)] mt-4">
               Incluídas na mensalidade. Marca o teu lugar em segundos — sem precisares de conta.
             </p>
+            <Link
+              href="/ginasio"
+              className="mt-4 inline-flex items-center gap-2 font-display uppercase text-sm tracking-wide text-[var(--color-lime)] hover:gap-3 transition-all"
+            >
+              Conhecer o Ginásio <ArrowRight size={16} />
+            </Link>
           </ScrollReveal>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">

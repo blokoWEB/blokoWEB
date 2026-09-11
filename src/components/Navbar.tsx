@@ -25,7 +25,7 @@ export default function Navbar() {
         scrolled ? "glass-card border-b border-white/5" : "bg-transparent"
       }`}
     >
-      <nav className="container-bloko flex items-center justify-between h-20">
+      <nav className="w-full max-w-[1480px] mx-auto px-6 md:px-10 flex items-center justify-between h-20">
         <Link href="/" className="flex items-center gap-3 shrink-0" onClick={() => setOpen(false)}>
           <Image
             src="/images/logo-bloko.svg"
@@ -37,15 +37,21 @@ export default function Navbar() {
           />
         </Link>
 
-        <ul className="hidden lg:flex items-center gap-1 font-display text-sm tracking-wide uppercase">
+        <ul className="hidden xl:flex items-center gap-0.5 font-display text-sm tracking-wide uppercase">
           {navLinks.map((link) => (
             <li key={link.href} className="relative group">
               <Link
                 href={link.href}
-                className="flex items-center gap-1 px-4 py-8 text-[var(--color-text-muted)] hover:text-[var(--color-lime)] transition-colors"
+                className="flex items-center gap-1 px-3 py-8 text-[var(--color-text-muted)] hover:text-[var(--color-lime)] transition-colors"
               >
                 {link.icon ? (
-                  <Image src={link.icon} alt={link.label} width={317} height={166} className="h-6 w-auto" />
+                  <Image
+                    src={link.icon}
+                    alt={link.label}
+                    width={317}
+                    height={166}
+                    className="h-8 w-auto shrink-0"
+                  />
                 ) : (
                   link.label
                 )}
@@ -72,25 +78,25 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden xl:flex items-center gap-2.5 shrink-0">
           <a
             href={site.navPadelBookingUrl}
             target="_blank"
             rel="noreferrer"
-            className="font-display text-sm uppercase tracking-wide px-5 py-2.5 rounded-full border border-[var(--color-lime)]/40 text-[var(--color-lime)] hover:bg-[var(--color-lime)] hover:text-black transition-colors"
+            className="font-display text-sm uppercase tracking-wide px-4 py-2.5 rounded-full border border-[var(--color-lime)]/40 text-[var(--color-lime)] hover:bg-[var(--color-lime)] hover:text-black transition-colors whitespace-nowrap"
           >
             Reservar Padel
           </a>
           <Link
             href="/aulas?categoria=ginasio"
-            className="font-display text-sm uppercase tracking-wide px-5 py-2.5 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors glow-lime"
+            className="font-display text-sm uppercase tracking-wide px-4 py-2.5 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors glow-lime whitespace-nowrap"
           >
             Aulas Ginásio
           </Link>
         </div>
 
         <button
-          className="lg:hidden p-2 text-[var(--color-text)]"
+          className="xl:hidden p-2 text-[var(--color-text)]"
           onClick={() => setOpen((v) => !v)}
           aria-label="Abrir menu"
         >
@@ -105,7 +111,7 @@ export default function Navbar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="lg:hidden overflow-hidden glass-card border-t border-white/5"
+            className="xl:hidden overflow-hidden glass-card border-t border-white/5"
           >
             <ul className="container-bloko py-6 flex flex-col gap-1 font-display uppercase tracking-wide">
               {navLinks.map((link) => (

@@ -5,12 +5,13 @@ import {
   CreditCard,
   Phone,
   ShieldCheck,
+  Sparkles,
   Users,
 } from "lucide-react";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import AcademiaLevelPicker from "@/components/AcademiaLevelPicker";
-import { site } from "@/lib/site-data";
+import { academiaPricing, site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -102,6 +103,47 @@ export default function AcademiaPage() {
             </ul>
           </div>
         </ScrollReveal>
+      </section>
+
+      {/* Preços */}
+      <section className="container-bloko pb-24">
+        <ScrollReveal className="max-w-2xl mb-10">
+          <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
+            Preçário
+          </p>
+          <h2 className="font-display font-bold text-3xl md:text-4xl uppercase mb-4">
+            Mensalidade
+          </h2>
+          <p className="text-[var(--color-text-muted)] flex items-center gap-2">
+            <Sparkles size={15} className="text-[var(--color-lime)]" />{" "}
+            {academiaPricing.founderDiscount}
+          </p>
+        </ScrollReveal>
+
+        <div className="grid sm:grid-cols-2 gap-6">
+          {academiaPricing.tiers.map((tier, i) => (
+            <ScrollReveal key={tier.label} delay={i * 0.1}>
+              <div className="glass-card rounded-2xl overflow-hidden h-full">
+                <div className="bg-[var(--color-lime)] text-black px-6 py-4">
+                  <h3 className="font-display uppercase text-sm tracking-wide">{tier.label}</h3>
+                </div>
+                <div className="p-6 flex flex-col gap-4">
+                  {tier.plans.map((p) => (
+                    <div
+                      key={p.freq}
+                      className="flex items-center justify-between border-b border-white/10 pb-3 last:border-0 last:pb-0"
+                    >
+                      <span className="text-sm text-[var(--color-text-muted)]">{p.freq}</span>
+                      <span className="font-display text-lg text-[var(--color-lime)]">
+                        {p.price}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
       </section>
 
       {/* CTA turmas */}

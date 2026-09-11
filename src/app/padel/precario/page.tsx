@@ -1,4 +1,5 @@
-import { Clock, MessageCircle, ShoppingBag, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Clock, MessageCircle, ShoppingBag, Sparkles } from "lucide-react";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import { padelCourtPricing, padelLessonPricing, site } from "@/lib/site-data";
@@ -142,9 +143,6 @@ export default function PadelPrecarioPage() {
           </div>
 
           <ScrollReveal delay={0.2} className="mt-14 text-center">
-            <p className="text-sm text-[var(--color-text-muted)] mb-6">
-              Pacotes família e combos com o ginásio — brevemente aqui.
-            </p>
             <a
               href={site.whatsappUrl}
               target="_blank"
@@ -155,6 +153,20 @@ export default function PadelPrecarioPage() {
             </a>
           </ScrollReveal>
         </div>
+      </section>
+
+      <section className="container-bloko py-20 text-center">
+        <ScrollReveal>
+          <p className="text-sm text-[var(--color-text-muted)] mb-6">
+            Também jogas padel? Combina com o ginásio no Pack Padel + Ginásio.
+          </p>
+          <Link
+            href="/ginasio/precario"
+            className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+          >
+            Ver preços do Ginásio <ArrowRight size={16} />
+          </Link>
+        </ScrollReveal>
       </section>
     </div>
   );

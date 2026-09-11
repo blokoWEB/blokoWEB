@@ -146,6 +146,90 @@ export const padelFeatures = [
   "Torneios semanais e ligas",
 ];
 
+// Preçário — Ginásio: mensalidade base
+export const gymMembership = {
+  inscricao: "15€",
+  plans: [
+    { name: "Acesso Livre", price: "34,60€", period: "/mês" },
+    {
+      name: "Off Peak",
+      price: "25,95€",
+      period: "/mês",
+      note: "Diariamente das 7h às 17h",
+    },
+  ],
+  trial: [
+    { name: "Treino Único", price: "4,99€" },
+    { name: "1 Semana Acesso Livre", price: "9,99€" },
+    { name: "2 Semanas Acesso Livre", price: "19,98€" },
+  ],
+};
+
+// Preçário — Ginásio: Pack Família
+export const gymFamilyPack = [
+  { members: "2 elementos", price: "29,95€", period: "/mês por pessoa" },
+  { members: "3 elementos", price: "25,95€", period: "/mês por pessoa" },
+];
+
+// Preçário — Ginásio: Pack Fim-de-Semana
+export const gymWeekendPack = {
+  price: "13,95€",
+  period: "/mês",
+  note: "Oferta sexta-feira das 17h às 22h",
+};
+
+// Preçário — Pack Padel + Ginásio (combo)
+export const padelGymComboPack = {
+  price: "45,95€",
+  period: "/mês",
+  note: "Inclui 20€ Padel",
+  inscricao: "15€",
+};
+
+// Preçário — Aulas de Grupo (para quem não tem mensalidade de ginásio)
+export const groupClassPricing = {
+  note: "10% de desconto para clientes de ginásio",
+  tiers: [
+    {
+      label: "Clientes Externos",
+      plans: [
+        { freq: "1 aula avulso", price: "5€" },
+        { freq: "2 aulas/semana", price: "24,95€/mês" },
+        { freq: "3 aulas/semana", price: "29,95€/mês" },
+      ],
+    },
+    {
+      label: "Kids",
+      plans: [{ freq: "1 aula/semana", price: "15,95€/mês" }],
+    },
+    {
+      label: "Ativos +60",
+      plans: [{ freq: "2 aulas/semana", price: "24,95€/mês" }],
+    },
+  ],
+};
+
+// Preçário — Academia (mensalidade recorrente)
+export const academiaPricing = {
+  founderDiscount: "10% de desconto para Sócios Fundadores",
+  tiers: [
+    {
+      label: "Adultos",
+      plans: [
+        { freq: "1x semana", price: "55€/mês" },
+        { freq: "2x semana", price: "95€/mês" },
+      ],
+    },
+    {
+      label: "Kids",
+      plans: [
+        { freq: "1x semana", price: "45€/mês" },
+        { freq: "2x semana", price: "80€/mês" },
+      ],
+    },
+  ],
+};
+
 // Preçário — Ginásio: Treino Personalizado (PT)
 export const gymPersonalTraining = [
   {

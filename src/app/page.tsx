@@ -67,11 +67,11 @@ export default function Home() {
               O BLOKO
             </p>
             <h2 className="font-display font-bold text-4xl md:text-5xl uppercase leading-tight mb-6">
-              Somos desporto <br /> e convívio
+              Desporto e convívio, <br /> sem limites.
             </h2>
             <p className="text-[var(--color-text-muted)] leading-relaxed mb-6">
-              Acreditamos que Bragança está à altura de outras cidades onde o padel é sucesso e
-              está em crescimento contínuo. Apostámos na modalidade como desporto de lazer,
+              Bragança está à altura de outras cidades onde o padel é sucesso e está em
+              crescimento contínuo. Apostámos na modalidade como desporto de lazer,
               complementado por um amplo e moderno ginásio para todos os que querem manter-se
               ativos — e um espaço de bar e lounge para o salutar convívio entre praticantes.
             </p>
@@ -122,10 +122,10 @@ export default function Home() {
       </ParallaxDive>
 
       {/* GINÁSIO / AULAS */}
-      <section className="relative bg-[var(--color-bg)]">
+      <section className="relative bg-[var(--color-bg)] bg-grid">
         <div className="container-bloko py-28">
           <ScrollReveal className="text-center max-w-2xl mx-auto mb-16">
-            <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
+            <p className="font-display text-2xl md:text-3xl tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
               Ginásio
             </p>
             <h2 className="font-display font-bold text-4xl md:text-5xl uppercase">
@@ -183,8 +183,8 @@ export default function Home() {
           Torneios <span className="text-gradient-lime">BLOKO</span>
         </h2>
         <p className="max-w-xl mx-auto text-white/70 mb-10">
-          Nonstops todas as semanas e Torneios Sociais várias vezes por ano — a maior competição
-          de padel social de Bragança.
+          Nonstops todas as semanas, Torneios Sociais várias vezes por ano e Maratona anual de
+          Padel — competição social em grande.
         </p>
         <div className="grid sm:grid-cols-2 gap-4 max-w-xl mx-auto">
           {tournamentFormats.map((t) => (

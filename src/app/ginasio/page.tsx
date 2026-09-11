@@ -69,31 +69,6 @@ export default function GinasioPage() {
       </section>
 
       <section className="container-bloko py-24 grid lg:grid-cols-2 gap-16 items-center">
-        <ScrollReveal delay={0.15} className="order-2 lg:order-1">
-          <div className="relative aspect-[16/10] rounded-2xl overflow-hidden">
-            <Image
-              src="/images/real-gym-musculacao.jpg"
-              alt="Sala de musculação do Ginásio BLOKO"
-              fill
-              className="object-cover"
-            />
-          </div>
-        </ScrollReveal>
-        <ScrollReveal className="order-1 lg:order-2">
-          <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
-            Equipamento
-          </p>
-          <h2 className="font-display font-bold text-3xl md:text-4xl uppercase mb-6">
-            Sala de musculação
-          </h2>
-          <p className="text-[var(--color-text-muted)] leading-relaxed">
-            Máquinas, rack de musculação e zona de treino funcional, tudo no mesmo espaço amplo —
-            sem esperas entre séries.
-          </p>
-        </ScrollReveal>
-      </section>
-
-      <section className="container-bloko py-24 grid lg:grid-cols-2 gap-16 items-center">
         <ScrollReveal>
           <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
             Equipamento
@@ -102,15 +77,15 @@ export default function GinasioPage() {
             Treino funcional
           </h2>
           <p className="text-[var(--color-text-muted)] leading-relaxed">
-            Wall balls, sacos de treino e discos bumper para séries de alta intensidade — tudo o
-            que precisas para um treino funcional completo.
+            Zona dedicada de treino funcional, com racks de musculação e material de alta
+            intensidade lado a lado — tudo no mesmo espaço amplo.
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
           <div className="relative aspect-[9/16] sm:aspect-[4/5] rounded-2xl overflow-hidden">
             <Image
-              src="/images/real-gym-funcional-equip.jpg"
-              alt="Equipamento de treino funcional do Ginásio BLOKO"
+              src="/images/real-gym-only-hero.jpg"
+              alt="Zona de treino funcional do Ginásio BLOKO"
               fill
               className="object-cover"
             />

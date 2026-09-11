@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle } from "lucide-react";
+import { Mail } from "lucide-react";
 import { site } from "@/lib/site-data";
 
 const levels = ["Iniciação", "Intermédio", "Avançado"];
@@ -13,8 +13,11 @@ export default function AcademiaLevelPicker() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const message = `Olá! Quero inscrever-me na Academia BLOKO.\n\nNome: ${name}\nContacto: ${contact}\nNível: ${level}`;
-    window.open(`${site.whatsappUrl}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    const subject = `Inscrição Academia — ${name}`;
+    const body = `Nível: ${level}\nNome: ${name}\nContacto: ${contact}`;
+    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
   }
 
   return (
@@ -72,7 +75,7 @@ export default function AcademiaLevelPicker() {
         disabled={!level}
         className="w-full inline-flex items-center justify-center gap-2 font-display uppercase tracking-wide py-3.5 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       >
-        <MessageCircle size={16} /> Pedir horários no WhatsApp
+        <Mail size={16} /> Enviar Inscrição
       </button>
     </form>
   );

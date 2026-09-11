@@ -109,7 +109,7 @@ export default function GinasioPage() {
             Equipamento
           </p>
           <h2 className="font-display font-bold text-3xl md:text-4xl uppercase mb-6">
-            Máquinas para o trem superior
+            Equipamentos de treino superior
           </h2>
           <p className="text-[var(--color-text-muted)] leading-relaxed">
             Estações de puxada, remo e pressão para trabalhares costas, ombros e braços com
@@ -134,7 +134,7 @@ export default function GinasioPage() {
         <ScrollReveal delay={0.15}>
           <div className="relative aspect-[9/16] sm:aspect-[4/5] rounded-2xl overflow-hidden">
             <Image
-              src="/images/real-gym-pesos-livres.jpg"
+              src="/images/real-gym-pesos-livres-2.jpg"
               alt="Zona livre de pesos do Ginásio BLOKO"
               fill
               className="object-cover"

@@ -81,7 +81,7 @@ export const classTypes = [
     name: "GAP",
     full: "Glúteos, Abdominais e Pernas",
     description:
-      "Treino de tonificação focado no trem inferior e core, com séries curtas e alta intensidade.",
+      "Treino de tonificação focado nos membros inferiores e core, com séries curtas e alta intensidade.",
     image: "/images/class-gap-real.jpg",
   },
   {

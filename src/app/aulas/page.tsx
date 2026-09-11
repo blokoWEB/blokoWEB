@@ -6,6 +6,7 @@ import Image from "next/image";
 import { CalendarClock, Check, Clock, Loader2, MapPin, Users, X } from "lucide-react";
 import Portal from "@/components/Portal";
 import ScrollReveal from "@/components/ScrollReveal";
+import AcademiaLevelPicker from "@/components/AcademiaLevelPicker";
 import { classCategories, classTypes, type ClassCategoryKey } from "@/lib/site-data";
 import type { ClassSessionWithCount } from "@/lib/types";
 
@@ -84,17 +85,12 @@ function AulasContent() {
     };
   }, []);
 
-  const academiaClasses = useMemo(
-    () => sessions.filter((s) => s.category === "academia"),
-    [sessions]
-  );
   const ginasioClasses = useMemo(
     () => sessions.filter((s) => s.category === "ginasio"),
     [sessions]
   );
 
-  const isEmpty =
-    category === "ginasio" ? ginasioClasses.length === 0 : academiaClasses.length === 0;
+  const isEmpty = category === "ginasio" && ginasioClasses.length === 0;
 
   function handleBooked(sessionId: string) {
     setSessions((prev) =>
@@ -136,30 +132,27 @@ function AulasContent() {
           {tabCategories.find((c) => c.key === category)?.blurb}
         </p>
 
-        {loading && (
+        {category === "ginasio" && loading && (
           <div className="flex items-center gap-3 text-[var(--color-text-muted)]">
             <Loader2 className="animate-spin" size={18} /> A carregar aulas…
           </div>
         )}
 
-        {loadError && (
+        {category === "ginasio" && loadError && (
           <div className="glass-card rounded-2xl p-6 text-sm text-red-400">{loadError}</div>
         )}
 
-        {!loading && !loadError && isEmpty && (
+        {category === "ginasio" && !loading && !loadError && isEmpty && (
           <div className="glass-card rounded-2xl p-10 text-center text-[var(--color-text-muted)]">
-            Sem aulas de {tabCategories.find((c) => c.key === category)?.label.toLowerCase()}{" "}
-            agendadas de momento. Volta em breve.
+            Sem aulas de ginásio agendadas de momento. Volta em breve.
           </div>
         )}
 
-        {!loading && !loadError && category === "ginasio" && (
+        {category === "ginasio" && !loading && !loadError && (
           <SessionGroups sessions={ginasioClasses} onSelect={setSelected} />
         )}
 
-        {!loading && !loadError && category === "academia" && (
-          <SessionGroups sessions={academiaClasses} onSelect={setSelected} />
-        )}
+        {category === "academia" && <AcademiaLevelPicker />}
       </div>
 
       {selected && (

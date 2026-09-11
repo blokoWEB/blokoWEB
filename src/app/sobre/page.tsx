@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CalendarHeart, PartyPopper, Trophy } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import { pageMetadata } from "@/lib/seo";
@@ -37,38 +37,6 @@ export default function SobrePage() {
             ginásio em Bragança.
           </p>
         </ScrollReveal>
-
-        <div className="grid sm:grid-cols-3 gap-5 mb-16">
-          <ScrollReveal>
-            <div className="glass-card rounded-2xl p-6 h-full">
-              <CalendarHeart size={22} className="text-[var(--color-lime)] mb-4" />
-              <h3 className="font-display uppercase text-sm mb-2">Sempre presentes</h3>
-              <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
-                Abrimos todos os dias desde que existimos — só fechamos no dia de Natal.
-              </p>
-            </div>
-          </ScrollReveal>
-          <ScrollReveal delay={0.08}>
-            <div className="glass-card rounded-2xl p-6 h-full">
-              <Trophy size={22} className="text-[var(--color-lime)] mb-4" />
-              <h3 className="font-display uppercase text-sm mb-2">Nonstop toda a sexta</h3>
-              <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
-                Todas as sextas-feiras, salvo casos excecionais, juntamos a comunidade para mais
-                um Nonstop.
-              </p>
-            </div>
-          </ScrollReveal>
-          <ScrollReveal delay={0.16}>
-            <div className="glass-card rounded-2xl p-6 h-full">
-              <PartyPopper size={22} className="text-[var(--color-lime)] mb-4" />
-              <h3 className="font-display uppercase text-sm mb-2">3 grandes torneios por ano</h3>
-              <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
-                Os Torneios Sociais são os maiores eventos do clube — dias inteiros de padel,
-                prémios e convívio.
-              </p>
-            </div>
-          </ScrollReveal>
-        </div>
 
         <ScrollReveal>
           <div className="glass-card rounded-3xl p-10 md:p-14 text-center max-w-2xl mx-auto glow-lime">

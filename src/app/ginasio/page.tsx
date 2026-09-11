@@ -97,7 +97,7 @@ export default function GinasioPage() {
         <ScrollReveal delay={0.15} className="order-2 lg:order-1">
           <div className="relative aspect-[16/10] rounded-2xl overflow-hidden">
             <Image
-              src="/images/real-gym-maquinas.jpg"
+              src="/images/real-gym-pt.jpg"
               alt="Máquinas de musculação do Ginásio BLOKO"
               fill
               className="object-cover"

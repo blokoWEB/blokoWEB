@@ -64,7 +64,7 @@ export const navLinks: NavLink[] = [
 export const classCategories = [
   { key: "ginasio", label: "Ginásio", blurb: "Aulas de grupo incluídas na mensalidade." },
   { key: "padel", label: "Padel", blurb: "Aulas avulsas para todos os níveis." },
-  { key: "academia", label: "Academia", blurb: "Turmas fixas de formação, por escalão etário." },
+  { key: "academia", label: "Academia Padel", blurb: "Turmas fixas de formação, por escalão etário." },
 ] as const;
 
 export type ClassCategoryKey = (typeof classCategories)[number]["key"];

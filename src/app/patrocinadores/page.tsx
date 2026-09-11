@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Handshake, Mail } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
-import { courtSponsors, sponsors } from "@/lib/site-data";
+import { courtSponsors, sponsors, tournamentSponsors } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -52,6 +52,34 @@ export default function PatrocinadoresPage() {
                 )}
               </div>
             ))}
+          </div>
+        </ScrollReveal>
+
+        {/* Patrocinadores de torneios anteriores */}
+        <ScrollReveal className="mb-16">
+          <h2 className="font-display uppercase text-sm tracking-[0.2em] text-[var(--color-blue-soft)] mb-5">
+            Patrocinadores de Torneios Anteriores
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
+            {tournamentSponsors.map((s) =>
+              s.logo ? (
+                <div
+                  key={s.name}
+                  className="rounded-2xl h-28 flex items-center justify-center p-5 bg-white border border-black/5 shadow-lg shadow-black/20"
+                >
+                  <div className="relative w-full h-full">
+                    <Image src={s.logo} alt={s.name} fill className="object-contain" sizes="200px" />
+                  </div>
+                </div>
+              ) : (
+                <div
+                  key={s.name}
+                  className="rounded-2xl h-28 flex items-center justify-center px-6 bg-white border border-black/5 shadow-lg shadow-black/20"
+                >
+                  <span className="font-display uppercase text-sm text-center text-black">{s.name}</span>
+                </div>
+              )
+            )}
           </div>
         </ScrollReveal>
 

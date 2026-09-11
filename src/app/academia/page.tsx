@@ -1,6 +1,4 @@
-import Link from "next/link";
 import {
-  ArrowRight,
   Calendar,
   CircleCheck,
   Clock,
@@ -11,6 +9,7 @@ import {
 } from "lucide-react";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
+import AcademiaLevelPicker from "@/components/AcademiaLevelPicker";
 import { site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
@@ -110,26 +109,22 @@ export default function AcademiaPage() {
         <div className="container-bloko">
           <ScrollReveal>
             <h2 className="font-display font-bold text-2xl md:text-3xl uppercase mb-4">
-              Vê as turmas disponíveis
+              Inscreve-te na Academia
             </h2>
-            <p className="text-[var(--color-text-muted)] max-w-lg mx-auto mb-8">
-              Consulta os horários das turmas da Academia e marca o lugar do teu educando — sem
-              precisares de criar conta.
+            <p className="text-[var(--color-text-muted)] max-w-lg mx-auto mb-10">
+              Como as turmas são fixas e por nível, falamos contigo antes para encontrar o horário
+              certo.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link
-                href="/aulas?categoria=academia"
-                className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
-              >
-                Ver turmas e marcar <ArrowRight size={16} />
-              </Link>
+            <AcademiaLevelPicker />
+            <p className="mt-8 text-xs text-[var(--color-text-muted)] flex items-center justify-center gap-2">
+              Ou liga para
               <a
                 href={site.phoneHref}
-                className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+                className="inline-flex items-center gap-1.5 text-[var(--color-lime)] hover:underline"
               >
-                <Phone size={16} /> {site.phone}
+                <Phone size={13} /> {site.phone}
               </a>
-            </div>
+            </p>
           </ScrollReveal>
         </div>
       </section>

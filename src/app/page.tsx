@@ -121,6 +121,40 @@ export default function Home() {
         </Link>
       </ParallaxDive>
 
+      {/* ACADEMIA */}
+      <section className="relative bg-[var(--color-bg)]">
+        <div className="container-bloko py-28 grid lg:grid-cols-2 gap-16 items-center">
+          <ScrollReveal delay={0.15} className="order-2 lg:order-1">
+            <div className="relative aspect-[4/5] rounded-3xl overflow-hidden glow-lime">
+              <Image
+                src="/images/real-academia-sub12.jpg"
+                alt="Academia BLOKO"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </ScrollReveal>
+          <ScrollReveal className="order-1 lg:order-2">
+            <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
+              Academia
+            </p>
+            <h2 className="font-display font-bold text-4xl md:text-5xl uppercase leading-tight mb-6">
+              Aprende a jogar <br /> a sério
+            </h2>
+            <p className="text-[var(--color-text-muted)] leading-relaxed mb-8">
+              Turmas fixas para todas as idades e níveis — da iniciação à competição, em grupos
+              reduzidos de até 4 alunos.
+            </p>
+            <Link
+              href="/academia"
+              className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
+            >
+              Conhecer a Academia <ArrowRight size={16} />
+            </Link>
+          </ScrollReveal>
+        </div>
+      </section>
+
       {/* GINÁSIO / AULAS */}
       <section className="relative bg-[var(--color-bg)] bg-grid">
         <div className="container-bloko py-28">
@@ -214,12 +248,20 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <Link
-          href="/torneios"
-          className="mt-10 inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
-        >
-          Ver Torneios BLOKO <ArrowRight size={16} />
-        </Link>
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            href="/torneios"
+            className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
+          >
+            Ver Torneios BLOKO <ArrowRight size={16} />
+          </Link>
+          <Link
+            href="/sobre/eventos"
+            className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+          >
+            Ver Eventos BLOKO <ArrowRight size={16} />
+          </Link>
+        </div>
       </ParallaxDive>
 
       {/* REVIEW CTA */}

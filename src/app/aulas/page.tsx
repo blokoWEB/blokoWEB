@@ -100,7 +100,6 @@ function AulasContent() {
     setSessions((prev) =>
       prev.map((s) => (s.id === sessionId ? { ...s, booked_count: s.booked_count + 1 } : s))
     );
-    setSelected(null);
   }
 
   return (

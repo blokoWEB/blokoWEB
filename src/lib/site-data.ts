@@ -370,4 +370,6 @@ export const sponsors: Sponsor[] = [
   { name: "Clínica Montes de Saúde", logo: "/images/sponsors/montes-de-saude.png" },
   { name: "CrossXLed Solutions", logo: "/images/sponsors/crossxled-solutions.png" },
   { name: "TMJanelas", logo: "/images/sponsors/tmjanelas.png" },
+  { name: "McDonald's Bragança", logo: "/images/logos/mcdonalds.png" },
+  { name: "Grandson Interiores" },
 ];

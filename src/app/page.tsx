@@ -127,8 +127,8 @@ export default function Home() {
           <ScrollReveal delay={0.15} className="order-2 lg:order-1">
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden glow-lime">
               <Image
-                src="/images/real-academia-sub12.jpg"
-                alt="Academia BLOKO"
+                src="/images/academia-treino-2.jpg"
+                alt="Treino da Academia BLOKO"
                 fill
                 className="object-cover"
               />

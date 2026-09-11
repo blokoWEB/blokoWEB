@@ -45,7 +45,10 @@ export const navLinks: NavLink[] = [
   {
     href: "/ginasio",
     label: "Ginásio",
-    submenu: [{ href: "/aulas?categoria=ginasio", label: "Aulas de Ginásio" }],
+    submenu: [
+      { href: "/aulas?categoria=ginasio", label: "Aulas de Ginásio" },
+      { href: "/ginasio/precario", label: "Preçário" },
+    ],
   },
   {
     href: "/padel",
@@ -54,6 +57,7 @@ export const navLinks: NavLink[] = [
       { href: "/padel/aulas", label: "Aulas de Padel" },
       { href: "/academia", label: "Academia BLOKO" },
       { href: "/torneios", label: "Torneios" },
+      { href: "/padel/precario", label: "Preçário" },
     ],
   },
   { href: "/patrocinadores", label: "Patrocinadores", submenu: [] },
@@ -141,6 +145,124 @@ export const padelFeatures = [
   "Reservas via Playtomic",
   "Torneios semanais e ligas",
 ];
+
+// Preçário — Ginásio: Treino Personalizado (PT)
+export const gymPersonalTraining = [
+  {
+    label: "Individuais",
+    plans: [
+      { freq: "1 treino/semana", price: "71€" },
+      { freq: "2 treinos/semana", price: "134€" },
+      { freq: "3 treinos/semana", price: "188€" },
+    ],
+  },
+  {
+    label: "2 Pessoas",
+    plans: [
+      { freq: "1 treino/semana", price: "53€" },
+      { freq: "2 treinos/semana", price: "98€" },
+      { freq: "3 treinos/semana", price: "139€" },
+    ],
+  },
+  {
+    label: "3 Pessoas",
+    plans: [
+      { freq: "1 treino/semana", price: "44€" },
+      { freq: "2 treinos/semana", price: "80€" },
+      { freq: "3 treinos/semana", price: "112€" },
+    ],
+  },
+];
+
+// Preçário — Padel: aluguer de campo
+export const padelCourtPricing = {
+  offPeakHours: "Segunda a sexta, das 07h às 17h",
+  offPeak: [
+    { duration: "1h", price: "4€ / pessoa" },
+    { duration: "1h30", price: "6€ / pessoa" },
+  ],
+  peak: [
+    { duration: "1h", price: "6€ / pessoa" },
+    { duration: "1h30", price: "8,5€ / pessoa" },
+  ],
+  racketRental: [
+    { model: "Nox", price: "1,5€ / raquete" },
+    { model: "Quad", price: "3,5€ / raquete" },
+  ],
+};
+
+// Preçário — Padel: aulas (Peak Hour / Off Peak, por nº de alunos)
+export const padelLessonPricing = {
+  founderDiscount: "10% de desconto para Sócios Fundadores",
+  peak: [
+    {
+      group: "Individuais",
+      plans: [
+        { label: "1 aula", price: "39€" },
+        { label: "5 aulas", price: "175€" },
+        { label: "10 aulas", price: "310€" },
+      ],
+    },
+    {
+      group: "2 Alunos",
+      plans: [
+        { label: "1 aula", price: "24€" },
+        { label: "5 aulas", price: "110€" },
+        { label: "10 aulas", price: "190€" },
+      ],
+    },
+    {
+      group: "3 Alunos",
+      plans: [
+        { label: "1 aula", price: "19€" },
+        { label: "5 aulas", price: "85€" },
+        { label: "10 aulas", price: "150€" },
+      ],
+    },
+    {
+      group: "4 Alunos",
+      plans: [
+        { label: "1 aula", price: "16€" },
+        { label: "5 aulas", price: "70€" },
+        { label: "10 aulas", price: "125€" },
+      ],
+    },
+  ],
+  offPeak: [
+    {
+      group: "Individuais",
+      plans: [
+        { label: "1 aula", price: "29€" },
+        { label: "5 aulas", price: "130€" },
+        { label: "10 aulas", price: "230€" },
+      ],
+    },
+    {
+      group: "2 Alunos",
+      plans: [
+        { label: "1 aula", price: "19€" },
+        { label: "5 aulas", price: "85€" },
+        { label: "10 aulas", price: "150€" },
+      ],
+    },
+    {
+      group: "3 Alunos",
+      plans: [
+        { label: "1 aula", price: "15€" },
+        { label: "5 aulas", price: "68€" },
+        { label: "10 aulas", price: "120€" },
+      ],
+    },
+    {
+      group: "4 Alunos",
+      plans: [
+        { label: "1 aula", price: "12€" },
+        { label: "5 aulas", price: "55€" },
+        { label: "10 aulas", price: "95€" },
+      ],
+    },
+  ],
+};
 
 export const whatsappGroups = [
   {

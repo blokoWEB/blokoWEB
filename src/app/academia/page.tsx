@@ -43,7 +43,7 @@ const policies = [
 export default function AcademiaPage() {
   return (
     <div>
-      <ParallaxDive image="/images/real-academia-sub12.jpg">
+      <ParallaxDive image="/images/academia-treino.jpg">
         <p className="font-display text-xs tracking-[0.4em] uppercase text-[var(--color-lime)] mb-4">
           Formação de Padel
         </p>

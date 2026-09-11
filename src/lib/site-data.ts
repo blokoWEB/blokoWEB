@@ -82,7 +82,7 @@ export const classTypes = [
     full: "Glúteos, Abdominais e Pernas",
     description:
       "Treino de tonificação focado no trem inferior e core, com séries curtas e alta intensidade.",
-    image: "/images/class-gap-stock.jpg",
+    image: "/images/class-gap-real.jpg",
   },
   {
     slug: "abs",
@@ -99,7 +99,7 @@ export const classTypes = [
     full: "Treino Funcional",
     description:
       "Movimentos multiarticulares e funcionais para força, mobilidade e resistência geral.",
-    image: "/images/class-funcional-stock.jpg",
+    image: "/images/class-funcional-real.jpg",
   },
   // Padel — aulas avulsas, para todos os níveis
   {

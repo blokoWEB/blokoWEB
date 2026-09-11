@@ -59,7 +59,7 @@ export default function GinasioPage() {
         <ScrollReveal delay={0.15}>
           <div className="relative aspect-[9/16] sm:aspect-[4/5] rounded-2xl overflow-hidden">
             <Image
-              src="/images/real-ginasio-treadmills.jpg"
+              src="/images/real-gym-cardio.jpg"
               alt="Zona de cardio do Ginásio BLOKO, com vista para os campos de padel"
               fill
               className="object-cover"

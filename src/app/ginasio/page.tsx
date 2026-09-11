@@ -10,7 +10,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Ginásio",
   description:
-    "Ginásio moderno em Bragança com aulas de grupo incluídas na mensalidade: GAP, BLOKO Burn, ABS, Funcional e mais.",
+    "Ginásio moderno em Bragança com aulas de grupo incluídas na mensalidade: GAP, ABS, Funcional e mais.",
   path: "/ginasio",
 });
 

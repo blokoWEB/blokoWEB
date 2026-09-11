@@ -78,16 +78,7 @@ export const classTypes = [
     full: "Glúteos, Abdominais e Pernas",
     description:
       "Treino de tonificação focado no trem inferior e core, com séries curtas e alta intensidade.",
-    image: "/images/real-class-gap.jpg",
-  },
-  {
-    slug: "bloko-burn",
-    category: "ginasio" as ClassCategoryKey,
-    name: "BLOKO BURN",
-    full: "Treino metabólico de alta intensidade",
-    description:
-      "Aula cardio-intensa desenhada para maximizar o gasto calórico em circuito, ao ritmo da música.",
-    image: "/images/real-class-bloko-burn.jpg",
+    image: "/images/class-gap-stock.jpg",
   },
   {
     slug: "abs",
@@ -95,7 +86,7 @@ export const classTypes = [
     name: "ABS",
     full: "Core & Abdominais",
     description: "Sessão focada no fortalecimento do core, postura e definição abdominal.",
-    image: "/images/real-class-abs.jpg",
+    image: "/images/class-abs-stock.png",
   },
   {
     slug: "funcional",
@@ -104,7 +95,7 @@ export const classTypes = [
     full: "Treino Funcional",
     description:
       "Movimentos multiarticulares e funcionais para força, mobilidade e resistência geral.",
-    image: "/images/real-class-funcional.jpg",
+    image: "/images/class-funcional-stock.jpg",
   },
   // Padel — aulas avulsas, para todos os níveis
   {

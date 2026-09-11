@@ -444,7 +444,7 @@ function SessionFormModal({
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ex: BLOKO BURN"
+                placeholder="Ex: GAP"
                 className="input"
               />
             </Field>

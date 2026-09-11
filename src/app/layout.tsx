@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Orbitron } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ReviewPopup from "@/components/ReviewPopup";
+import CampaignPopup from "@/components/CampaignPopup";
 import { site } from "@/lib/site-data";
 import "./globals.css";
 
@@ -140,6 +141,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main className="flex-1">{children}</main>
         <Footer />
         <ReviewPopup />
+        <CampaignPopup />
       </body>
     </html>
   );

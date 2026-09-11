@@ -51,10 +51,6 @@ export default function GinasioPage() {
           <h2 className="font-display font-bold text-3xl md:text-4xl uppercase mb-6">
             Zona de cardio
           </h2>
-          <p className="text-[var(--color-text-muted)] leading-relaxed">
-            Passadeiras, bicicletas e remos de última geração, lado a lado com os campos de padel
-            — treina sem perderes o jogo de vista.
-          </p>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
           <div className="relative aspect-[9/16] sm:aspect-[4/5] rounded-2xl overflow-hidden">
@@ -76,10 +72,6 @@ export default function GinasioPage() {
           <h2 className="font-display font-bold text-3xl md:text-4xl uppercase mb-6">
             Treino funcional
           </h2>
-          <p className="text-[var(--color-text-muted)] leading-relaxed">
-            Zona dedicada de treino funcional, com racks de musculação e material de alta
-            intensidade lado a lado — tudo no mesmo espaço amplo.
-          </p>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
           <div className="relative aspect-[9/16] sm:aspect-[4/5] rounded-2xl overflow-hidden">
@@ -111,10 +103,6 @@ export default function GinasioPage() {
           <h2 className="font-display font-bold text-3xl md:text-4xl uppercase mb-6">
             Equipamentos de treino superior
           </h2>
-          <p className="text-[var(--color-text-muted)] leading-relaxed">
-            Estações de puxada, remo e pressão para trabalhares costas, ombros e braços com
-            segurança e controlo total do movimento.
-          </p>
         </ScrollReveal>
       </section>
 
@@ -126,10 +114,6 @@ export default function GinasioPage() {
           <h2 className="font-display font-bold text-3xl md:text-4xl uppercase mb-6">
             Zona livre de pesos
           </h2>
-          <p className="text-[var(--color-text-muted)] leading-relaxed">
-            Barras, halteres e discos de todos os pesos, com espaço à volta para levantamentos em
-            segurança.
-          </p>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
           <div className="relative aspect-[9/16] sm:aspect-[4/5] rounded-2xl overflow-hidden">

@@ -53,7 +53,7 @@ export default function PadelPrecarioPage() {
           Preços <span className="text-gradient-lime">Padel</span>
         </h1>
         <p className="mt-6 max-w-xl text-white/70">
-          Campos, aulas e aluguer de raquetes — tudo com IVA incluído à taxa legal em vigor.
+          Campos, aulas e aluguer de raquetes. Treinos personalizados e academia de Padel BLOKO.
         </p>
       </ParallaxDive>
 
@@ -158,7 +158,7 @@ export default function PadelPrecarioPage() {
       <section className="container-bloko py-20 text-center">
         <ScrollReveal>
           <p className="text-sm text-[var(--color-text-muted)] mb-6">
-            Também jogas padel? Combina com o ginásio no Pack Padel + Ginásio.
+            Também treinas no ginásio? Combina os dois no Pack Padel + Ginásio.
           </p>
           <Link
             href="/ginasio/precario"

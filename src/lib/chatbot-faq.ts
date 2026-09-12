@@ -355,14 +355,23 @@ export const faq: FaqEntry[] = [
     answer: `Setembro trouxe uma campanha especial: 50% de desconto na 1ª mensalidade se pagares as 4 mensalidades seguintes adiantado até ao fim do ano — e ainda levas 1 hora de PT + toalha BLOKO.`,
     prompt: `Fala connosco no WhatsApp para aproveitares!`,
   },
-];
-
-// Base de conhecimento "geral" — dados reais do site que não têm uma
-// resposta curada dedicada. Consultada só depois de `faq` não encontrar
-// nada, para tentar sempre responder com informação real antes de desistir.
-const classBySlug = (slug: string) => classTypes.find((c) => c.slug === slug)!;
-
-export const knowledge: FaqEntry[] = [
+  {
+    id: "quero-ser-patrocinador",
+    keywords: [
+      "quero ser patrocinador",
+      "como ser patrocinador",
+      "ser patrocinador",
+      "patrocinio",
+      "patrocinar o bloko",
+      "proposta de patrocinio",
+      "parceria com o bloko",
+      "quero patrocinar",
+      "empresa parceira",
+    ],
+    answer: `Boa! Temos várias formas de patrocínio — naming rights de campos, patrocínio de torneios e parcerias locais. Manda-nos uma mensagem com o nome da tua empresa e vemos contigo as opções disponíveis.`,
+    prompt: `Qual é a tua empresa? Vamos ver o melhor encaixe para vocês!`,
+    link: { url: site.whatsappUrl, label: "Falar no WhatsApp" },
+  },
   {
     id: "patrocinador-campo",
     keywords: [
@@ -393,6 +402,14 @@ export const knowledge: FaqEntry[] = [
     ],
     answer: `Os nossos torneios já tiveram o apoio de: ${tournamentSponsors.map((s) => s.name).join(", ")}.`,
   },
+];
+
+// Base de conhecimento "geral" — dados reais do site que não têm uma
+// resposta curada dedicada. Consultada só depois de `faq` não encontrar
+// nada, para tentar sempre responder com informação real antes de desistir.
+const classBySlug = (slug: string) => classTypes.find((c) => c.slug === slug)!;
+
+export const knowledge: FaqEntry[] = [
   {
     id: "tipos-aulas-padel",
     keywords: [

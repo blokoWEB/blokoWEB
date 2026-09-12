@@ -1,73 +1,79 @@
 "use client";
 
-import { useRef, useState } from "react";
-import Image from "next/image";
+import { useEffect, useId, useRef, useState } from "react";
+import Script from "next/script";
 import { Move } from "lucide-react";
+
+type PannellumViewerInstance = { destroy: () => void };
+
+declare global {
+  interface Window {
+    pannellum?: {
+      viewer: (container: string, config: Record<string, unknown>) => PannellumViewerInstance;
+    };
+  }
+}
 
 export default function PanoramaViewer({
   src,
-  alt,
-  aspectRatio,
+  /** Ângulo horizontal (em graus) coberto pela foto — a panorâmica não é uma esfera completa. */
+  haov = 140,
+  /** Ângulo vertical (em graus) coberto pela foto. */
+  vaov = 55,
 }: {
   src: string;
-  alt: string;
-  /** Largura da imagem original, dividida pela altura visível do visor. */
-  aspectRatio: number;
+  haov?: number;
+  vaov?: number;
 }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [offset, setOffset] = useState(0);
-  const [dragging, setDragging] = useState(false);
+  const rawId = useId();
+  const id = `pnlm-${rawId.replace(/[^a-zA-Z0-9]/g, "")}`;
+  const viewerRef = useRef<PannellumViewerInstance | null>(null);
+  const [scriptReady, setScriptReady] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const dragState = useRef({ startX: 0, startOffset: 0 });
 
-  function clamp(value: number) {
-    const container = containerRef.current;
-    if (!container) return value;
-    const maxOffset = Math.max(0, container.scrollWidth - container.clientWidth);
-    return Math.min(0, Math.max(value, -maxOffset));
-  }
+  useEffect(() => {
+    if (!scriptReady || !window.pannellum) return;
 
-  function handlePointerDown(e: React.PointerEvent) {
-    setDragging(true);
-    setHasInteracted(true);
-    dragState.current = { startX: e.clientX, startOffset: offset };
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
-  }
+    viewerRef.current = window.pannellum.viewer(id, {
+      type: "equirectangular",
+      panorama: src,
+      haov,
+      vaov,
+      autoLoad: true,
+      showZoomCtrl: true,
+      showFullscreenCtrl: true,
+      compass: false,
+      draggable: true,
+      mouseZoom: true,
+      hfov: Math.min(100, haov),
+      minHfov: 40,
+      maxHfov: haov,
+      pitch: 0,
+      yaw: 0,
+    });
 
-  function handlePointerMove(e: React.PointerEvent) {
-    if (!dragging) return;
-    const delta = e.clientX - dragState.current.startX;
-    setOffset(clamp(dragState.current.startOffset + delta));
-  }
-
-  function handlePointerUp() {
-    setDragging(false);
-  }
+    return () => {
+      viewerRef.current?.destroy();
+      viewerRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scriptReady, src, haov, vaov, id]);
 
   return (
-    <div
-      ref={containerRef}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerLeave={handlePointerUp}
-      className={`relative w-full aspect-[16/9] rounded-2xl overflow-hidden select-none ${
-        dragging ? "cursor-grabbing" : "cursor-grab"
-      }`}
-    >
+    <div className="relative">
+      <link rel="stylesheet" href="/vendor/pannellum/pannellum.css" />
+      <Script
+        src="/vendor/pannellum/pannellum.js"
+        strategy="afterInteractive"
+        onReady={() => setScriptReady(true)}
+      />
       <div
-        style={{
-          width: `${aspectRatio * 100}%`,
-          transform: `translateX(${offset}px)`,
-          transition: dragging ? "none" : "transform 0.2s ease-out",
-        }}
-        className="relative h-full"
-      >
-        <Image src={src} alt={alt} fill draggable={false} className="object-cover pointer-events-none" />
-      </div>
-
+        id={id}
+        onPointerDown={() => setHasInteracted(true)}
+        className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-black"
+      />
       {!hasInteracted && (
-        <div className="absolute inset-x-0 bottom-4 flex justify-center pointer-events-none">
+        <div className="absolute inset-x-0 bottom-4 flex justify-center pointer-events-none z-10">
           <span className="flex items-center gap-2 text-xs font-display uppercase tracking-wide px-4 py-2 rounded-full bg-black/60 backdrop-blur-sm text-white animate-pulse">
             <Move size={14} /> Arrasta para explorar
           </span>

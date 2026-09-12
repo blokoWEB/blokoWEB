@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowRight, Calendar, PartyPopper, Trophy, Users } from "lucide-react";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
-import PanoramaViewer from "@/components/PanoramaViewer";
 import { courtSponsors, events, pastTournaments } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
@@ -110,25 +109,6 @@ export default function SobrePage() {
             </Link>
           </ScrollReveal>
         </div>
-      </section>
-
-      {/* Panorama interativo */}
-      <section className="container-bloko py-24">
-        <ScrollReveal className="max-w-2xl mb-10">
-          <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
-            Vê por dentro
-          </p>
-          <h2 className="font-display font-bold text-3xl md:text-4xl uppercase">
-            Os campos, ao pormenor
-          </h2>
-        </ScrollReveal>
-        <ScrollReveal delay={0.1}>
-          <PanoramaViewer
-            src="/images/real-padel-panorama.jpg"
-            alt="Panorâmica dos campos de padel do BLOKO"
-            aspectRatio={1.424}
-          />
-        </ScrollReveal>
       </section>
 
       {/* Torneios */}

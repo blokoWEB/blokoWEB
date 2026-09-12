@@ -2,7 +2,6 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import Script from "next/script";
-import { Move } from "lucide-react";
 
 type PannellumViewerInstance = { destroy: () => void };
 
@@ -16,10 +15,10 @@ declare global {
 
 export default function PanoramaViewer({
   src,
-  /** Ângulo horizontal (em graus) coberto pela foto — a panorâmica não é uma esfera completa. */
-  haov = 140,
+  /** Ângulo horizontal (em graus) coberto pela foto — modo "180° Panorama" do DJI. */
+  haov = 180,
   /** Ângulo vertical (em graus) coberto pela foto. */
-  vaov = 55,
+  vaov = 71,
   /** Direção inicial (em graus) — 0 é o centro da foto. */
   yaw = 0,
 }: {
@@ -32,15 +31,9 @@ export default function PanoramaViewer({
   const id = `pnlm-${rawId.replace(/[^a-zA-Z0-9]/g, "")}`;
   const viewerRef = useRef<PannellumViewerInstance | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     if (!scriptReady || !window.pannellum) return;
-
-    // hfov máximo fica sempre abaixo do haov para nunca revelar a zona sem
-    // imagem para lá do que a panorâmica cobre.
-    const maxHfov = Math.min(90, haov - 20);
-    const yawLimit = Math.max(0, haov / 2 - maxHfov / 2);
 
     viewerRef.current = window.pannellum.viewer(id, {
       type: "equirectangular",
@@ -53,13 +46,15 @@ export default function PanoramaViewer({
       compass: false,
       draggable: true,
       mouseZoom: true,
-      hfov: Math.min(70, maxHfov),
-      minHfov: 40,
-      maxHfov,
-      minYaw: -yawLimit,
-      maxYaw: yawLimit,
+      hfov: 100,
+      minHfov: 30,
+      maxHfov: 120,
+      minYaw: -haov / 2,
+      maxYaw: haov / 2,
       pitch: 0,
-      yaw: Math.max(-yawLimit, Math.min(yawLimit, yaw)),
+      yaw,
+      autoRotate: -2,
+      autoRotateInactivityDelay: 2000,
     });
 
     return () => {
@@ -79,16 +74,8 @@ export default function PanoramaViewer({
       />
       <div
         id={id}
-        onPointerDown={() => setHasInteracted(true)}
         className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-black"
       />
-      {!hasInteracted && (
-        <div className="absolute inset-x-0 bottom-4 flex justify-center pointer-events-none z-10">
-          <span className="flex items-center gap-2 text-xs font-display uppercase tracking-wide px-4 py-2 rounded-full bg-black/60 backdrop-blur-sm text-white animate-pulse">
-            <Move size={14} /> Arrasta para explorar
-          </span>
-        </div>
-      )}
     </div>
   );
 }

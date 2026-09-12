@@ -123,7 +123,7 @@ export default function SobrePage() {
           </h2>
         </ScrollReveal>
         <ScrollReveal delay={0.1}>
-          <PanoramaViewer src="/images/real-padel-panorama.jpg" yaw={-20} />
+          <PanoramaViewer src="/images/real-padel-panorama.jpg" />
         </ScrollReveal>
       </section>
 

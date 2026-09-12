@@ -108,8 +108,21 @@ function AulasContent() {
           <h1 className="font-display font-extrabold text-4xl md:text-6xl uppercase mb-4">
             Marca a tua <span className="text-gradient-lime">aula</span>
           </h1>
-          <p className="text-[var(--color-text-muted)]">
+          <p className="text-[var(--color-text-muted)] mb-3">
             Não precisas de conta — só do teu nome, email e número de sócio ou código de voucher.
+          </p>
+          <p className="text-xs text-[var(--color-text-muted)]">
+            Já marcaste e precisas de cancelar?{" "}
+            <a
+              href={`${site.whatsappUrl}?text=${encodeURIComponent(
+                "Olá! Gostava de cancelar a minha presença numa aula. Aula, dia e hora: "
+              )}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-[var(--color-lime)] hover:underline"
+            >
+              Cancela pelo WhatsApp
+            </a>
           </p>
         </ScrollReveal>
 

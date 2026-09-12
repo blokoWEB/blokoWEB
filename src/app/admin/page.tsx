@@ -55,7 +55,7 @@ export default function AdminLoginPage() {
               autoFocus
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-lime)]"
+              className="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-base focus:outline-none focus:border-[var(--color-lime)]"
             />
           </div>
           <div>
@@ -67,7 +67,7 @@ export default function AdminLoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-lime)]"
+              className="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-base focus:outline-none focus:border-[var(--color-lime)]"
             />
           </div>
 

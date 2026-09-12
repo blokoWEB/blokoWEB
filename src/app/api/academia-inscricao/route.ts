@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         from: `"Site BLOKO" <${SMTP_USER}>`,
         to: SMTP_TO || SMTP_USER,
         replyTo: SMTP_USER,
-        subject: `Inscrição Academia — ${name}`,
+        subject: `NOVA INSCRIÇÃO ACADEMIA`,
         text: `Nível: ${level}\nNome: ${name}\nContacto: ${contact}`,
       });
     } catch (err) {

@@ -8,7 +8,8 @@ const levels = ["Iniciação", "Intermédio", "Avançado"];
 export default function AcademiaLevelPicker() {
   const [level, setLevel] = useState<string | null>(null);
   const [name, setName] = useState("");
-  const [contact, setContact] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
@@ -22,7 +23,7 @@ export default function AcademiaLevelPicker() {
       const res = await fetch("/api/academia-inscricao", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ level, name, contact }),
+        body: JSON.stringify({ level, name, phone, email }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Não foi possível enviar a inscrição.");
@@ -89,14 +90,28 @@ export default function AcademiaLevelPicker() {
       </div>
       <div>
         <label className="text-xs uppercase tracking-wide text-[var(--color-text-muted)] mb-1.5 block">
-          Telefone ou email
+          Telefone
         </label>
         <input
           required
-          value={contact}
-          onChange={(e) => setContact(e.target.value)}
+          type="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
           className="input"
           placeholder="912 345 678"
+        />
+      </div>
+      <div>
+        <label className="text-xs uppercase tracking-wide text-[var(--color-text-muted)] mb-1.5 block">
+          Email
+        </label>
+        <input
+          required
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="input"
+          placeholder="email@exemplo.com"
         />
       </div>
 

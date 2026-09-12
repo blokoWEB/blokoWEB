@@ -745,7 +745,7 @@ function AcademiaInscricoesSection() {
 
   return (
     <div className="glass-card rounded-2xl overflow-x-auto">
-      <table className="w-full text-sm min-w-[560px]">
+      <table className="w-full text-sm min-w-[680px]">
         <thead>
           <tr className="border-b border-white/10 text-left">
             <th className="px-5 py-3 font-display uppercase text-xs text-[var(--color-text-muted)]">
@@ -758,7 +758,10 @@ function AcademiaInscricoesSection() {
               Nome
             </th>
             <th className="px-5 py-3 font-display uppercase text-xs text-[var(--color-text-muted)]">
-              Contacto
+              Telefone
+            </th>
+            <th className="px-5 py-3 font-display uppercase text-xs text-[var(--color-text-muted)]">
+              Email
             </th>
             <th className="px-5 py-3" />
           </tr>
@@ -779,7 +782,8 @@ function AcademiaInscricoesSection() {
                 </span>
               </td>
               <td className="px-5 py-3">{i.name}</td>
-              <td className="px-5 py-3 text-[var(--color-text-muted)]">{i.contact}</td>
+              <td className="px-5 py-3 text-[var(--color-text-muted)]">{i.phone || i.contact || "—"}</td>
+              <td className="px-5 py-3 text-[var(--color-text-muted)]">{i.email || "—"}</td>
               <td className="px-5 py-3 text-right">
                 <button
                   onClick={() => handleDelete(i.id)}

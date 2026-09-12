@@ -3,16 +3,16 @@ import nodemailer from "nodemailer";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
-  const { level, name, contact } = await req.json();
+  const { level, name, phone, email } = await req.json();
 
-  if (!level || !name || !contact) {
+  if (!level || !name || !phone || !email) {
     return NextResponse.json({ error: "Campos em falta." }, { status: 400 });
   }
 
   const supabase = getSupabaseAdmin();
   const { error: dbError } = await supabase
     .from("academia_inscricoes")
-    .insert({ level, name, contact });
+    .insert({ level, name, phone, email });
 
   if (dbError) {
     console.error("Erro ao gravar inscrição:", dbError);
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
         to: SMTP_TO || SMTP_USER,
         replyTo: SMTP_USER,
         subject: `NOVA INSCRIÇÃO ACADEMIA`,
-        text: `Nível: ${level}\nNome: ${name}\nContacto: ${contact}`,
+        text: `Nível: ${level}\nNome: ${name}\nTelefone: ${phone}\nEmail: ${email}`,
       });
     } catch (err) {
       // A inscrição já ficou gravada — o email é só uma notificação extra.

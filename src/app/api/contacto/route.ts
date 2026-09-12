@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 export async function POST(req: NextRequest) {
-  const { name, email, message } = await req.json();
+  const { name, phone, email, message } = await req.json();
 
-  if (!name || !email || !message) {
+  if (!name || !phone || !email || !message) {
     return NextResponse.json({ error: "Campos em falta." }, { status: 400 });
   }
 
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       to: SMTP_TO || SMTP_USER,
       replyTo: email,
       subject: `NOVA MENSAGEM WEBSITE BLOKO`,
-      text: `Nome: ${name}\nEmail: ${email}\n\nMensagem:\n${message}`,
+      text: `Nome: ${name}\nTelefone: ${phone}\nEmail: ${email}\n\nMensagem:\n${message}`,
     });
   } catch (err) {
     console.error("Erro ao enviar mensagem de contacto:", err);

@@ -31,6 +31,9 @@ export type AcademiaInscricao = {
   id: string;
   level: string;
   name: string;
-  contact: string;
+  phone: string | null;
+  email: string | null;
+  /** Legado — inscrições anteriores à separação de phone/email. */
+  contact?: string | null;
   created_at: string;
 };

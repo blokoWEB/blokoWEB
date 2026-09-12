@@ -44,11 +44,18 @@ create table if not exists academia_inscricoes (
   id uuid primary key default gen_random_uuid(),
   level text not null,
   name text not null,
-  contact text not null,
+  phone text not null,
+  email text not null,
   created_at timestamptz not null default now()
 );
 
 create index if not exists academia_inscricoes_created_at_idx on academia_inscricoes(created_at);
+
+-- Se a tabela já existia antes de phone/email substituírem o campo contact único, corre isto também:
+-- alter table academia_inscricoes add column if not exists phone text;
+-- alter table academia_inscricoes add column if not exists email text;
+-- alter table academia_inscricoes alter column contact drop not null;
+-- update academia_inscricoes set phone = contact where phone is null;
 
 -- RLS ligado, sem policies: só o backend (service role key) acede a estas tabelas.
 alter table class_sessions enable row level security;

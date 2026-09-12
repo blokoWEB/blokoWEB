@@ -5,6 +5,7 @@ import { Check, Loader2, Send } from "lucide-react";
 
 export default function ContactForm() {
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -20,7 +21,7 @@ export default function ContactForm() {
       const res = await fetch("/api/contacto", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({ name, phone, email, message }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Não foi possível enviar a mensagem.");
@@ -65,6 +66,19 @@ export default function ContactForm() {
           onChange={(e) => setName(e.target.value)}
           className="input"
           placeholder="O teu nome"
+        />
+      </div>
+      <div>
+        <label className="text-xs uppercase tracking-wide text-[var(--color-text-muted)] mb-1.5 block">
+          Telefone
+        </label>
+        <input
+          required
+          type="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className="input"
+          placeholder="912 345 678"
         />
       </div>
       <div>

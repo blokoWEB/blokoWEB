@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ReviewPopup from "@/components/ReviewPopup";
 import CampaignPopup from "@/components/CampaignPopup";
 import ChatWidget from "@/components/ChatWidget";
+import BackToTop from "@/components/BackToTop";
 import { site } from "@/lib/site-data";
 import "./globals.css";
 
@@ -144,6 +145,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ReviewPopup />
         <CampaignPopup />
         <ChatWidget />
+        <BackToTop />
       </body>
     </html>
   );

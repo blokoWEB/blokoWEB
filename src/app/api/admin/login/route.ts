@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { createAdminSessionCookie } from "@/lib/session";
 
 export async function POST(request: Request) {
-  const { username, password } = await request.json().catch(() => ({}));
+  const { username, password, remember } = await request.json().catch(() => ({}));
 
   const expectedUser = process.env.ADMIN_USERNAME;
   const expectedHashB64 = process.env.ADMIN_PASSWORD_HASH_B64;
@@ -31,6 +31,6 @@ export async function POST(request: Request) {
     );
   }
 
-  await createAdminSessionCookie();
+  await createAdminSessionCookie(remember === true);
   return NextResponse.json({ ok: true });
 }

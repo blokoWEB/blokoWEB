@@ -8,6 +8,7 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +21,7 @@ export default function AdminLoginPage() {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, remember }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Falha no login.");
@@ -41,7 +42,7 @@ export default function AdminLoginPage() {
         </div>
         <h1 className="font-display uppercase text-2xl mb-1">Admin BLOKO</h1>
         <p className="text-sm text-[var(--color-text-muted)] mb-8">
-          Acesso reservado à gestão de aulas.
+          Zona reservada à administração interna do BLOKO.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -69,6 +70,16 @@ export default function AdminLoginPage() {
               className="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-lime)]"
             />
           </div>
+
+          <label className="flex items-center gap-2.5 text-sm text-[var(--color-text-muted)] cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={remember}
+              onChange={(e) => setRemember(e.target.checked)}
+              className="w-4 h-4 rounded accent-[var(--color-lime)]"
+            />
+            Lembrar-me
+          </label>
 
           {error && <p className="text-sm text-red-400">{error}</p>}
 

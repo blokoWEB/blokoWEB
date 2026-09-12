@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 
 export const ADMIN_COOKIE = "bloko_admin_session";
 const SESSION_DURATION_SECONDS = 60 * 60 * 8; // 8h
+const REMEMBER_DURATION_SECONDS = 60 * 60 * 24 * 30; // 30 dias
 
 function getSecret() {
   const secret = process.env.ADMIN_SESSION_SECRET;
@@ -12,11 +13,13 @@ function getSecret() {
   return new TextEncoder().encode(secret);
 }
 
-export async function createAdminSessionCookie() {
+export async function createAdminSessionCookie(remember = false) {
+  const duration = remember ? REMEMBER_DURATION_SECONDS : SESSION_DURATION_SECONDS;
+
   const token = await new SignJWT({ role: "admin" })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime(`${SESSION_DURATION_SECONDS}s`)
+    .setExpirationTime(`${duration}s`)
     .sign(getSecret());
 
   const store = await cookies();
@@ -25,7 +28,7 @@ export async function createAdminSessionCookie() {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: SESSION_DURATION_SECONDS,
+    maxAge: duration,
   });
 }
 

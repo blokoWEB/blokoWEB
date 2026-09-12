@@ -15,6 +15,7 @@ import {
   site,
   sponsors,
   tournamentSponsors,
+  upcomingTournaments,
 } from "@/lib/site-data";
 
 export type FaqLink = { url: string; label: string };
@@ -351,8 +352,11 @@ export const faq: FaqEntry[] = [
   },
   {
     id: "torneios",
-    keywords: ["torneios", "nonstop", "quando e o proximo torneio", "competir"],
-    answer: `Temos Nonstops semanais e Torneios Sociais várias vezes por ano. As datas são anunciadas nos grupos de WhatsApp do clube.`,
+    keywords: ["torneios", "nonstop", "quando e o proximo torneio", "proximo torneio", "competir"],
+    answer:
+      upcomingTournaments.length > 0
+        ? `O próximo torneio é o ${upcomingTournaments[0].name}, marcado para ${upcomingTournaments[0].dates}. ${upcomingTournaments[0].summary} Temos também Nonstops semanais, todas as semanas.`
+        : `Temos Nonstops semanais e Torneios Sociais várias vezes por ano. As datas são anunciadas nos grupos de WhatsApp do clube.`,
     prompt: `Já jogaste algum? Vais adorar a energia!`,
     link: { url: site.whatsappCommunityUrl, label: "Entrar na Comunidade" },
   },
@@ -364,7 +368,16 @@ export const faq: FaqEntry[] = [
   },
   {
     id: "campanha",
-    keywords: ["campanha", "desconto atual", "promocao", "oferta"],
+    keywords: [
+      "campanha",
+      "desconto atual",
+      "promocao",
+      "promocoes",
+      "promocao ginasio",
+      "promocoes ginasio",
+      "desconto ginasio",
+      "oferta",
+    ],
     answer: `Setembro trouxe uma campanha especial: 50% de desconto na 1ª mensalidade se pagares as 4 mensalidades seguintes adiantado até ao fim do ano — e ainda levas 1 hora de PT + toalha BLOKO.`,
     prompt: `Fala connosco no WhatsApp para aproveitares!`,
   },

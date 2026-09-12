@@ -36,6 +36,34 @@ export default function GinasioPrecarioPage() {
         </p>
       </ParallaxDive>
 
+      {/* CAMPANHA */}
+      <section className="container-bloko pt-14">
+        <ScrollReveal>
+          <div className="glass-card rounded-2xl p-6 sm:p-8 glow-lime flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8">
+            <div className="w-12 h-12 rounded-full bg-[var(--color-lime)]/10 text-[var(--color-lime)] flex items-center justify-center shrink-0">
+              <Sparkles size={22} />
+            </div>
+            <div className="flex-1">
+              <p className="font-display uppercase text-xs tracking-wide text-[var(--color-lime)] mb-1">
+                Campanha de Setembro
+              </p>
+              <p className="text-sm text-[var(--color-text-muted)]">
+                50% de desconto na 1ª mensalidade se pagares as 4 mensalidades seguintes
+                adiantado até ao fim do ano — e ainda levas 1 hora de PT + toalha BLOKO.
+              </p>
+            </div>
+            <a
+              href={site.whatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="shrink-0 inline-flex items-center justify-center gap-2 font-display uppercase text-xs tracking-wide px-6 py-3 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors"
+            >
+              Aproveitar
+            </a>
+          </div>
+        </ScrollReveal>
+      </section>
+
       {/* MENSALIDADE */}
       <section className="container-bloko py-24">
         <ScrollReveal className="max-w-2xl mb-14">

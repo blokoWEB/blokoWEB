@@ -20,10 +20,13 @@ export default function PanoramaViewer({
   haov = 140,
   /** Ângulo vertical (em graus) coberto pela foto. */
   vaov = 55,
+  /** Direção inicial (em graus) — 0 é o centro da foto. */
+  yaw = 0,
 }: {
   src: string;
   haov?: number;
   vaov?: number;
+  yaw?: number;
 }) {
   const rawId = useId();
   const id = `pnlm-${rawId.replace(/[^a-zA-Z0-9]/g, "")}`;
@@ -33,6 +36,11 @@ export default function PanoramaViewer({
 
   useEffect(() => {
     if (!scriptReady || !window.pannellum) return;
+
+    // hfov máximo fica sempre abaixo do haov para nunca revelar a zona sem
+    // imagem para lá do que a panorâmica cobre.
+    const maxHfov = Math.min(90, haov - 20);
+    const yawLimit = Math.max(0, haov / 2 - maxHfov / 2);
 
     viewerRef.current = window.pannellum.viewer(id, {
       type: "equirectangular",
@@ -45,11 +53,13 @@ export default function PanoramaViewer({
       compass: false,
       draggable: true,
       mouseZoom: true,
-      hfov: Math.min(100, haov),
+      hfov: Math.min(70, maxHfov),
       minHfov: 40,
-      maxHfov: haov,
+      maxHfov,
+      minYaw: -yawLimit,
+      maxYaw: yawLimit,
       pitch: 0,
-      yaw: 0,
+      yaw: Math.max(-yawLimit, Math.min(yawLimit, yaw)),
     });
 
     return () => {
@@ -57,7 +67,7 @@ export default function PanoramaViewer({
       viewerRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scriptReady, src, haov, vaov, id]);
+  }, [scriptReady, src, haov, vaov, yaw, id]);
 
   return (
     <div className="relative">

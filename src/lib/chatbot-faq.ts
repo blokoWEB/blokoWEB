@@ -1,4 +1,5 @@
 import {
+  academiaPolicies,
   academiaPricing,
   classTypes,
   courtSponsors,
@@ -8,6 +9,7 @@ import {
   gymPersonalTraining,
   gymWeekendPack,
   groupClassPricing,
+  nonstopRegulamento,
   padelCourtPricing,
   padelGymComboPack,
   padelLessonPricing,
@@ -383,6 +385,30 @@ export const faq: FaqEntry[] = [
     link: { url: site.whatsappCommunityUrl, label: "Entrar na Comunidade" },
   },
   {
+    id: "regulamento-nonstop",
+    keywords: [
+      "regulamento nonstop",
+      "regras do nonstop",
+      "regras do torneio",
+      "como funciona o nonstop",
+      "regulamento torneio",
+    ],
+    answer: nonstopRegulamento[0].body,
+    prompt: `Consulta o regulamento completo — desempates, atrasos e mais.`,
+    link: { url: "/torneios#regulamento", label: "Ver Regulamento" },
+  },
+  {
+    id: "atraso-nonstop",
+    keywords: [
+      "atraso nonstop",
+      "cheguei atrasado",
+      "e se eu atrasar",
+      "penalizacao atraso",
+      "posso desistir do nonstop",
+    ],
+    answer: `${nonstopRegulamento[5].body} ${nonstopRegulamento[4].body}`,
+  },
+  {
     id: "blokos",
     keywords: ["blokos pontos", "sistema de pontos", "o que sao os blokos"],
     answer: `Blokos é o nosso sistema de pontos: jogas torneios, acumulas Blokos, e trocas por horas de padel, artigos da loja e mais. Consulta o teu saldo na app BLOKOS.`,
@@ -414,6 +440,29 @@ export const faq: FaqEntry[] = [
       "preciso de contrato",
     ],
     answer: `As mensalidades e packs do Ginásio não têm fidelização — cancelas quando quiseres, sem multas nem tempo mínimo.`,
+  },
+  {
+    id: "academia-fidelizacao",
+    keywords: [
+      "fidelizacao academia",
+      "academia tem fidelizacao",
+      "compromisso academia",
+      "compromisso da academia",
+      "posso cancelar a academia",
+      "academia compromisso minimo",
+    ],
+    answer: `Na Academia há um ${academiaPolicies[2].toLowerCase()}. Depois disso, sem fidelização adicional — cancela quando quiseres.`,
+  },
+  {
+    id: "academia-faltas",
+    keywords: [
+      "posso faltar",
+      "falta academia",
+      "faltar a uma aula",
+      "reposicao de aula",
+      "cancelar aula academia",
+    ],
+    answer: `${academiaPolicies[4]}. ${academiaPolicies[5]}.`,
   },
   {
     id: "quero-ser-patrocinador",

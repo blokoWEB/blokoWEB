@@ -4,7 +4,12 @@ import Link from "next/link";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import TournamentCard from "@/components/TournamentCard";
-import { pastTournaments, tournamentFormats, upcomingTournaments } from "@/lib/site-data";
+import {
+  nonstopRegulamento,
+  pastTournaments,
+  tournamentFormats,
+  upcomingTournaments,
+} from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -13,33 +18,6 @@ export const metadata = pageMetadata({
     "Torneios Sociais e Nonstops semanais de padel em Bragança, e o sistema de pontos Blokos.",
   path: "/torneios",
 });
-
-const regulamento = [
-  {
-    title: "1 — Estrutura da prova",
-    body: "Os Nonstop de cada categoria têm 8 duplas, que disputam 7 jogos de 13 minutos, de forma a que todas as duplas se defrontem. No final há uma classificação em função dos resultados obtidos, sendo a dupla vencedora a que tiver maior número de vitórias ao longo do torneio.",
-  },
-  {
-    title: "2 — Inscrições",
-    body: "As inscrições são feitas através do WhatsApp, com os nomes das duplas adicionados após o anúncio de vagas. O pagamento deve ser feito até 15 minutos antes do início — as duplas devem apresentar-se o mais tardar às 21h45. Cancelamentos com menos de 12h de antecedência fazem perder prioridade de inscrição no evento seguinte.",
-  },
-  {
-    title: "3 — Jogos",
-    body: "Início com 5 minutos de aquecimento. O serviço de abertura é definido por sorteio. Os jogos são disputados com ponto de ouro; só contam jogos completos, com regras específicas para empates e jogos incompletos.",
-  },
-  {
-    title: "4 — Critérios de desempate",
-    body: "1) Confrontos diretos entre duplas empatadas · 2) Diferença de jogos nesses confrontos · 3) Diferença de jogos no torneio · 4) Total de jogos ganhos · 5) Ordem de inscrição · 6) Sorteio.",
-  },
-  {
-    title: "5 — Desistências e repescagens",
-    body: "Se uma dupla desistir ou trocar de atleta (lesão ou outro motivo), os jogos dessa dupla são anulados para efeitos de classificação.",
-  },
-  {
-    title: "6 — Horários e conduta desportiva",
-    body: "Apresentação 15 min antes do jogo. Atrasos são penalizados com 3 jogos por cada 5 minutos; 10 minutos de atraso resultam em derrota por 6-0. Condutas antidesportivas reincidentes resultam também em derrota por 6-0, podendo levar a exclusão sem reembolso em casos graves.",
-  },
-];
 
 export default function TorneiosPage() {
   return (
@@ -190,7 +168,7 @@ export default function TorneiosPage() {
           </ScrollReveal>
 
           <div className="space-y-4 max-w-3xl">
-            {regulamento.map((r, i) => (
+            {nonstopRegulamento.map((r, i) => (
               <ScrollReveal key={r.title} delay={i * 0.05}>
                 <details className="glass-card rounded-2xl p-6 group">
                   <summary className="font-display uppercase text-sm cursor-pointer list-none flex items-center justify-between">

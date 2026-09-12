@@ -236,6 +236,17 @@ export const academiaPricing = {
   ],
 };
 
+// Condições e política de faltas da Academia BLOKO.
+export const academiaPolicies = [
+  "1º mês pago na inscrição; restantes até ao dia 6 de cada mês, na receção",
+  "Penalização de 4€ por pagamento em atraso",
+  "Compromisso mínimo de 1 mês por inscrição",
+  "Aulas pessoais e não transmissíveis",
+  "Faltas sem aviso não têm reposição; faltas justificadas podem ser repostas consoante disponibilidade",
+  "Cancelamento com 24h de antecedência não desconta do pack de aulas",
+  "Aulas canceladas pelo clube são creditadas na mensalidade seguinte",
+];
+
 // Preçário — Ginásio: Treino Personalizado (PT)
 export const gymPersonalTraining = [
   {
@@ -381,6 +392,34 @@ export const tournamentFormats = [
     frequency: "Todas as semanas",
     description:
       "8 duplas, 7 jogos de 13 minutos, todas contra todas. Pode disputar-se em formato normal ou estilo americano. Inscrições via WhatsApp.",
+  },
+];
+
+// Regulamento dos Nonstop semanais — usado na página de Torneios e pelo Blokinho.
+export const nonstopRegulamento = [
+  {
+    title: "1 — Estrutura da prova",
+    body: "Os Nonstop de cada categoria têm 8 duplas, que disputam 7 jogos de 13 minutos, de forma a que todas as duplas se defrontem. No final há uma classificação em função dos resultados obtidos, sendo a dupla vencedora a que tiver maior número de vitórias ao longo do torneio.",
+  },
+  {
+    title: "2 — Inscrições",
+    body: "As inscrições são feitas através do WhatsApp, com os nomes das duplas adicionados após o anúncio de vagas. O pagamento deve ser feito até 15 minutos antes do início — as duplas devem apresentar-se o mais tardar às 21h45. Cancelamentos com menos de 12h de antecedência fazem perder prioridade de inscrição no evento seguinte.",
+  },
+  {
+    title: "3 — Jogos",
+    body: "Início com 5 minutos de aquecimento. O serviço de abertura é definido por sorteio. Os jogos são disputados com ponto de ouro; só contam jogos completos, com regras específicas para empates e jogos incompletos.",
+  },
+  {
+    title: "4 — Critérios de desempate",
+    body: "1) Confrontos diretos entre duplas empatadas · 2) Diferença de jogos nesses confrontos · 3) Diferença de jogos no torneio · 4) Total de jogos ganhos · 5) Ordem de inscrição · 6) Sorteio.",
+  },
+  {
+    title: "5 — Desistências e repescagens",
+    body: "Se uma dupla desistir ou trocar de atleta (lesão ou outro motivo), os jogos dessa dupla são anulados para efeitos de classificação.",
+  },
+  {
+    title: "6 — Horários e conduta desportiva",
+    body: "Apresentação 15 min antes do jogo. Atrasos são penalizados com 3 jogos por cada 5 minutos; 10 minutos de atraso resultam em derrota por 6-0. Condutas antidesportivas reincidentes resultam também em derrota por 6-0, podendo levar a exclusão sem reembolso em casos graves.",
   },
 ];
 

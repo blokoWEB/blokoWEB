@@ -11,7 +11,7 @@ import {
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import AcademiaLevelPicker from "@/components/AcademiaLevelPicker";
-import { academiaPricing, site } from "@/lib/site-data";
+import { academiaPolicies, academiaPricing, site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -28,16 +28,6 @@ const format = [
   { icon: Calendar, text: "Turmas fixas, uma ou duas vezes por semana, ao longo do ano" },
   { icon: CreditCard, text: "Mensalidade ou packs de aulas válidos por 1 ano" },
   { icon: ShieldCheck, text: "Raquetes de padel disponíveis para empréstimo" },
-];
-
-const policies = [
-  "1º mês pago na inscrição; restantes até ao dia 6 de cada mês, na receção",
-  "Penalização de 4€ por pagamento em atraso",
-  "Compromisso mínimo de 1 mês por inscrição",
-  "Aulas pessoais e não transmissíveis",
-  "Faltas sem aviso não têm reposição; faltas justificadas podem ser repostas consoante disponibilidade",
-  "Cancelamento com 24h de antecedência não desconta do pack de aulas",
-  "Aulas canceladas pelo clube são creditadas na mensalidade seguinte",
 ];
 
 export default function AcademiaPage() {
@@ -94,7 +84,7 @@ export default function AcademiaPage() {
               <Clock size={16} /> Condições e política de faltas
             </h3>
             <ul className="space-y-2.5">
-              {policies.map((p) => (
+              {academiaPolicies.map((p) => (
                 <li key={p} className="flex items-start gap-2.5 text-sm text-[var(--color-text-muted)]">
                   <CircleCheck size={15} className="text-[var(--color-lime)] shrink-0 mt-0.5" />
                   {p}

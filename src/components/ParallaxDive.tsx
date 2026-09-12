@@ -43,7 +43,7 @@ export default function ParallaxDive({
   const filter = useTransform(blur, (b) => `blur(${b}px)`);
 
   return (
-    <section ref={ref} className="relative h-[100dvh] overflow-hidden">
+    <section ref={ref} className="relative h-[100dvh] overflow-hidden bg-[var(--color-bg)]">
       <motion.div
         style={{
           scale,

@@ -16,6 +16,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/blokos", priority: 0.6, changeFrequency: "monthly" },
     { path: "/patrocinadores", priority: 0.5, changeFrequency: "monthly" },
     { path: "/contactos", priority: 0.6, changeFrequency: "monthly" },
+    { path: "/politica-privacidade", priority: 0.2, changeFrequency: "monthly" },
+    { path: "/politica-cookies", priority: 0.2, changeFrequency: "monthly" },
+    { path: "/termos-condicoes", priority: 0.2, changeFrequency: "monthly" },
   ];
 
   const lastModified = new Date();

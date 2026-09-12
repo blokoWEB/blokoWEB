@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, MessageCircle, Phone } from "lucide-react";
+import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { navLinks, site, whatsappGroups } from "@/lib/site-data";
 
 function InstagramIcon() {
@@ -143,7 +143,35 @@ export default function Footer() {
                 {site.phone}
               </a>
             </li>
+            <li className="flex items-center gap-2.5">
+              <Mail size={16} className="shrink-0 text-[var(--color-blue-soft)]" />
+              <a href={`mailto:${site.email}`} className="hover:text-[var(--color-text)] transition-colors">
+                {site.email}
+              </a>
+            </li>
           </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-white/5">
+        <div className="container-bloko py-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-[var(--color-text-muted)]">
+          <Link href="/politica-privacidade" className="hover:text-[var(--color-text)] transition-colors">
+            Política de Privacidade
+          </Link>
+          <Link href="/politica-cookies" className="hover:text-[var(--color-text)] transition-colors">
+            Política de Cookies
+          </Link>
+          <Link href="/termos-condicoes" className="hover:text-[var(--color-text)] transition-colors">
+            Termos e Condições
+          </Link>
+          <a
+            href="https://www.livroreclamacoes.pt/inicio/"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-[var(--color-text)] transition-colors"
+          >
+            Livro de Reclamações Online
+          </a>
         </div>
       </div>
 

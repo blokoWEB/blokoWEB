@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, Send, X } from "lucide-react";
 import Portal from "@/components/Portal";
-import { matchFaq, type FaqEntry } from "@/lib/chatbot-faq";
+import { matchFaq, matchKnowledge, type FaqEntry } from "@/lib/chatbot-faq";
 import { site } from "@/lib/site-data";
 
 type Message = {
@@ -72,17 +72,23 @@ export default function ChatWidget() {
     }
 
     const match = matchFaq(q);
-
-    if (!match) {
-      addBotBubble(FALLBACK, BUBBLE_DELAY_MS, true);
+    if (match) {
+      addBotBubble(match.answer, BUBBLE_DELAY_MS, false, match.prompt ? undefined : match.link);
+      if (match.prompt) {
+        addBotBubble(match.prompt, BUBBLE_DELAY_MS * 2.4, false, match.link);
+        pendingRef.current = match.followUp ? match : null;
+      }
       return;
     }
 
-    addBotBubble(match.answer, BUBBLE_DELAY_MS, false, match.prompt ? undefined : match.link);
-    if (match.prompt) {
-      addBotBubble(match.prompt, BUBBLE_DELAY_MS * 2.4, false, match.link);
-      pendingRef.current = match.followUp ? match : null;
+    // Antes de admitir que não sabe, tenta a base de conhecimento geral do site.
+    const kb = matchKnowledge(q);
+    if (kb) {
+      addBotBubble(kb.answer, BUBBLE_DELAY_MS, false, kb.link);
+      return;
     }
+
+    addBotBubble(FALLBACK, BUBBLE_DELAY_MS, true);
   }
 
   function handleSubmit(e: React.FormEvent) {

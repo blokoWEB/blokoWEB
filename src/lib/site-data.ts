@@ -408,7 +408,7 @@ export const upcomingTournaments: TournamentEntry[] = [
     summary: "Brevemente mais info.",
     poster: null,
     comingSoon: true,
-    registerUrl: "#",
+    registerUrl: "https://padelteams.pt/info/default/competition?k=Y2lkPTc1NDQ%3D",
     regulamentoUrl: "#",
     partnerUrl: site.whatsappCommunityUrl,
   },

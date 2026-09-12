@@ -1,6 +1,8 @@
 import {
   academiaPricing,
+  classTypes,
   courtSponsors,
+  events,
   gymFamilyPack,
   gymMembership,
   gymPersonalTraining,
@@ -9,7 +11,10 @@ import {
   padelCourtPricing,
   padelGymComboPack,
   padelLessonPricing,
+  pastTournaments,
   site,
+  sponsors,
+  tournamentSponsors,
 } from "@/lib/site-data";
 
 export type FaqLink = { url: string; label: string };
@@ -342,6 +347,7 @@ export const faq: FaqEntry[] = [
     id: "blokos",
     keywords: ["blokos pontos", "sistema de pontos", "o que sao os blokos"],
     answer: `Blokos é o nosso sistema de pontos: jogas torneios, acumulas Blokos, e trocas por horas de padel, artigos da loja e mais. Consulta o teu saldo na app BLOKOS.`,
+    link: { url: site.blokosAppUrl, label: "Abrir App BLOKOS" },
   },
   {
     id: "campanha",
@@ -351,13 +357,115 @@ export const faq: FaqEntry[] = [
   },
 ];
 
-export function matchFaq(question: string): FaqEntry | null {
+// Base de conhecimento "geral" — dados reais do site que não têm uma
+// resposta curada dedicada. Consultada só depois de `faq` não encontrar
+// nada, para tentar sempre responder com informação real antes de desistir.
+const classBySlug = (slug: string) => classTypes.find((c) => c.slug === slug)!;
+
+export const knowledge: FaqEntry[] = [
+  {
+    id: "patrocinador-campo",
+    keywords: [
+      "patrocinador do campo",
+      "patrocinadores dos campos",
+      "nome dos campos",
+      "quem patrocina os campos",
+      "naming rights",
+    ],
+    answer: `Os 4 campos têm naming rights de patrocinadores: Campo 1 — ${courtSponsors[0].sponsor}, Campo 2 — ${courtSponsors[1].sponsor}, Campo 3 — ${courtSponsors[2].sponsor}, Campo 4 — ${courtSponsors[3].sponsor}.`,
+  },
+  {
+    id: "patrocinadores-gerais",
+    keywords: [
+      "quem sao os patrocinadores",
+      "lista de patrocinadores",
+      "parceiros do bloko",
+      "quais sao os parceiros",
+    ],
+    answer: `Contamos com o apoio de vários parceiros locais: ${sponsors.map((s) => s.name).join(", ")}.`,
+  },
+  {
+    id: "patrocinadores-torneios",
+    keywords: [
+      "patrocinadores dos torneios",
+      "quem patrocina os torneios",
+      "patrocinadores de torneios anteriores",
+    ],
+    answer: `Os nossos torneios já tiveram o apoio de: ${tournamentSponsors.map((s) => s.name).join(", ")}.`,
+  },
+  {
+    id: "tipos-aulas-padel",
+    keywords: [
+      "tipos de aulas de padel",
+      "niveis de aulas de padel",
+      "iniciacao aperfeicoamento",
+      "aula para iniciantes padel",
+    ],
+    answer: `Temos aulas de Padel para dois níveis: ${classBySlug("padel-iniciacao").full} (${classBySlug("padel-iniciacao").description.toLowerCase()}) e ${classBySlug("padel-aperfeicoamento").full} (${classBySlug("padel-aperfeicoamento").description.toLowerCase()})`,
+  },
+  {
+    id: "escaloes-academia",
+    keywords: [
+      "escaloes da academia",
+      "idades da academia",
+      "academia sub 12",
+      "academia sub 16",
+      "para que idades e a academia",
+    ],
+    answer: `A Academia tem duas turmas fixas por escalão: ${classBySlug("academia-sub12").full} (${classBySlug("academia-sub12").description.toLowerCase()}) e ${classBySlug("academia-sub16").full} (${classBySlug("academia-sub16").description.toLowerCase()})`,
+  },
+  {
+    id: "descricao-aulas-grupo",
+    keywords: [
+      "o que e o gap",
+      "o que e abs",
+      "o que e funcional",
+      "descricao das aulas de grupo",
+      "em que consistem as aulas",
+    ],
+    answer: `${classBySlug("gap").full} (GAP): ${classBySlug("gap").description} ${classBySlug("abs").full} (ABS): ${classBySlug("abs").description} ${classBySlug("funcional").full}: ${classBySlug("funcional").description}`,
+  },
+  {
+    id: "eventos-realizados",
+    keywords: [
+      "eventos que ja fizeram",
+      "eventos anteriores",
+      "festas do bloko",
+      "aniversario bloko",
+      "que eventos ja houve",
+    ],
+    answer: `Já fizemos vários eventos temáticos, entre eles: ${events.map((e) => e.name).join(", ")}.`,
+  },
+  {
+    id: "torneios-realizados",
+    keywords: [
+      "torneios que ja fizeram",
+      "torneios anteriores",
+      "historico de torneios",
+      "que torneios ja houve",
+    ],
+    answer: `Já realizámos vários Torneios Sociais, entre eles: ${pastTournaments.map((t) => t.name).join(", ")}.`,
+  },
+  {
+    id: "socio-fundador",
+    keywords: ["socio fundador", "desconto fundador", "o que e socio fundador"],
+    answer: `Os Sócios Fundadores têm ${padelLessonPricing.founderDiscount.toLowerCase()} nas Aulas de Padel e ${academiaPricing.founderDiscount.toLowerCase()} na Academia.`,
+  },
+  {
+    id: "grupo-marcacoes",
+    keywords: ["grupo de marcacoes", "avisos de marcacoes"],
+    answer: `Para pedidos e avisos sobre marcações de campos e aulas, junta-te ao grupo "Marcações" na nossa comunidade de WhatsApp.`,
+    link: { url: site.whatsappCommunityUrl, label: "Entrar na Comunidade" },
+  },
+];
+
+function findBestMatch<T extends { keywords: string[] }>(question: string, entries: T[]): T | null {
   const qWords = words(question);
   if (qWords.length === 0) return null;
 
-  let best: { entry: FaqEntry; score: number } | null = null;
+  let best: { entry: T; score: number } | null = null;
 
-  for (const entry of faq) {
+  for (const entry of entries) {
     const bag = new Set(entry.keywords.flatMap((k) => words(k)));
     const matched = qWords.filter((w) => bag.has(w));
     if (matched.length === 0) continue;
@@ -383,4 +491,14 @@ export function matchFaq(question: string): FaqEntry | null {
   }
 
   return best ? best.entry : null;
+}
+
+export function matchFaq(question: string): FaqEntry | null {
+  return findBestMatch(question, faq);
+}
+
+/** Pesquisa a base de conhecimento geral — usada só depois de `matchFaq` falhar,
+ * para tentar sempre encontrar informação real do site antes de admitir que não sabe. */
+export function matchKnowledge(question: string): FaqEntry | null {
+  return findBestMatch(question, knowledge);
 }

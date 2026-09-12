@@ -26,3 +26,11 @@ export type Booking = {
   cancelled: boolean;
   created_at: string;
 };
+
+export type AcademiaInscricao = {
+  id: string;
+  level: string;
+  name: string;
+  contact: string;
+  created_at: string;
+};

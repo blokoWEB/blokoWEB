@@ -6,7 +6,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { X } from "lucide-react";
 import Portal from "@/components/Portal";
-import { site } from "@/lib/site-data";
 
 // Muda esta key sempre que trocares de campanha — garante que quem já viu
 // (e fechou) a campanha anterior volta a ver a nova.
@@ -67,17 +66,6 @@ export default function CampaignPopup() {
                 className="w-full h-auto"
                 priority
               />
-              <div className="p-4 bg-[var(--color-bg-elevated)]">
-                <a
-                  href={site.whatsappBookingUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={dismiss}
-                  className="block text-center font-display uppercase tracking-wide py-3.5 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
-                >
-                  Quero aproveitar
-                </a>
-              </div>
             </motion.div>
           </motion.div>
         )}

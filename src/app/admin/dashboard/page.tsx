@@ -2,9 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, LogOut, Pencil, Plus, Trash2, Users, X } from "lucide-react";
+import { GraduationCap, Loader2, LogOut, Pencil, Plus, Trash2, Users, X } from "lucide-react";
 import { classCategories, type ClassCategoryKey } from "@/lib/site-data";
-import type { Booking, ClassSessionWithCount } from "@/lib/types";
+import type { AcademiaInscricao, Booking, ClassSessionWithCount } from "@/lib/types";
 
 const categoryStyle: Record<ClassCategoryKey, string> = {
   ginasio: "border-[var(--color-lime)]/40 text-[var(--color-lime)]",
@@ -29,6 +29,7 @@ function toDateInput(d: Date) {
 
 export default function AdminDashboardPage() {
   const router = useRouter();
+  const [view, setView] = useState<"aulas" | "academia">("aulas");
   const [sessions, setSessions] = useState<ClassSessionWithCount[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<ClassCategoryKey>("ginasio");
@@ -95,7 +96,9 @@ export default function AdminDashboardPage() {
             <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-lime)] mb-2">
               Painel Admin
             </p>
-            <h1 className="font-display uppercase text-3xl md:text-4xl">Gestão de aulas</h1>
+            <h1 className="font-display uppercase text-3xl md:text-4xl">
+              {view === "aulas" ? "Gestão de aulas" : "Inscrições Academia"}
+            </h1>
           </div>
           <button
             onClick={handleLogout}
@@ -105,6 +108,33 @@ export default function AdminDashboardPage() {
           </button>
         </div>
 
+        <div className="flex flex-wrap gap-2 mb-8">
+          <button
+            onClick={() => setView("aulas")}
+            className={`font-display uppercase text-xs tracking-wide px-5 py-2.5 rounded-full border transition-colors ${
+              view === "aulas"
+                ? "bg-white text-black border-white"
+                : "border-white/15 text-[var(--color-text-muted)] hover:border-white/30 hover:text-white"
+            }`}
+          >
+            Aulas
+          </button>
+          <button
+            onClick={() => setView("academia")}
+            className={`flex items-center gap-2 font-display uppercase text-xs tracking-wide px-5 py-2.5 rounded-full border transition-colors ${
+              view === "academia"
+                ? "bg-white text-black border-white"
+                : "border-white/15 text-[var(--color-text-muted)] hover:border-white/30 hover:text-white"
+            }`}
+          >
+            <GraduationCap size={14} /> Inscrições Academia
+          </button>
+        </div>
+
+        {view === "academia" && <AcademiaInscricoesSection />}
+
+        {view === "aulas" && (
+        <>
         <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
           <div className="flex flex-wrap gap-2">
             {classCategories.map((c) => (
@@ -234,6 +264,8 @@ export default function AdminDashboardPage() {
               );
             })}
           </div>
+        )}
+        </>
         )}
       </div>
 
@@ -657,6 +689,110 @@ function BookingsModal({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function AcademiaInscricoesSection() {
+  const [inscricoes, setInscricoes] = useState<AcademiaInscricao[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/admin/academia-inscricoes")
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Erro ao carregar inscrições.");
+        if (!cancelled) setInscricoes(data.inscricoes ?? []);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err.message);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function handleDelete(id: string) {
+    if (!confirm("Eliminar esta inscrição?")) return;
+    await fetch(`/api/admin/academia-inscricoes/${id}`, { method: "DELETE" });
+    setInscricoes((prev) => prev.filter((i) => i.id !== id));
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center gap-3 text-[var(--color-text-muted)]">
+        <Loader2 className="animate-spin" size={18} /> A carregar…
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="glass-card rounded-2xl p-6 text-sm text-red-400">{error}</div>;
+  }
+
+  if (inscricoes.length === 0) {
+    return (
+      <div className="glass-card rounded-2xl p-10 text-center text-[var(--color-text-muted)]">
+        Ainda sem inscrições na Academia.
+      </div>
+    );
+  }
+
+  return (
+    <div className="glass-card rounded-2xl overflow-hidden">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-white/10 text-left">
+            <th className="px-5 py-3 font-display uppercase text-xs text-[var(--color-text-muted)]">
+              Data
+            </th>
+            <th className="px-5 py-3 font-display uppercase text-xs text-[var(--color-text-muted)]">
+              Nível
+            </th>
+            <th className="px-5 py-3 font-display uppercase text-xs text-[var(--color-text-muted)]">
+              Nome
+            </th>
+            <th className="px-5 py-3 font-display uppercase text-xs text-[var(--color-text-muted)]">
+              Contacto
+            </th>
+            <th className="px-5 py-3" />
+          </tr>
+        </thead>
+        <tbody>
+          {inscricoes.map((i) => (
+            <tr key={i.id} className="border-b border-white/5 last:border-0">
+              <td className="px-5 py-3 text-[var(--color-text-muted)] whitespace-nowrap">
+                {new Date(i.created_at).toLocaleDateString("pt-PT", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </td>
+              <td className="px-5 py-3">
+                <span className="text-[10px] uppercase tracking-wide px-2.5 py-1 rounded-full border border-white/25 text-white/70">
+                  {i.level}
+                </span>
+              </td>
+              <td className="px-5 py-3">{i.name}</td>
+              <td className="px-5 py-3 text-[var(--color-text-muted)]">{i.contact}</td>
+              <td className="px-5 py-3 text-right">
+                <button
+                  onClick={() => handleDelete(i.id)}
+                  className="text-[var(--color-text-muted)] hover:text-red-400 transition-colors"
+                  aria-label="Eliminar inscrição"
+                >
+                  <Trash2 size={15} />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

@@ -40,6 +40,17 @@ create table if not exists bookings (
 create index if not exists bookings_session_id_idx on bookings(session_id);
 create index if not exists class_sessions_starts_at_idx on class_sessions(starts_at);
 
+create table if not exists academia_inscricoes (
+  id uuid primary key default gen_random_uuid(),
+  level text not null,
+  name text not null,
+  contact text not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists academia_inscricoes_created_at_idx on academia_inscricoes(created_at);
+
 -- RLS ligado, sem policies: só o backend (service role key) acede a estas tabelas.
 alter table class_sessions enable row level security;
 alter table bookings enable row level security;
+alter table academia_inscricoes enable row level security;

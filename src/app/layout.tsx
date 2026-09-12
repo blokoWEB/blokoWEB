@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ReviewPopup from "@/components/ReviewPopup";
 import CampaignPopup from "@/components/CampaignPopup";
+import ChatWidget from "@/components/ChatWidget";
 import { site } from "@/lib/site-data";
 import "./globals.css";
 
@@ -142,6 +143,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Footer />
         <ReviewPopup />
         <CampaignPopup />
+        <ChatWidget />
       </body>
     </html>
   );

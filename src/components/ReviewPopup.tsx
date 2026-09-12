@@ -34,7 +34,7 @@ export default function ReviewPopup() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-4 inset-x-4 sm:inset-x-auto sm:right-4 sm:left-auto sm:max-w-xs z-40 glass-card rounded-2xl p-5"
+          className="fixed bottom-4 right-4 left-24 sm:inset-x-auto sm:left-auto sm:max-w-xs z-40 glass-card rounded-2xl p-5"
         >
           <button
             onClick={dismiss}

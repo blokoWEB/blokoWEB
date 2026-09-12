@@ -8,7 +8,12 @@ import Portal from "@/components/Portal";
 import { matchFaq, type FaqEntry } from "@/lib/chatbot-faq";
 import { site } from "@/lib/site-data";
 
-type Message = { from: "bot" | "user"; text: string; fallback?: boolean };
+type Message = {
+  from: "bot" | "user";
+  text: string;
+  fallback?: boolean;
+  link?: { url: string; label: string };
+};
 
 const BUBBLE_DELAY_MS = 350;
 
@@ -37,9 +42,14 @@ export default function ChatWidget() {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, open]);
 
-  function addBotBubble(text: string, delay: number, fallback = false) {
+  function addBotBubble(
+    text: string,
+    delay: number,
+    fallback = false,
+    link?: { url: string; label: string }
+  ) {
     setTimeout(() => {
-      setMessages((prev) => [...prev, { from: "bot", text, fallback }]);
+      setMessages((prev) => [...prev, { from: "bot", text, fallback, link }]);
     }, delay);
   }
 
@@ -68,9 +78,9 @@ export default function ChatWidget() {
       return;
     }
 
-    addBotBubble(match.answer, BUBBLE_DELAY_MS);
+    addBotBubble(match.answer, BUBBLE_DELAY_MS, false, match.prompt ? undefined : match.link);
     if (match.prompt) {
-      addBotBubble(match.prompt, BUBBLE_DELAY_MS * 2.4);
+      addBotBubble(match.prompt, BUBBLE_DELAY_MS * 2.4, false, match.link);
       pendingRef.current = match.followUp ? match : null;
     }
   }
@@ -116,13 +126,27 @@ export default function ChatWidget() {
                 {messages.map((m, i) => (
                   <div
                     key={i}
-                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
-                      m.from === "bot"
-                        ? "bg-white/5 text-[var(--color-text)]"
-                        : "bg-[var(--color-lime)] text-black ml-auto"
-                    }`}
+                    className={`flex flex-col gap-2 max-w-[85%] ${m.from === "user" ? "ml-auto items-end" : "items-start"}`}
                   >
-                    {m.text}
+                    <div
+                      className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                        m.from === "bot"
+                          ? "bg-white/5 text-[var(--color-text)]"
+                          : "bg-[var(--color-lime)] text-black"
+                      }`}
+                    >
+                      {m.text}
+                    </div>
+                    {m.from === "bot" && m.link && (
+                      <a
+                        href={m.link.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="self-start inline-flex items-center gap-2 font-display uppercase text-xs tracking-wide px-4 py-2.5 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
+                      >
+                        {m.link.label}
+                      </a>
+                    )}
                   </div>
                 ))}
 

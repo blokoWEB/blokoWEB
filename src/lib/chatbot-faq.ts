@@ -1,5 +1,6 @@
 import {
   academiaPricing,
+  courtSponsors,
   gymFamilyPack,
   gymMembership,
   gymPersonalTraining,
@@ -11,6 +12,8 @@ import {
   site,
 } from "@/lib/site-data";
 
+export type FaqLink = { url: string; label: string };
+
 export type FaqEntry = {
   id: string;
   keywords: string[];
@@ -20,6 +23,8 @@ export type FaqEntry = {
   prompt?: string;
   /** Interpreta a resposta do utilizador ao `prompt`. Devolve null para cair no FAQ normal. */
   followUp?: (reply: string) => string | null;
+  /** Botão de ação a mostrar junto da resposta (ex: link da comunidade de WhatsApp). */
+  link?: FaqLink;
 };
 
 function euro(v: string) {
@@ -34,18 +39,108 @@ export function normalize(text: string) {
     .trim();
 }
 
+// Palavras demasiado comuns para ajudarem a distinguir o tema da pergunta.
+const STOPWORDS = new Set(
+  [
+    "a",
+    "o",
+    "os",
+    "as",
+    "de",
+    "do",
+    "da",
+    "dos",
+    "das",
+    "um",
+    "uma",
+    "uns",
+    "umas",
+    "e",
+    "ou",
+    "com",
+    "sem",
+    "para",
+    "por",
+    "no",
+    "na",
+    "nos",
+    "nas",
+    "em",
+    "ao",
+    "aos",
+    "à",
+    "às",
+    "que",
+    "e",
+    "é",
+    "sao",
+    "está",
+    "esta",
+    "estao",
+    "tem",
+    "tens",
+    "ter",
+    "tenho",
+    "posso",
+    "pode",
+    "podem",
+    "quero",
+    "queres",
+    "qual",
+    "quais",
+    "quanto",
+    "quanta",
+    "quantos",
+    "quantas",
+    "como",
+    "onde",
+    "quando",
+    "ha",
+    "vosso",
+    "vossa",
+    "voces",
+    "bloko",
+    "clube",
+    "custa",
+    "custam",
+    "vc",
+  ].map((w) => normalize(w))
+);
+
+function words(text: string): string[] {
+  return normalize(text)
+    .split(/[^a-z0-9]+/)
+    .filter((w) => w.length > 1 && !STOPWORDS.has(w));
+}
+
 export const faq: FaqEntry[] = [
+  {
+    id: "quantos-campos",
+    keywords: [
+      "quantos campos",
+      "campos de padel tem",
+      "numero de campos",
+      "quantos campos de padel",
+    ],
+    answer: `Temos ${courtSponsors.length} campos de padel panorâmicos indoor, com piso Mondo Supercourt e iluminação de competição.`,
+    prompt: `Vem conhecer o espaço — queres marcar uma visita ou já um jogo?`,
+  },
   {
     id: "preco-padel-campo",
     keywords: [
       "preco hora padel",
       "quanto custa padel",
       "preco campo",
+      "preco padel",
       "aluguer campo",
+      "aluguer de campo",
       "alugar campo",
       "preco do campo",
       "quanto custa o campo",
+      "quanto custa alugar um campo",
       "reservar campo preco",
+      "preco raquete",
+      "aluguer raquete",
     ],
     answer:
       `Aluguer de campo: Off Peak (seg-sex, ${padelCourtPricing.offPeakHours.toLowerCase()}) ${padelCourtPricing.offPeak[0].price} (1h) ou ${padelCourtPricing.offPeak[1].price} (1h30). ` +
@@ -62,6 +157,7 @@ export const faq: FaqEntry[] = [
       "treino unico",
       "experimentar ginasio",
       "ir uma vez ao ginasio",
+      "entrada avulsa",
     ],
     answer:
       `Uma entrada avulsa/diária no ginásio (Treino Único) custa ${euro(gymMembership.trial[0].price)}. Se depois te inscreveres na mensalidade, esse valor é-te devolvido. ` +
@@ -77,6 +173,7 @@ export const faq: FaqEntry[] = [
       "quanto custa o ginasio",
       "inscricao ginasio",
       "quanto custa inscrever",
+      "preco mensal ginasio",
     ],
     answer: `Mensalidade do Ginásio: Acesso Livre ${euro(gymMembership.plans[0].price)}/mês, ou Off Peak (${gymMembership.plans[1].note?.toLowerCase()}) por ${euro(gymMembership.plans[1].price)}/mês. Inscrição: ${euro(gymMembership.inscricao)} (inclui avaliação física e plano de treino).`,
     prompt: `Treinas toda a semana ou preferes só ao fim de semana? E já agora — vens com família? Temos o Pack Família com desconto por pessoa!`,
@@ -137,7 +234,13 @@ export const faq: FaqEntry[] = [
   },
   {
     id: "aulas-padel-preco",
-    keywords: ["preco aulas padel", "aula de padel preco", "quanto custa uma aula de padel"],
+    keywords: [
+      "preco aulas padel",
+      "aula de padel preco",
+      "quanto custa uma aula de padel",
+      "marcar aula de padel",
+      "aula padel individual",
+    ],
     answer:
       `Aulas de Padel (individual): Peak Hour ${padelLessonPricing.peak[0].plans[0].price} (1 aula) / ${padelLessonPricing.peak[0].plans[1].price} (5 aulas) / ${padelLessonPricing.peak[0].plans[2].price} (10 aulas). ` +
       `Off Peak: ${padelLessonPricing.offPeak[0].plans[0].price} / ${padelLessonPricing.offPeak[0].plans[1].price} / ${padelLessonPricing.offPeak[0].plans[2].price}. Em grupo o preço por pessoa desce bastante — ${padelLessonPricing.founderDiscount.toLowerCase()}.`,
@@ -151,8 +254,16 @@ export const faq: FaqEntry[] = [
   },
   {
     id: "aulas-grupo-preco",
-    keywords: ["aulas de grupo preco", "gap abs funcional preco", "aula avulso ginasio"],
-    answer: `Aulas de Grupo (GAP, ABS, Funcional) já estão incluídas na mensalidade do Ginásio. Sem mensalidade: ${groupClassPricing.tiers[0].plans[0].freq} por ${groupClassPricing.tiers[0].plans[0].price}, ou pacotes semanais a partir de ${groupClassPricing.tiers[0].plans[1].price}. ${groupClassPricing.note}.`,
+    keywords: [
+      "aulas de grupo",
+      "aula de grupo preco",
+      "aulas de grupo preco",
+      "marcar aula de grupo",
+      "gap abs funcional preco",
+      "aula avulso ginasio",
+      "gap abs funcional",
+    ],
+    answer: `Aulas de Grupo (GAP, ABS, Funcional) já estão incluídas na mensalidade do Ginásio. Sem mensalidade: ${groupClassPricing.tiers[0].plans[0].freq} por ${groupClassPricing.tiers[0].plans[0].price}, ou pacotes semanais a partir de ${groupClassPricing.tiers[0].plans[1].price}. ${groupClassPricing.note}. Marca-se online no Mapa de Aulas, sem precisares de conta.`,
     prompt: `Já experimentaste alguma? É só apareceres — qual te apetece mais?`,
   },
   {
@@ -174,10 +285,27 @@ export const faq: FaqEntry[] = [
     answer: `Podes ligar-nos para ${site.phone} ou escrever para ${site.email}.`,
   },
   {
+    id: "bar-lounge",
+    keywords: ["bar", "lounge", "servico de bar", "convivio", "bebidas"],
+    answer: `Sim! Temos um espaço de bar e lounge para o convívio antes ou depois do jogo e do treino.`,
+    prompt: `Fica cá depois do teu jogo para umas bebidas com a malta!`,
+  },
+  {
     id: "reservar-padel",
-    keywords: ["reservar padel", "marcar campo", "quero jogar padel", "playtomic"],
+    keywords: [
+      "reservar padel",
+      "marcar campo",
+      "marcar jogo",
+      "marcar um jogo",
+      "posso marcar",
+      "quero jogar padel",
+      "quero marcar",
+      "como marco",
+      "playtomic",
+    ],
     answer: `Reserva o teu campo diretamente pelo WhatsApp ou pelo Playtomic — o que preferires.`,
     prompt: `Combina já um jogo, é rapidinho!`,
+    link: { url: site.whatsappBookingUrl, label: "Reservar no WhatsApp" },
   },
   {
     id: "parceiro-padel",
@@ -186,9 +314,12 @@ export const faq: FaqEntry[] = [
       "procuro parceiro",
       "nao tenho com quem jogar",
       "jogo aberto",
+      "jogos abertos",
       "encontrar parceiro",
+      "onde encontrar parceiros",
     ],
-    answer: `Sem problema! Junta-te aos grupos de WhatsApp de Jogos Abertos — combina-se lá padel com outros sócios fora dos torneios, mesmo sem teres dupla.`,
+    answer: `Sem problema! Junta-te aos grupos de WhatsApp de Jogos Abertos — combina-se lá jogos de padel com outros jogadores, mesmo sem teres dupla.`,
+    link: { url: site.whatsappCommunityUrl, label: "Entrar na Comunidade" },
   },
   {
     id: "vamos-treinar",
@@ -203,8 +334,9 @@ export const faq: FaqEntry[] = [
   {
     id: "torneios",
     keywords: ["torneios", "nonstop", "quando e o proximo torneio", "competir"],
-    answer: `Temos Nonstops semanais e Torneios Sociais várias vezes por ano. As datas são anunciadas nos grupos de WhatsApp do clube — dá uma vista de olhos na página de Torneios.`,
+    answer: `Temos Nonstops semanais e Torneios Sociais várias vezes por ano. As datas são anunciadas nos grupos de WhatsApp do clube.`,
     prompt: `Já jogaste algum? Vais adorar a energia!`,
+    link: { url: site.whatsappCommunityUrl, label: "Entrar na Comunidade" },
   },
   {
     id: "blokos",
@@ -220,25 +352,32 @@ export const faq: FaqEntry[] = [
 ];
 
 export function matchFaq(question: string): FaqEntry | null {
-  const q = normalize(question);
-  if (!q) return null;
+  const qWords = words(question);
+  if (qWords.length === 0) return null;
 
   let best: { entry: FaqEntry; score: number } | null = null;
 
   for (const entry of faq) {
-    let score = 0;
+    const bag = new Set(entry.keywords.flatMap((k) => words(k)));
+    const matched = qWords.filter((w) => bag.has(w));
+    if (matched.length === 0) continue;
+
+    // Bónus grande se alguma frase-chave inteira aparecer tal e qual na pergunta.
+    let phraseBonus = 0;
+    const nq = normalize(question);
     for (const kw of entry.keywords) {
       const nkw = normalize(kw);
-      if (q.includes(nkw)) {
-        score += nkw.split(" ").length; // frases mais específicas pesam mais
-      } else {
-        // conta palavras individuais em comum (match parcial)
-        const words = nkw.split(" ").filter((w) => w.length > 3);
-        const hits = words.filter((w) => q.includes(w)).length;
-        if (hits === words.length && words.length > 0) score += hits * 0.5;
+      if (nq.includes(nkw)) {
+        phraseBonus = Math.max(phraseBonus, words(kw).length * 3);
       }
     }
-    if (score > 0 && (!best || score > best.score)) {
+
+    // Favorece respostas que expliquem a maior parte da pergunta (precisão),
+    // sem penalizar perguntas mais longas que só têm uma palavra-chave forte.
+    const coverage = matched.length / qWords.length;
+    const score = matched.length + phraseBonus + coverage * 2;
+
+    if (!best || score > best.score) {
       best = { entry, score };
     }
   }

@@ -5,10 +5,12 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, Send, X } from "lucide-react";
 import Portal from "@/components/Portal";
-import { matchFaq } from "@/lib/chatbot-faq";
+import { matchFaq, type FaqEntry } from "@/lib/chatbot-faq";
 import { site } from "@/lib/site-data";
 
 type Message = { from: "bot" | "user"; text: string; fallback?: boolean };
+
+const BUBBLE_DELAY_MS = 350;
 
 const GREETING =
   "Olá! Sou o Blokinho, o assistente do BLOKO. Pergunta-me preços, horários, ou o que quiseres saber sobre o clube.";
@@ -29,10 +31,17 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([{ from: "bot", text: GREETING }]);
   const [input, setInput] = useState("");
   const listRef = useRef<HTMLDivElement>(null);
+  const pendingRef = useRef<FaqEntry | null>(null);
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, open]);
+
+  function addBotBubble(text: string, delay: number, fallback = false) {
+    setTimeout(() => {
+      setMessages((prev) => [...prev, { from: "bot", text, fallback }]);
+    }, delay);
+  }
 
   function send(question: string) {
     const q = question.trim();
@@ -40,12 +49,30 @@ export default function ChatWidget() {
     setMessages((prev) => [...prev, { from: "user", text: q }]);
     setInput("");
 
-    const match = matchFaq(q);
-    const answer = match ? match.answer : FALLBACK;
+    // Se estávamos à espera de resposta a uma pergunta do bot, tenta interpretá-la primeiro.
+    const pending = pendingRef.current;
+    if (pending?.followUp) {
+      pendingRef.current = null;
+      const tailored = pending.followUp(q);
+      if (tailored) {
+        addBotBubble(tailored, BUBBLE_DELAY_MS);
+        return;
+      }
+      // Não percebeu a resposta — cai para o reconhecimento normal de perguntas.
+    }
 
-    setTimeout(() => {
-      setMessages((prev) => [...prev, { from: "bot", text: answer, fallback: !match }]);
-    }, 300);
+    const match = matchFaq(q);
+
+    if (!match) {
+      addBotBubble(FALLBACK, BUBBLE_DELAY_MS, true);
+      return;
+    }
+
+    addBotBubble(match.answer, BUBBLE_DELAY_MS);
+    if (match.prompt) {
+      addBotBubble(match.prompt, BUBBLE_DELAY_MS * 2.4);
+      pendingRef.current = match.followUp ? match : null;
+    }
   }
 
   function handleSubmit(e: React.FormEvent) {

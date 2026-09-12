@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { MessageCircle, Send, X } from "lucide-react";
+import { Send, X } from "lucide-react";
+import BlokinhoAvatar from "@/components/BlokinhoAvatar";
 import Portal from "@/components/Portal";
 import { matchFaq, matchKnowledge, type FaqEntry } from "@/lib/chatbot-faq";
 import { site } from "@/lib/site-data";
@@ -100,13 +101,33 @@ export default function ChatWidget() {
 
   return (
     <>
-      <button
-        onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Fechar chat" : "Abrir chat"}
-        className="fixed bottom-4 left-4 z-40 w-14 h-14 rounded-full bg-[var(--color-lime)] text-black glow-lime flex items-center justify-center hover:bg-[var(--color-lime-soft)] transition-colors"
-      >
-        {open ? <X size={22} /> : <MessageCircle size={22} />}
-      </button>
+      <div className="fixed bottom-4 left-4 z-40">
+        <AnimatePresence>
+          {!open && (
+            <motion.div
+              initial={{ opacity: 0, y: 6, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 6, scale: 0.9 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute bottom-full left-0 mb-3 px-3 py-2 rounded-xl glass-card text-center"
+            >
+              <span className="block font-display uppercase text-[11px] leading-snug tracking-wide whitespace-nowrap">
+                Pergunta ao
+              </span>
+              <span className="block font-display uppercase text-[11px] leading-snug tracking-wide whitespace-nowrap">
+                Blokinho
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <button
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Fechar chat" : "Abrir chat"}
+          className="w-14 h-14 rounded-full bg-[var(--color-lime)] text-black glow-lime flex items-center justify-center hover:bg-[var(--color-lime-soft)] transition-colors"
+        >
+          {open ? <X size={22} /> : <BlokinhoAvatar size={34} />}
+        </button>
+      </div>
 
       <Portal>
         <AnimatePresence>
@@ -119,8 +140,8 @@ export default function ChatWidget() {
               className="fixed bottom-20 left-4 z-40 w-[calc(100vw-2rem)] max-w-sm h-[70vh] max-h-[560px] flex flex-col glass-card rounded-2xl overflow-hidden"
             >
               <div className="flex items-center gap-3 px-5 py-4 border-b border-white/10 shrink-0">
-                <div className="w-9 h-9 rounded-full bg-[var(--color-lime)]/10 text-[var(--color-lime)] flex items-center justify-center">
-                  <MessageCircle size={18} />
+                <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center">
+                  <BlokinhoAvatar size={36} />
                 </div>
                 <div>
                   <p className="font-display uppercase text-sm">Blokinho</p>

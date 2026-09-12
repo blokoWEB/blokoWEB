@@ -233,9 +233,22 @@ export const faq: FaqEntry[] = [
     id: "personal-training",
     keywords: ["personal training", "treino personalizado", "preco pt", "personal trainer"],
     answer:
-      `Personal Training (preço/mês): Individual — 1x ${euro(gymPersonalTraining[0].plans[0].price)}, 2x ${euro(gymPersonalTraining[0].plans[1].price)}, 3x ${euro(gymPersonalTraining[0].plans[2].price)} por semana. ` +
+      `Personal Training Ginásio (preço/mês): Individual — 1x ${euro(gymPersonalTraining[0].plans[0].price)}, 2x ${euro(gymPersonalTraining[0].plans[1].price)}, 3x ${euro(gymPersonalTraining[0].plans[2].price)} por semana. ` +
       `Em 2 pessoas ou 3 pessoas fica mais barato por pessoa — pergunta-nos os valores no WhatsApp.`,
     prompt: `Queres um treino só para ti? Diz-nos o teu objetivo e ajudamos-te a escolher o plano certo.`,
+  },
+  {
+    id: "pt-padel",
+    keywords: [
+      "pt padel",
+      "pt de padel",
+      "personal trainer padel",
+      "personal trainer de padel",
+      "personal training padel",
+      "treino personalizado padel",
+    ],
+    answer: `Temos dois tipos de Personal Training: Personal Training Ginásio (treino individual no ginásio) e Personal Training Padel — aula individual de padel, a sós com o treinador, a partir de ${padelLessonPricing.offPeak[0].plans[0].price} (Off Peak) ou ${padelLessonPricing.peak[0].plans[0].price} (Peak Hour). Se procuras algo mais estruturado, a Academia BLOKO tem turmas fixas para todas as idades e níveis — da iniciação à competição, em grupos reduzidos de até 4 alunos.`,
+    prompt: `Preferes Personal Training Padel ao teu ritmo, ou uma turma fixa da Academia?`,
   },
   {
     id: "aulas-padel-preco",
@@ -480,16 +493,31 @@ function findBestMatch<T extends { keywords: string[] }>(question: string, entri
   const qWords = words(question);
   if (qWords.length === 0) return null;
 
+  const bags = entries.map((entry) => new Set(entry.keywords.flatMap((k) => words(k))));
+
+  // Peso por palavra: quanto mais entries partilham essa palavra, menos ela distingue
+  // o tema da pergunta (ex: "padel" aparece em quase tudo; "pt" só numa entry).
+  // Isto evita que uma palavra genérica empate com uma palavra rara e decida por
+  // ordem do array em vez de por relevância real.
+  const df = new Map<string, number>();
+  for (const bag of bags) {
+    for (const w of bag) df.set(w, (df.get(w) ?? 0) + 1);
+  }
+  const weight = (w: string) => 1 / (df.get(w) ?? 1);
+
+  const nq = normalize(question);
   let best: { entry: T; score: number } | null = null;
 
-  for (const entry of entries) {
-    const bag = new Set(entry.keywords.flatMap((k) => words(k)));
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const bag = bags[i];
     const matched = qWords.filter((w) => bag.has(w));
     if (matched.length === 0) continue;
 
+    const weightedMatch = matched.reduce((sum, w) => sum + weight(w), 0);
+
     // Bónus grande se alguma frase-chave inteira aparecer tal e qual na pergunta.
     let phraseBonus = 0;
-    const nq = normalize(question);
     for (const kw of entry.keywords) {
       const nkw = normalize(kw);
       if (nq.includes(nkw)) {
@@ -500,7 +528,7 @@ function findBestMatch<T extends { keywords: string[] }>(question: string, entri
     // Favorece respostas que expliquem a maior parte da pergunta (precisão),
     // sem penalizar perguntas mais longas que só têm uma palavra-chave forte.
     const coverage = matched.length / qWords.length;
-    const score = matched.length + phraseBonus + coverage * 2;
+    const score = weightedMatch * 2 + phraseBonus + coverage;
 
     if (!best || score > best.score) {
       best = { entry, score };

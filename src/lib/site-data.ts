@@ -1,3 +1,9 @@
+// Entidade legal que explora a marca comercial BLOKO — usada nas páginas legais.
+export const legalEntity = {
+  name: "Blokoativo, Lda",
+  nif: "517924153",
+};
+
 export const site = {
   name: "BLOKO",
   tagline: "Padel, Ginásio & Lounge",

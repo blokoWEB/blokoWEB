@@ -1,6 +1,6 @@
 import Link from "next/link";
 import LegalPageLayout from "@/components/LegalPageLayout";
-import { site } from "@/lib/site-data";
+import { legalEntity, site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -15,7 +15,9 @@ export default function TermosCondicoesPage() {
       <h2>1. Âmbito</h2>
       <p>
         Estes Termos e Condições regulam o acesso e utilização do site do BLOKO — Padel, Gym &amp;
-        Lounge, em Bragança. Ao utilizares este site, aceitas estes termos.
+        Lounge, em Bragança, operado pela sociedade <strong>{legalEntity.name}</strong> (NIF{" "}
+        {legalEntity.nif}), com sede em {site.address}. Ao utilizares este site, aceitas estes
+        termos.
       </p>
 
       <h2>2. O que este site é (e não é)</h2>

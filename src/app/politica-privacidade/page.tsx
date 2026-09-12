@@ -1,6 +1,6 @@
 import Link from "next/link";
 import LegalPageLayout from "@/components/LegalPageLayout";
-import { site } from "@/lib/site-data";
+import { legalEntity, site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -14,7 +14,8 @@ export default function PoliticaPrivacidadePage() {
     <LegalPageLayout eyebrow="Legal" title="Política de Privacidade" updated="12 de setembro de 2026">
       <h2>1. Quem somos</h2>
       <p>
-        O BLOKO — Padel, Gym &amp; Lounge (&quot;BLOKO&quot;, &quot;nós&quot;) é responsável pelo
+        O BLOKO — Padel, Gym &amp; Lounge (&quot;BLOKO&quot;, &quot;nós&quot;), explorado pela
+        sociedade <strong>{legalEntity.name}</strong> (NIF {legalEntity.nif}), é responsável pelo
         tratamento dos dados pessoais recolhidos através deste site. Podes contactar-nos em{" "}
         <a href={`mailto:${site.email}`}>{site.email}</a> ou na morada {site.address}.
       </p>

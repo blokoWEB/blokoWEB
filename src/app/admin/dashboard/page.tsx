@@ -744,8 +744,8 @@ function AcademiaInscricoesSection() {
   }
 
   return (
-    <div className="glass-card rounded-2xl overflow-hidden">
-      <table className="w-full text-sm">
+    <div className="glass-card rounded-2xl overflow-x-auto">
+      <table className="w-full text-sm min-w-[560px]">
         <thead>
           <tr className="border-b border-white/10 text-left">
             <th className="px-5 py-3 font-display uppercase text-xs text-[var(--color-text-muted)]">

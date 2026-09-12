@@ -155,13 +155,9 @@ export default function SobrePage() {
           <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
             A Equipa
           </p>
-          <h2 className="font-display font-bold text-3xl md:text-4xl uppercase mb-4">
+          <h2 className="font-display font-bold text-3xl md:text-4xl uppercase">
             Quem te acompanha todos os dias
           </h2>
-          <p className="text-[var(--color-text-muted)]">
-            Professores de Padel e monitores de Ginásio, todos licenciados em Desporto —
-            prontos para te ajudar a evoluir.
-          </p>
         </ScrollReveal>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">

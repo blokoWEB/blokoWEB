@@ -14,6 +14,7 @@ export default function ParallaxDive({
   children,
   overlay = true,
   mobilePosition = "center",
+  mobileSize = "cover",
 }: {
   image: string;
   children: ReactNode;
@@ -21,6 +22,12 @@ export default function ParallaxDive({
   /** background-position used only below the sm breakpoint — handy for very wide
    * panoramas that get over-cropped on narrow/tall mobile viewports. */
   mobilePosition?: string;
+  /** background-size used only below the sm breakpoint. For a tall/portrait
+   * source image, "cover" often leaves no vertical slack to crop with
+   * `mobilePosition` (the image height already matches the viewport height).
+   * Pass something like "auto 160%" to zoom in first, so positioning can
+   * actually hide an unwanted part of the photo (e.g. a glass-wall reflection). */
+  mobileSize?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -38,8 +45,15 @@ export default function ParallaxDive({
   return (
     <section ref={ref} className="relative h-[100dvh] overflow-hidden">
       <motion.div
-        style={{ scale, opacity, filter, backgroundImage: `url(${image})`, backgroundPosition: mobilePosition }}
-        className="absolute inset-0 bg-cover sm:hidden"
+        style={{
+          scale,
+          opacity,
+          filter,
+          backgroundImage: `url(${image})`,
+          backgroundPosition: mobilePosition,
+          backgroundSize: mobileSize,
+        }}
+        className="absolute inset-0 sm:hidden"
       />
       <motion.div
         style={{ scale, opacity, filter, backgroundImage: `url(${image})` }}

@@ -44,7 +44,11 @@ const regulamento = [
 export default function TorneiosPage() {
   return (
     <div>
-      <ParallaxDive image="/images/real-tournament.jpg">
+      <ParallaxDive
+        image="/images/real-tournament.jpg"
+        mobilePosition="center bottom"
+        mobileSize="auto 170%"
+      >
         <p className="font-display text-xs tracking-[0.4em] uppercase text-[var(--color-lime)] mb-4">
           Competição
         </p>

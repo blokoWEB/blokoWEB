@@ -7,7 +7,7 @@ import { CalendarClock, Check, Clock, Loader2, MapPin, Users, X } from "lucide-r
 import Portal from "@/components/Portal";
 import ScrollReveal from "@/components/ScrollReveal";
 import AcademiaLevelPicker from "@/components/AcademiaLevelPicker";
-import { classCategories, classTypes, type ClassCategoryKey } from "@/lib/site-data";
+import { classCategories, classTypes, site, type ClassCategoryKey } from "@/lib/site-data";
 import type { ClassSessionWithCount } from "@/lib/types";
 
 const categoryFallbackImage: Record<ClassCategoryKey, string> = {
@@ -317,8 +317,8 @@ function BookingModal({
 
   return (
     <Portal>
-    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/70 backdrop-blur-sm">
-      <div className="glass-card w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl p-8 relative">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-sm">
+      <div className="glass-card w-full sm:max-w-md rounded-3xl p-8 relative">
         <button
           onClick={onClose}
           aria-label="Fechar"
@@ -336,12 +336,24 @@ function BookingModal({
             <p className="text-sm text-[var(--color-text-muted)] mb-6">
               {session.title} — {formatDay(session.starts_at)} às {formatTime(session.starts_at)}
             </p>
-            <button
-              onClick={onClose}
-              className="font-display uppercase text-sm tracking-wide px-6 py-3 rounded-full bg-[var(--color-lime)] text-black"
-            >
-              Fechar
-            </button>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={onClose}
+                className="font-display uppercase text-sm tracking-wide px-6 py-3 rounded-full bg-[var(--color-lime)] text-black"
+              >
+                Fechar
+              </button>
+              <a
+                href={`${site.whatsappUrl}?text=${encodeURIComponent(
+                  `Olá! Gostava de cancelar a minha presença na aula de ${session.title} (${formatDay(session.starts_at)} às ${formatTime(session.starts_at)}), em nome de ${name}.`
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="font-display uppercase text-sm tracking-wide px-6 py-3 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+              >
+                Cancelar presença
+              </a>
+            </div>
           </div>
         ) : (
           <>
@@ -362,7 +374,7 @@ function BookingModal({
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-lime)]"
+                  className="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-base focus:outline-none focus:border-[var(--color-lime)]"
                   placeholder="O teu nome"
                 />
               </div>
@@ -375,7 +387,7 @@ function BookingModal({
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-lime)]"
+                  className="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-base focus:outline-none focus:border-[var(--color-lime)]"
                   placeholder="email@exemplo.com"
                 />
               </div>
@@ -386,7 +398,7 @@ function BookingModal({
                 <input
                   value={memberCode}
                   onChange={(e) => setMemberCode(e.target.value)}
-                  className="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-[var(--color-lime)]"
+                  className="w-full rounded-xl bg-black/30 border border-white/10 px-4 py-3 text-base focus:outline-none focus:border-[var(--color-lime)]"
                   placeholder="Ex: 1234 ou VOUCHER-XYZ"
                 />
               </div>

@@ -91,11 +91,11 @@ export default function TournamentCard({
       {open && (
         <Portal>
         <div
-          className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-sm"
+          className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         >
           <div
-            className="glass-card w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl p-8 relative max-h-[90dvh] overflow-y-auto"
+            className="glass-card w-full sm:max-w-lg rounded-3xl p-8 relative max-h-[90dvh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button

@@ -402,12 +402,12 @@ function SessionFormModal({
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (needsScopeChoice) return;
-    submit(isEditing ? "this" : null);
+    submit(isEditing ? (scopeChoice ?? "this") : null);
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/70 backdrop-blur-sm">
-      <div className="glass-card w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl p-8 relative max-h-[90dvh] overflow-y-auto">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-sm">
+      <div className="glass-card w-full sm:max-w-lg rounded-3xl p-8 relative max-h-[90dvh] overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-5 right-5 text-[var(--color-text-muted)] hover:text-white"
@@ -425,10 +425,7 @@ function SessionFormModal({
               Esta aula faz parte de uma série recorrente. Aplicar as alterações a:
             </p>
             <button
-              onClick={() => {
-                setScopeChoice("this");
-                submit("this");
-              }}
+              onClick={() => setScopeChoice("this")}
               className="w-full text-left glass-card rounded-xl p-4 border border-white/10 hover:border-[var(--color-lime)]/40 transition-colors"
             >
               <p className="font-display uppercase text-sm">Só esta aula</p>
@@ -437,10 +434,7 @@ function SessionFormModal({
               </p>
             </button>
             <button
-              onClick={() => {
-                setScopeChoice("series");
-                submit("series");
-              }}
+              onClick={() => setScopeChoice("series")}
               className="w-full text-left glass-card rounded-xl p-4 border border-white/10 hover:border-[var(--color-lime)]/40 transition-colors"
             >
               <p className="font-display uppercase text-sm">Todas as aulas desta série</p>
@@ -449,11 +443,6 @@ function SessionFormModal({
                 ocorrências (a data/hora de cada uma mantém-se).
               </p>
             </button>
-            {submitting && (
-              <div className="flex items-center gap-2 text-sm text-[var(--color-text-muted)]">
-                <Loader2 className="animate-spin" size={14} /> A guardar…
-              </div>
-            )}
             {error && <p className="text-sm text-red-400">{error}</p>}
           </div>
         ) : (
@@ -636,8 +625,8 @@ function BookingsModal({
   const active = bookings.filter((b) => !b.cancelled);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/70 backdrop-blur-sm">
-      <div className="glass-card w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl p-8 relative max-h-[90dvh] overflow-y-auto">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-sm">
+      <div className="glass-card w-full sm:max-w-2xl rounded-3xl p-8 relative max-h-[90dvh] overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-5 right-5 text-[var(--color-text-muted)] hover:text-white"

@@ -14,6 +14,7 @@ import {
   pastTournaments,
   site,
   sponsors,
+  tournamentFormats,
   tournamentSponsors,
   upcomingTournaments,
 } from "@/lib/site-data";
@@ -352,12 +353,33 @@ export const faq: FaqEntry[] = [
   },
   {
     id: "torneios",
-    keywords: ["torneios", "nonstop", "quando e o proximo torneio", "proximo torneio", "competir"],
+    keywords: [
+      "torneios",
+      "torneios sociais",
+      "quando e o proximo torneio",
+      "proximo torneio",
+      "competir",
+    ],
     answer:
       upcomingTournaments.length > 0
-        ? `O próximo torneio é o ${upcomingTournaments[0].name}, marcado para ${upcomingTournaments[0].dates}. ${upcomingTournaments[0].summary} Temos também Nonstops semanais, todas as semanas.`
+        ? `O próximo Torneio Social é o ${upcomingTournaments[0].name}, marcado para ${upcomingTournaments[0].dates}. ${upcomingTournaments[0].summary} Temos também Nonstops semanais, todas as semanas.`
         : `Temos Nonstops semanais e Torneios Sociais várias vezes por ano. As datas são anunciadas nos grupos de WhatsApp do clube.`,
     prompt: `Já jogaste algum? Vais adorar a energia!`,
+    link: { url: site.whatsappCommunityUrl, label: "Entrar na Comunidade" },
+  },
+  {
+    id: "nonstop",
+    keywords: [
+      "nonstop",
+      "inscrever nonstop",
+      "inscrever no nonstop",
+      "inscrever-me no nonstop",
+      "torneio nonstop",
+      "jogar nonstop",
+      "quero jogar nonstop",
+    ],
+    answer: `O Nonstop é ${tournamentFormats[0].frequency.toLowerCase()}: ${tournamentFormats[0].description} As vagas são publicadas todas as semanas no grupo de WhatsApp da comunidade — é lá que te inscreves.`,
+    prompt: `Fica atento ao grupo — as vagas costumam esgotar rápido!`,
     link: { url: site.whatsappCommunityUrl, label: "Entrar na Comunidade" },
   },
   {
@@ -380,6 +402,18 @@ export const faq: FaqEntry[] = [
     ],
     answer: `Setembro trouxe uma campanha especial: 50% de desconto na 1ª mensalidade se pagares as 4 mensalidades seguintes adiantado até ao fim do ano — e ainda levas 1 hora de PT + toalha BLOKO.`,
     prompt: `Fala connosco no WhatsApp para aproveitares!`,
+  },
+  {
+    id: "fidelizacao",
+    keywords: [
+      "fidelizacao",
+      "tem fidelizacao",
+      "compromisso minimo",
+      "posso cancelar quando quiser",
+      "tempo minimo de contrato",
+      "preciso de contrato",
+    ],
+    answer: `As mensalidades e packs do Ginásio não têm fidelização — cancelas quando quiseres, sem multas nem tempo mínimo.`,
   },
   {
     id: "quero-ser-patrocinador",

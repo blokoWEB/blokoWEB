@@ -1,5 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MessageCircle, Sparkles, Users } from "lucide-react";
+import { ArrowRight, MessageCircle, ShieldCheck, Sparkles, Users } from "lucide-react";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import {
@@ -31,35 +32,45 @@ export default function GinasioPrecarioPage() {
           Preços <span className="text-gradient-lime">Ginásio</span>
         </h1>
         <p className="mt-6 max-w-xl text-white/70">
-          Mensalidades, packs e treino personalizado — tudo com IVA incluído à taxa legal em
-          vigor.
+          Mensalidades, packs, treino personalizado e campanhas em vigor. Vamos a isso?
         </p>
+        <div className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[var(--color-lime)]/50 bg-[var(--color-lime)]/10 text-[var(--color-lime)] font-display uppercase text-xs tracking-wide text-center">
+          <ShieldCheck size={15} className="shrink-0" /> Sem fidelização,<br className="sm:hidden" /> cancela
+          quando quiseres
+        </div>
       </ParallaxDive>
 
       {/* CAMPANHA */}
       <section className="container-bloko pt-14">
         <ScrollReveal>
-          <div className="glass-card rounded-2xl p-6 sm:p-8 glow-lime flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8">
-            <div className="w-12 h-12 rounded-full bg-[var(--color-lime)]/10 text-[var(--color-lime)] flex items-center justify-center shrink-0">
-              <Sparkles size={22} />
+          <div className="glass-card rounded-2xl overflow-hidden glow-lime flex flex-col sm:flex-row sm:items-center gap-0 sm:gap-8">
+            <div className="relative w-full sm:w-40 aspect-[750/890] sm:aspect-auto sm:self-stretch shrink-0">
+              <Image
+                src="/images/campaigns/setembro-2026.jpg"
+                alt="Campanha de Setembro — 50% de desconto na 1ª mensalidade"
+                fill
+                className="object-cover"
+              />
             </div>
-            <div className="flex-1">
-              <p className="font-display uppercase text-xs tracking-wide text-[var(--color-lime)] mb-1">
-                Campanha de Setembro
-              </p>
-              <p className="text-sm text-[var(--color-text-muted)]">
-                50% de desconto na 1ª mensalidade se pagares as 4 mensalidades seguintes
-                adiantado até ao fim do ano — e ainda levas 1 hora de PT + toalha BLOKO.
-              </p>
+            <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-5 p-6 sm:py-6 sm:pr-8 sm:pl-0">
+              <div className="flex-1">
+                <p className="font-display uppercase text-xs tracking-wide text-[var(--color-lime)] mb-1">
+                  Campanha de Setembro
+                </p>
+                <p className="text-sm text-[var(--color-text-muted)]">
+                  50% de desconto na 1ª mensalidade se pagares as 4 mensalidades seguintes
+                  adiantado até ao fim do ano — e ainda levas 1 hora de PT + toalha BLOKO.
+                </p>
+              </div>
+              <a
+                href={site.whatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="shrink-0 inline-flex items-center justify-center gap-2 font-display uppercase text-xs tracking-wide px-6 py-3 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors"
+              >
+                Aproveitar
+              </a>
             </div>
-            <a
-              href={site.whatsappUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="shrink-0 inline-flex items-center justify-center gap-2 font-display uppercase text-xs tracking-wide px-6 py-3 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors"
-            >
-              Aproveitar
-            </a>
           </div>
         </ScrollReveal>
       </section>
@@ -91,6 +102,9 @@ export default function GinasioPrecarioPage() {
                   <span className="text-sm text-[var(--color-text-muted)]">{p.period}</span>
                 </p>
                 {p.note && <p className="text-xs text-[var(--color-text-muted)] mt-2">{p.note}</p>}
+                <p className="mt-3 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-[var(--color-lime)]">
+                  <ShieldCheck size={11} /> Sem fidelização
+                </p>
               </div>
             </ScrollReveal>
           ))}
@@ -147,6 +161,9 @@ export default function GinasioPrecarioPage() {
                       </span>
                     </div>
                   ))}
+                  <p className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-[var(--color-lime)]">
+                    <ShieldCheck size={11} /> Sem fidelização
+                  </p>
                 </div>
               </div>
             </ScrollReveal>
@@ -165,7 +182,10 @@ export default function GinasioPrecarioPage() {
                       {gymWeekendPack.period}
                     </span>
                   </p>
-                  <p className="text-xs text-[var(--color-text-muted)]">{gymWeekendPack.note}</p>
+                  <p className="text-xs text-[var(--color-text-muted)] mb-3">{gymWeekendPack.note}</p>
+                  <p className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-[var(--color-lime)]">
+                    <ShieldCheck size={11} /> Sem fidelização
+                  </p>
                 </div>
               </div>
             </ScrollReveal>
@@ -185,8 +205,11 @@ export default function GinasioPrecarioPage() {
                       {padelGymComboPack.period}
                     </span>
                   </p>
-                  <p className="text-xs text-[var(--color-text-muted)]">
+                  <p className="text-xs text-[var(--color-text-muted)] mb-3">
                     {padelGymComboPack.note} · Inscrição: {padelGymComboPack.inscricao}
+                  </p>
+                  <p className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-[var(--color-lime)]">
+                    <ShieldCheck size={11} /> Sem fidelização
                   </p>
                 </div>
               </div>
@@ -229,6 +252,9 @@ export default function GinasioPrecarioPage() {
                       </span>
                     </div>
                   ))}
+                  <p className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-[var(--color-lime)]">
+                    <ShieldCheck size={11} /> Sem fidelização
+                  </p>
                 </div>
               </div>
             </ScrollReveal>
@@ -265,6 +291,9 @@ export default function GinasioPrecarioPage() {
                         <span className="font-display text-[var(--color-lime)]">{p.price}</span>
                       </div>
                     ))}
+                    <p className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-[var(--color-lime)]">
+                      <ShieldCheck size={11} /> Sem fidelização
+                    </p>
                   </div>
                 </div>
               </ScrollReveal>

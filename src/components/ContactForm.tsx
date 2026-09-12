@@ -1,21 +1,53 @@
 "use client";
 
 import { useState } from "react";
-import { Send } from "lucide-react";
-import { site } from "@/lib/site-data";
+import { Check, Loader2, Send } from "lucide-react";
 
 export default function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const subject = `Contacto pelo site — ${name}`;
-    const body = `${message}\n\n— ${name} (${email})`;
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/contacto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Não foi possível enviar a mensagem.");
+      setDone(true);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? `${err.message} Tenta antes pelo WhatsApp ou telefone.`
+          : "Erro inesperado. Tenta antes pelo WhatsApp ou telefone."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (done) {
+    return (
+      <div className="glass-card rounded-2xl p-8 text-center">
+        <div className="w-14 h-14 rounded-full bg-[var(--color-lime)]/10 text-[var(--color-lime)] flex items-center justify-center mx-auto mb-5">
+          <Check size={26} />
+        </div>
+        <h3 className="font-display uppercase text-xl mb-2">Mensagem enviada</h3>
+        <p className="text-sm text-[var(--color-text-muted)]">
+          Obrigado, {name}! Vamos responder-te em breve.
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -61,11 +93,16 @@ export default function ContactForm() {
           placeholder="Como podemos ajudar?"
         />
       </div>
+
+      {error && <p className="text-sm text-red-400">{error}</p>}
+
       <button
         type="submit"
-        className="w-full inline-flex items-center justify-center gap-2 font-display uppercase tracking-wide py-3.5 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors"
+        disabled={submitting}
+        className="w-full inline-flex items-center justify-center gap-2 font-display uppercase tracking-wide py-3.5 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors disabled:opacity-50"
       >
-        <Send size={16} /> Enviar mensagem
+        {submitting ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
+        Enviar mensagem
       </button>
     </form>
   );

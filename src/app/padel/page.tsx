@@ -40,6 +40,12 @@ export default function PadelPage() {
           >
             Ou via Playtomic
           </a>
+          <Link
+            href="/padel/precario"
+            className="inline-flex items-center gap-2 font-display uppercase text-xs tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white/70 hover:border-white/40 hover:text-white transition-colors"
+          >
+            Ver Preços <ArrowRight size={14} />
+          </Link>
         </div>
       </ParallaxDive>
 

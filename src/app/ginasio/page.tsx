@@ -29,6 +29,12 @@ export default function GinasioPage() {
         <p className="mt-6 max-w-xl text-white/70">
           Espaço amplo e moderno, aberto a todos — pratiques padel ou não.
         </p>
+        <Link
+          href="/ginasio/precario"
+          className="mt-8 inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
+        >
+          Ver Preços <ArrowRight size={16} />
+        </Link>
       </ParallaxDive>
 
       <section className="container-bloko pt-24">

@@ -1,9 +1,13 @@
 import {
+  academiaFormat,
   academiaPolicies,
   academiaPricing,
+  blokosDistribution,
   classTypes,
   courtSponsors,
+  equipa,
   events,
+  gymEquipmentCount,
   gymFamilyPack,
   gymMembership,
   gymPersonalTraining,
@@ -413,6 +417,52 @@ export const faq: FaqEntry[] = [
     keywords: ["blokos pontos", "sistema de pontos", "o que sao os blokos"],
     answer: `Blokos é o nosso sistema de pontos: jogas torneios, acumulas Blokos, e trocas por horas de padel, artigos da loja e mais. Consulta o teu saldo na app BLOKOS.`,
     link: { url: site.blokosAppUrl, label: "Abrir App BLOKOS" },
+  },
+  {
+    id: "blokos-distribuicao",
+    keywords: [
+      "quantos blokos ganho",
+      "quantos blokos se ganhar",
+      "blokos por torneio",
+      "pontos por vitoria",
+      "distribuicao de blokos",
+    ],
+    answer: `Num Nonstop (8 duplas): ${blokosDistribution
+      .map((b) => `${b.place} — ${b.blokos} Blokos${b.note ? ` (${b.note})` : ""}`)
+      .join("; ")}.`,
+  },
+  {
+    id: "equipa",
+    keywords: [
+      "quem sao os professores",
+      "quem sao os monitores",
+      "quem e o diretor tecnico",
+      "quem trabalha no bloko",
+      "quem da as aulas",
+      "equipa tecnica",
+    ],
+    answer: `A equipa técnica do BLOKO: ${equipa.map((m) => `${m.name} (${m.roles.join(", ")})`).join("; ")}.`,
+    link: { url: "/sobre/equipa", label: "Conhecer a Equipa" },
+  },
+  {
+    id: "academia-formato",
+    keywords: [
+      "quantos alunos por turma",
+      "tamanho da turma academia",
+      "preciso de raquete na academia",
+      "formato da academia",
+    ],
+    answer: `${academiaFormat[0]}. ${academiaFormat[1]}. ${academiaFormat[3]}.`,
+  },
+  {
+    id: "equipamento-ginasio",
+    keywords: [
+      "quantos equipamentos tem o ginasio",
+      "quantas maquinas tem o ginasio",
+      "equipamento do ginasio",
+      "que aparelhos tem o ginasio",
+    ],
+    answer: `O Ginásio BLOKO tem mais de ${gymEquipmentCount} equipamentos de treino disponíveis.`,
   },
   {
     id: "campanha",

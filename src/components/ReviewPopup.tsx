@@ -50,7 +50,7 @@ export default function ReviewPopup() {
           </div>
           <p className="text-sm text-[var(--color-text)] mb-1 pr-4">O que achas do BLOKO?</p>
           <p className="text-xs text-[var(--color-text-muted)] mb-4">
-            Deixa-nos uma review no Google — ajuda-nos imenso.
+            Fala-nos da tua experiência. Quantas estrelas merecemos?
           </p>
           <div className="flex gap-2">
             <a

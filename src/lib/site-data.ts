@@ -152,6 +152,9 @@ export const padelFeatures = [
   "Torneios semanais e ligas",
 ];
 
+// Número aproximado de equipamentos de treino disponíveis no Ginásio.
+export const gymEquipmentCount = 40;
+
 // Preçário — Ginásio: mensalidade base
 export const gymMembership = {
   inscricao: "15€",
@@ -619,4 +622,58 @@ export const tournamentSponsors: Sponsor[] = [
   { name: "Mudda Domus", logo: "/images/sponsors/mudda-domus.png" },
   { name: "Barrad'Ouro Bragança", logo: "/images/sponsors/barradouro.png" },
   { name: "Grandson Interiores" },
+];
+
+// Distribuição de Blokos por classificação num Nonstop (8 duplas) — ver página /blokos.
+export const blokosDistribution = [
+  { place: "1.º lugar", blokos: "600", note: "300 por jogador" },
+  { place: "2.º lugar", blokos: "400", note: "" },
+  { place: "3.º lugar", blokos: "250", note: "" },
+  { place: "4.º lugar", blokos: "150", note: "" },
+  { place: "5.º ao 8.º lugar", blokos: "50 (por dupla)", note: "Blokos garantidos" },
+];
+
+// Equipa técnica do BLOKO — professores de Padel e monitores de Ginásio.
+export type EquipaMember = {
+  name: string;
+  roles: string[];
+  qualification: string;
+  /** Preenche quando houver foto real — até lá mostra as iniciais. */
+  image?: string;
+};
+
+export const equipa: EquipaMember[] = [
+  {
+    name: "André Rodrigues",
+    roles: ["Diretor Técnico", "Professor de Padel", "Monitor de Ginásio"],
+    qualification: "Licenciatura em Desporto — IPB",
+  },
+  {
+    name: "André Teixeira",
+    roles: ["Professor de Padel", "Monitor de Ginásio"],
+    qualification: "Licenciatura em Desporto — IPB",
+  },
+  {
+    name: "André Félix",
+    roles: ["Monitor de Ginásio", "Personal Trainer"],
+    qualification: "Licenciatura em Desporto — IPB",
+  },
+  {
+    name: "Rodrigo Sá",
+    roles: ["Monitor de Ginásio", "Personal Trainer"],
+    qualification: "Licenciatura em Desporto — IPB",
+  },
+  {
+    name: "Pedro Aires",
+    roles: ["Monitor de Ginásio", "Personal Trainer"],
+    qualification: "Licenciatura em Desporto — IPB",
+  },
+];
+
+// Condições de formato da Academia — ver página /academia.
+export const academiaFormat = [
+  "Máximo 4 alunos por turma, mínimo 3 para a turma avançar",
+  "Turmas fixas, uma ou duas vezes por semana, ao longo do ano",
+  "Mensalidade ou packs de aulas válidos por 1 ano",
+  "Raquetes de padel disponíveis para empréstimo",
 ];

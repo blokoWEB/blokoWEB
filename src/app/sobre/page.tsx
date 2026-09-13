@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Calendar, GraduationCap, PartyPopper, Trophy, Users } from "lucide-react";
+import { ArrowRight, Calendar, Dumbbell, PartyPopper, Trophy, Users } from "lucide-react";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import PanoramaViewer from "@/components/PanoramaViewer";
-import { courtSponsors, events, pastTournaments } from "@/lib/site-data";
+import { courtSponsors, events, gymEquipmentCount, pastTournaments } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -17,46 +17,10 @@ export const metadata = pageMetadata({
 const facts = [
   { icon: Calendar, value: "Nov. 2024", label: "Abertura" },
   { icon: Users, value: String(courtSponsors.length), label: "Campos de padel" },
+  { icon: Dumbbell, value: `+${gymEquipmentCount}`, label: "Equipamentos para o teu treino" },
   { icon: Trophy, value: String(pastTournaments.length), label: "Torneios realizados" },
   { icon: PartyPopper, value: String(events.length), label: "Edições de eventos" },
 ];
-
-const equipa = [
-  {
-    name: "André Rodrigues",
-    roles: ["Diretor Técnico", "Professor de Padel", "Monitor de Ginásio"],
-    qualification: "Licenciatura em Desporto — IPB",
-  },
-  {
-    name: "André Teixeira",
-    roles: ["Professor de Padel", "Monitor de Ginásio"],
-    qualification: "Licenciatura em Desporto — IPB",
-  },
-  {
-    name: "André Félix",
-    roles: ["Monitor de Ginásio", "Personal Trainer"],
-    qualification: "Licenciatura em Desporto — IPB",
-  },
-  {
-    name: "Rodrigo Sá",
-    roles: ["Monitor de Ginásio", "Personal Trainer"],
-    qualification: "Licenciatura em Desporto — IPB",
-  },
-  {
-    name: "Pedro Aires",
-    roles: ["Monitor de Ginásio", "Personal Trainer"],
-    qualification: "Licenciatura em Desporto — IPB",
-  },
-];
-
-function initials(name: string) {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-}
 
 const espaco = [
   { image: "/images/real-gym-musculacao.jpg", alt: "Ginásio BLOKO, com vista para os campos de padel" },
@@ -92,7 +56,7 @@ export default function SobrePage() {
         </ScrollReveal>
 
         <ScrollReveal>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
             {facts.map((f) => (
               <div key={f.label} className="glass-card rounded-2xl p-5 text-center">
                 <f.icon size={20} className="text-[var(--color-lime)] mx-auto mb-3" />
@@ -151,41 +115,25 @@ export default function SobrePage() {
 
       {/* Equipa */}
       <section className="container-bloko py-24">
-        <ScrollReveal className="max-w-2xl mb-14">
-          <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
-            A Equipa
-          </p>
-          <h2 className="font-display font-bold text-3xl md:text-4xl uppercase">
-            Quem te acompanha todos os dias
-          </h2>
+        <ScrollReveal>
+          <div className="glass-card rounded-3xl p-10 md:p-14 text-center max-w-2xl mx-auto">
+            <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
+              A Equipa
+            </p>
+            <h2 className="font-display font-bold text-2xl md:text-3xl uppercase mb-4">
+              Quem te acompanha todos os dias
+            </h2>
+            <p className="text-[var(--color-text-muted)] mb-8">
+              Professores de Padel e monitores de Ginásio.
+            </p>
+            <Link
+              href="/sobre/equipa"
+              className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
+            >
+              Conhecer a Equipa <ArrowRight size={16} />
+            </Link>
+          </div>
         </ScrollReveal>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {equipa.map((m, i) => (
-            <ScrollReveal key={m.name} delay={i * 0.05}>
-              <div className="glass-card rounded-2xl p-6 h-full">
-                <div className="w-14 h-14 rounded-full bg-[var(--color-lime)]/10 text-[var(--color-lime)] flex items-center justify-center font-display text-lg mb-5">
-                  {initials(m.name)}
-                </div>
-                <h3 className="font-display uppercase text-base mb-3">{m.name}</h3>
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {m.roles.map((r) => (
-                    <span
-                      key={r}
-                      className="text-[10px] uppercase tracking-wide px-2.5 py-1 rounded-full border border-white/15 text-[var(--color-text-muted)]"
-                    >
-                      {r}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex items-center gap-2 text-xs text-[var(--color-text-muted)]">
-                  <GraduationCap size={14} className="text-[var(--color-blue-soft)] shrink-0" />
-                  {m.qualification}
-                </div>
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
       </section>
 
       {/* Panorama interativo */}

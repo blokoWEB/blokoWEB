@@ -11,7 +11,7 @@ import {
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import AcademiaLevelPicker from "@/components/AcademiaLevelPicker";
-import { academiaPolicies, academiaPricing, site } from "@/lib/site-data";
+import { academiaFormat, academiaPolicies, academiaPricing, site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -23,12 +23,8 @@ export const metadata = pageMetadata({
 
 const levels = ["Iniciação (Masculino e Feminino)", "Intermédio", "Avançado", "Kids", "Juniores"];
 
-const format = [
-  { icon: Users, text: "Máximo 4 alunos por turma, mínimo 3 para a turma avançar" },
-  { icon: Calendar, text: "Turmas fixas, uma ou duas vezes por semana, ao longo do ano" },
-  { icon: CreditCard, text: "Mensalidade ou packs de aulas válidos por 1 ano" },
-  { icon: ShieldCheck, text: "Raquetes de padel disponíveis para empréstimo" },
-];
+const formatIcons = [Users, Calendar, CreditCard, ShieldCheck];
+const format = academiaFormat.map((text, i) => ({ icon: formatIcons[i], text }));
 
 export default function AcademiaPage() {
   return (

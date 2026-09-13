@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Award, ExternalLink, TrendingUp, Trophy, Wallet } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
-import { site } from "@/lib/site-data";
+import { blokosDistribution, site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -10,14 +10,6 @@ export const metadata = pageMetadata({
   description: "O sistema de pontos e crédito interno do clube BLOKO. Ganha, acumula e usa Blokos.",
   path: "/blokos",
 });
-
-const blokosTable = [
-  { place: "1.º lugar", blokos: "600", note: "300 por jogador" },
-  { place: "2.º lugar", blokos: "400", note: "" },
-  { place: "3.º lugar", blokos: "250", note: "" },
-  { place: "4.º lugar", blokos: "150", note: "" },
-  { place: "5.º ao 8.º lugar", blokos: "50 (por dupla)", note: "Blokos garantidos" },
-];
 
 const steps = [
   {
@@ -83,7 +75,7 @@ export default function BlokosPage() {
             </p>
             <table className="w-full text-sm">
               <tbody>
-                {blokosTable.map((row) => (
+                {blokosDistribution.map((row) => (
                   <tr key={row.place} className="border-b border-white/5 last:border-0">
                     <td className="py-3 text-[var(--color-text-muted)]">{row.place}</td>
                     <td className="py-3 font-display text-[var(--color-lime)]">{row.blokos}</td>

@@ -622,7 +622,7 @@ export const tournamentSponsors: Sponsor[] = [
   { name: "McDonald's Bragança", logo: "/images/logos/mcdonalds.png" },
   { name: "Mudda Domus", logo: "/images/sponsors/mudda-domus.png" },
   { name: "Barrad'Ouro Bragança", logo: "/images/sponsors/barradouro.png" },
-  { name: "Grandson Interiores" },
+  { name: "Grandson Interiores", logo: "/images/sponsors/grandson-interiores.jpg" },
 ];
 
 // Exemplo de distribuição de Blokos por classificação num Nonstop (8 duplas) —

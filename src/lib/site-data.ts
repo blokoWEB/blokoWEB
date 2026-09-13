@@ -624,7 +624,8 @@ export const tournamentSponsors: Sponsor[] = [
   { name: "Grandson Interiores" },
 ];
 
-// Distribuição de Blokos por classificação num Nonstop (8 duplas) — ver página /blokos.
+// Exemplo de distribuição de Blokos por classificação num Nonstop (8 duplas) —
+// a distribuição pode variar de torneio para torneio. Ver página /blokos.
 export const blokosDistribution = [
   { place: "1.º lugar", blokos: "600", note: "300 por jogador" },
   { place: "2.º lugar", blokos: "400", note: "" },

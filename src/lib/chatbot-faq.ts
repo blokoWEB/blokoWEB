@@ -427,7 +427,7 @@ export const faq: FaqEntry[] = [
       "pontos por vitoria",
       "distribuicao de blokos",
     ],
-    answer: `Num Nonstop (8 duplas): ${blokosDistribution
+    answer: `Exemplo de distribuição num Nonstop (8 duplas) — pode variar de torneio para torneio: ${blokosDistribution
       .map((b) => `${b.place} — ${b.blokos} Blokos${b.note ? ` (${b.note})` : ""}`)
       .join("; ")}.`,
   },

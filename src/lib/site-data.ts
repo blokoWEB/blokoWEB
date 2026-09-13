@@ -606,6 +606,7 @@ export const courtSponsors = [
 export type Sponsor = { name: string; url?: string; logo?: string };
 
 export const sponsors: Sponsor[] = [
+  { name: "Barrad'Ouro Bragança", logo: "/images/sponsors/barradouro.png" },
   { name: "Farmácia Vale D'Álvaro", logo: "/images/sponsors/farmacia-vale-dalvaro.png" },
   { name: "Farmácia Bem Saúde", logo: "/images/sponsors/farmacia-bem-saude.png" },
   { name: "be up — Agência Criativa", logo: "/images/sponsors/be-up.png" },

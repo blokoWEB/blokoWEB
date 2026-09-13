@@ -37,9 +37,7 @@ export async function GET(req: NextRequest) {
         .publicUrl;
       const full = supabase.storage.from(BUCKET).getPublicUrl(`${base}/full/${f.name}`).data
         .publicUrl;
-      const original = supabase.storage.from(BUCKET).getPublicUrl(`${base}/original/${f.name}`)
-        .data.publicUrl;
-      return { name: f.name, thumb, full, original };
+      return { name: f.name, thumb, full };
     });
 
     return NextResponse.json({ images, hasMore: files.length === limit });

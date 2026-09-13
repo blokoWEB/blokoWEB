@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Download, ImageOff, Loader2, X } from "lucide-react";
 import Portal from "./Portal";
 
-type GalleryImage = { name: string; thumb: string; full: string; original: string };
+type GalleryImage = { name: string; thumb: string; full: string };
 
 const LIMIT = 24;
 
@@ -194,7 +194,7 @@ function SinglePhotoView({
       />
 
       <a
-        href={img.original}
+        href={img.full}
         download={img.name}
         target="_blank"
         rel="noreferrer"

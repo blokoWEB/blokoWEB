@@ -46,7 +46,10 @@ export const navLinks: NavLink[] = [
   {
     href: "/sobre",
     label: "Sobre",
-    submenu: [{ href: "/sobre/eventos", label: "Eventos" }],
+    submenu: [
+      { href: "/sobre/equipa", label: "Equipa" },
+      { href: "/sobre/eventos", label: "Eventos" },
+    ],
   },
   {
     href: "/ginasio",
@@ -603,14 +606,11 @@ export const courtSponsors = [
 export type Sponsor = { name: string; url?: string; logo?: string };
 
 export const sponsors: Sponsor[] = [
-  { name: "Sier Energia", logo: "/images/sponsors/sier-energia.png" },
   { name: "Farmácia Vale D'Álvaro", logo: "/images/sponsors/farmacia-vale-dalvaro.png" },
   { name: "Farmácia Bem Saúde", logo: "/images/sponsors/farmacia-bem-saude.png" },
   { name: "be up — Agência Criativa", logo: "/images/sponsors/be-up.png" },
-  { name: "Enerduo", logo: "/images/sponsors/enerduo.png" },
   { name: "NORD Higiene", logo: "/images/sponsors/nord-higiene.png" },
   { name: "Mundotur", logo: "/images/sponsors/mundotur.png" },
-  { name: "Clínica Montes de Saúde", logo: "/images/sponsors/montes-de-saude.png" },
   { name: "CrossXLed Solutions", logo: "/images/sponsors/crossxled-solutions.png" },
   { name: "TMJanelas", logo: "/images/sponsors/tmjanelas.png" },
 ];

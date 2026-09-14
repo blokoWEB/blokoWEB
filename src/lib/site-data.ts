@@ -228,15 +228,15 @@ export const academiaPricing = {
     {
       label: "Adultos",
       plans: [
-        { freq: "1x semana", price: "55€/mês" },
-        { freq: "2x semana", price: "95€/mês" },
+        { freq: "1x semana", price: "55€/mês", aulas: "~4 a 5 aulas/mês" },
+        { freq: "2x semana", price: "95€/mês", aulas: "~8 a 10 aulas/mês" },
       ],
     },
     {
       label: "Kids",
       plans: [
-        { freq: "1x semana", price: "45€/mês" },
-        { freq: "2x semana", price: "80€/mês" },
+        { freq: "1x semana", price: "45€/mês", aulas: "~4 a 5 aulas/mês" },
+        { freq: "2x semana", price: "80€/mês", aulas: "~8 a 10 aulas/mês" },
       ],
     },
   ],

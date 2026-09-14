@@ -119,7 +119,12 @@ export default function AcademiaPage() {
                       key={p.freq}
                       className="flex items-center justify-between border-b border-white/10 pb-3 last:border-0 last:pb-0"
                     >
-                      <span className="text-sm text-[var(--color-text-muted)]">{p.freq}</span>
+                      <div>
+                        <span className="block text-sm text-[var(--color-text-muted)]">{p.freq}</span>
+                        <span className="block text-[10px] text-[var(--color-text-muted)]/70">
+                          {p.aulas}
+                        </span>
+                      </div>
                       <span className="font-display text-lg text-[var(--color-lime)]">
                         {p.price}
                       </span>
@@ -130,9 +135,6 @@ export default function AcademiaPage() {
             </ScrollReveal>
           ))}
         </div>
-        <p className="mt-6 text-xs text-[var(--color-text-muted)]">
-          O nº de aulas por mês varia consoante o mês — 1x/semana são cerca de 4 a 5 aulas, 2x/semana cerca de 8 a 10.
-        </p>
       </section>
 
       {/* CTA turmas */}

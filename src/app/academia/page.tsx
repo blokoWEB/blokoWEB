@@ -130,6 +130,9 @@ export default function AcademiaPage() {
             </ScrollReveal>
           ))}
         </div>
+        <p className="mt-6 text-xs text-[var(--color-text-muted)]">
+          O nº de aulas por mês varia consoante o mês — 1x/semana são cerca de 4 a 5 aulas, 2x/semana cerca de 8 a 10.
+        </p>
       </section>
 
       {/* CTA turmas */}

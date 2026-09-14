@@ -140,8 +140,8 @@ export default function ChatWidget() {
               className="fixed bottom-20 left-4 z-40 w-[calc(100vw-2rem)] max-w-sm h-[70vh] max-h-[560px] flex flex-col glass-card rounded-2xl overflow-hidden"
             >
               <div className="flex items-center gap-3 px-5 py-4 border-b border-white/10 shrink-0">
-                <div className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center">
-                  <BlokinhoAvatar size={36} />
+                <div className="w-9 h-9 shrink-0 flex items-center justify-center">
+                  <BlokinhoAvatar size={32} />
                 </div>
                 <div>
                   <p className="font-display uppercase text-sm">Blokinho</p>

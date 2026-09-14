@@ -119,10 +119,21 @@ const STOPWORDS = new Set(
   ].map((w) => normalize(w))
 );
 
+// Normaliza plurais simples em português para o singular, para que "mensalidades"
+// combine com a keyword "mensalidade", "promocoes" com "promocao", etc.
+function stem(w: string): string {
+  if (w.length > 4 && w.endsWith("oes")) return w.slice(0, -3) + "ao";
+  if (w.length > 4 && w.endsWith("aes")) return w.slice(0, -3) + "ao";
+  if (w.length > 3 && w.endsWith("ns")) return w.slice(0, -2) + "m";
+  if (w.length > 3 && w.endsWith("s")) return w.slice(0, -1);
+  return w;
+}
+
 function words(text: string): string[] {
   return normalize(text)
     .split(/[^a-z0-9]+/)
-    .filter((w) => w.length > 1 && !STOPWORDS.has(w));
+    .filter((w) => w.length > 1 && !STOPWORDS.has(w))
+    .map(stem);
 }
 
 export const faq: FaqEntry[] = [

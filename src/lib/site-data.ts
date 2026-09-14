@@ -210,14 +210,6 @@ export const groupClassPricing = {
         { freq: "3 aulas/semana", price: "29,95€/mês" },
       ],
     },
-    {
-      label: "Kids",
-      plans: [{ freq: "1 aula/semana", price: "15,95€/mês" }],
-    },
-    {
-      label: "Ativos +60",
-      plans: [{ freq: "2 aulas/semana", price: "24,95€/mês" }],
-    },
   ],
 };
 

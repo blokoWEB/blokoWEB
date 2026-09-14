@@ -311,7 +311,7 @@ export default function GinasioPrecarioPage() {
             </p>
           </ScrollReveal>
 
-          <div className="grid sm:grid-cols-3 gap-6">
+          <div className="grid gap-6 max-w-sm">
             {groupClassPricing.tiers.map((tier, i) => (
               <ScrollReveal key={tier.label} delay={i * 0.1}>
                 <div className="glass-card rounded-2xl overflow-hidden h-full">

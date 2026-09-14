@@ -2,8 +2,35 @@ import Link from "next/link";
 import { ArrowRight, Clock, MessageCircle, ShoppingBag, Sparkles } from "lucide-react";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
+import FaqSection from "@/components/FaqSection";
 import { padelCourtPricing, padelLessonPricing, site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
+
+const faqs = [
+  {
+    question: "Quanto custa alugar um campo de padel no BLOKO?",
+    answer:
+      "Em horário Off Peak (segunda a sexta, das 7h às 17h), 1 hora custa 4€ por pessoa e 1h30 custa 6€ por pessoa. Em Peak Hour, 1 hora custa 6€ por pessoa e 1h30 custa 8,5€ por pessoa.",
+  },
+  {
+    question: "Quanto custam as aulas de padel?",
+    answer:
+      "Em Peak Hour, uma aula individual custa 39€, em grupo de 2 alunos custa 24€ por pessoa, e em grupo de 3 fica ainda mais barato. Há packs de 5 e 10 aulas com desconto, e 10% de desconto para Sócios Fundadores.",
+  },
+  {
+    question: "Posso alugar raquetes no BLOKO?",
+    answer: "Sim — raquete Nox por 1,5€ ou raquete Quad por 3,5€.",
+  },
+  {
+    question: "Há desconto para quem também treina no Ginásio?",
+    answer:
+      "Sim, com o Pack Padel + Ginásio combinas as duas mensalidades com desconto — consulta os preços do Ginásio para mais detalhes.",
+  },
+  {
+    question: "Como reservo um campo de padel?",
+    answer: "Fala connosco diretamente pelo WhatsApp para combinar dia e hora.",
+  },
+];
 
 export const metadata = pageMetadata({
   title: "Preços de Padel em Bragança",
@@ -154,6 +181,8 @@ export default function PadelPrecarioPage() {
           </ScrollReveal>
         </div>
       </section>
+
+      <FaqSection faqs={faqs} />
 
       <section className="container-bloko py-20 text-center">
         <ScrollReveal>

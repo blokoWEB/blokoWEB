@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, MessageCircle, ShieldCheck, Sparkles, Users } from "lucide-react";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
+import FaqSection from "@/components/FaqSection";
 import {
   gymFamilyPack,
   gymMembership,
@@ -13,6 +14,34 @@ import {
   site,
 } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
+
+const faqs = [
+  {
+    question: "Quanto custa a mensalidade do Ginásio BLOKO?",
+    answer:
+      "A mensalidade de Acesso Livre custa 34,60€/mês. Há também o plano Off Peak, por 25,95€/mês, com acesso diário das 7h às 17h. A inscrição é de 15€ e inclui avaliação física, plano de treino e seguro.",
+  },
+  {
+    question: "Há fidelização nas mensalidades do Ginásio?",
+    answer:
+      "Não. Todas as mensalidades e packs do Ginásio BLOKO são sem fidelização — cancelas quando quiseres, sem multas nem tempo mínimo.",
+  },
+  {
+    question: "Há desconto para quem treina em família?",
+    answer:
+      "Sim, o Pack Família custa 29,95€/mês por pessoa para 2 elementos, ou 25,95€/mês por pessoa a partir de 3 elementos.",
+  },
+  {
+    question: "Quanto custa o Personal Training no BLOKO?",
+    answer:
+      "Personal Training individual custa a partir de 71€/mês (1 treino/semana), com preços mais baixos por pessoa em grupos de 2 ou 3.",
+  },
+  {
+    question: "Posso experimentar o Ginásio antes de assinar mensalidade?",
+    answer:
+      "Sim: Treino Único por 4,99€, 1 Semana de Acesso Livre por 9,99€, ou 2 Semanas de Acesso Livre por 19,98€.",
+  },
+];
 
 export const metadata = pageMetadata({
   title: "Preços do Ginásio em Bragança",
@@ -312,6 +341,8 @@ export default function GinasioPrecarioPage() {
           </ScrollReveal>
         </div>
       </section>
+
+      <FaqSection faqs={faqs} />
 
       <section className="container-bloko py-20 text-center">
         <ScrollReveal>

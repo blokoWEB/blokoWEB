@@ -371,15 +371,15 @@ export const padelLessonPricing = {
 export const whatsappGroups = [
   {
     name: "Jogos Abertos Masculinos",
-    description: "Combina jogos de padel masculinos com outros jogadores, fora dos torneios.",
+    description: "Combina jogos de padel masculinos com outros jogadores ou inscreve-te em torneios semanais.",
   },
   {
     name: "Jogos Abertos Femininos",
-    description: "Combina jogos de padel femininos com outras jogadoras, fora dos torneios.",
+    description: "Combina jogos de padel femininos com outras jogadoras ou inscreve-te em torneios semanais.",
   },
   {
     name: "Jogos Abertos Mistos",
-    description: "Combina jogos de padel mistos com outros jogadores, fora dos torneios.",
+    description: "Combina jogos de padel mistos com outros jogadores ou inscreve-te em torneios semanais.",
   },
   {
     name: "Marcações",

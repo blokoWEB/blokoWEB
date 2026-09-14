@@ -275,7 +275,12 @@ export default function GinasioPrecarioPage() {
                       key={p.freq}
                       className="flex items-center justify-between border-b border-white/10 pb-3 last:border-0 last:pb-0"
                     >
-                      <span className="text-sm text-[var(--color-text-muted)]">{p.freq}</span>
+                      <div>
+                        <span className="block text-sm text-[var(--color-text-muted)]">{p.freq}</span>
+                        <span className="block text-[10px] text-[var(--color-text-muted)]/70">
+                          {p.sessoes}
+                        </span>
+                      </div>
                       <span className="font-display text-lg text-[var(--color-lime)]">
                         {p.price}
                       </span>

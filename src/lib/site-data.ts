@@ -258,25 +258,25 @@ export const gymPersonalTraining = [
   {
     label: "Individuais",
     plans: [
-      { freq: "1 treino/semana", price: "71€" },
-      { freq: "2 treinos/semana", price: "134€" },
-      { freq: "3 treinos/semana", price: "188€" },
+      { freq: "1 treino/semana", price: "71€", sessoes: "~4 a 5 treinos/mês" },
+      { freq: "2 treinos/semana", price: "134€", sessoes: "~8 a 10 treinos/mês" },
+      { freq: "3 treinos/semana", price: "188€", sessoes: "~12 a 15 treinos/mês" },
     ],
   },
   {
     label: "2 Pessoas",
     plans: [
-      { freq: "1 treino/semana", price: "53€" },
-      { freq: "2 treinos/semana", price: "98€" },
-      { freq: "3 treinos/semana", price: "139€" },
+      { freq: "1 treino/semana", price: "53€", sessoes: "~4 a 5 treinos/mês" },
+      { freq: "2 treinos/semana", price: "98€", sessoes: "~8 a 10 treinos/mês" },
+      { freq: "3 treinos/semana", price: "139€", sessoes: "~12 a 15 treinos/mês" },
     ],
   },
   {
     label: "3 Pessoas",
     plans: [
-      { freq: "1 treino/semana", price: "44€" },
-      { freq: "2 treinos/semana", price: "80€" },
-      { freq: "3 treinos/semana", price: "112€" },
+      { freq: "1 treino/semana", price: "44€", sessoes: "~4 a 5 treinos/mês" },
+      { freq: "2 treinos/semana", price: "80€", sessoes: "~8 a 10 treinos/mês" },
+      { freq: "3 treinos/semana", price: "112€", sessoes: "~12 a 15 treinos/mês" },
     ],
   },
 ];

@@ -2,26 +2,12 @@
 
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
 import { CalendarClock, Check, Clock, Loader2, MapPin, Users, X } from "lucide-react";
 import Portal from "@/components/Portal";
 import ScrollReveal from "@/components/ScrollReveal";
 import AcademiaLevelPicker from "@/components/AcademiaLevelPicker";
-import { classCategories, classTypes, site, type ClassCategoryKey } from "@/lib/site-data";
+import { classCategories, site, type ClassCategoryKey } from "@/lib/site-data";
 import type { ClassSessionWithCount } from "@/lib/types";
-
-const categoryFallbackImage: Record<ClassCategoryKey, string> = {
-  ginasio: "/images/real-gym-interior.jpg",
-  padel: "/images/real-padel-panorama.jpg",
-  academia: "/images/real-academia-sub12.jpg",
-};
-
-function imageForSession(session: ClassSessionWithCount) {
-  const match = classTypes.find(
-    (c) => c.name.toLowerCase() === session.title.toLowerCase()
-  );
-  return match?.image ?? categoryFallbackImage[session.category];
-}
 
 // Aulas de padel avulsas saíram do sistema de marcação por agora (ver /padel/aulas).
 const tabCategories = classCategories.filter((c) => c.key !== "padel");
@@ -236,23 +222,15 @@ function SessionGroups({
               key={s.id}
               className="glass-card rounded-2xl overflow-hidden flex flex-col hover:border-[var(--color-lime)]/40 transition-colors group"
             >
-              <div className="relative aspect-[16/10] overflow-hidden shrink-0">
-                <Image
-                  src={imageForSession(s)}
-                  alt={s.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-card)] via-transparent to-transparent" />
-                <span className="absolute top-3 left-3 flex items-center gap-1.5 text-xs font-display bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full capitalize">
-                  {formatDayShort(s.starts_at)}
-                </span>
-                <span className="absolute top-3 right-3 flex items-center gap-1.5 text-xs font-display bg-black/60 backdrop-blur-sm text-[var(--color-lime)] px-3 py-1.5 rounded-full">
-                  <Clock size={12} /> {formatTime(s.starts_at)}
-                </span>
-              </div>
-
               <div className="p-6 flex flex-col flex-1">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="flex items-center gap-1.5 text-xs font-display bg-white/5 text-white px-3 py-1.5 rounded-full capitalize">
+                    {formatDayShort(s.starts_at)}
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs font-display bg-white/5 text-[var(--color-lime)] px-3 py-1.5 rounded-full">
+                    <Clock size={12} /> {formatTime(s.starts_at)}
+                  </span>
+                </div>
                 <span className="font-display uppercase text-lg mb-2">{s.title}</span>
                 {s.description && (
                   <p className="text-sm text-[var(--color-text-muted)] mb-3 flex-1">
@@ -276,6 +254,17 @@ function SessionGroups({
                 >
                   {full ? "Sem vagas" : "Marcar"}
                 </button>
+                <p className="mt-3 text-center text-[11px] text-[var(--color-text-muted)]">
+                  Já marcaste e precisas de cancelar?{" "}
+                  <a
+                    href={site.whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[var(--color-lime)] hover:underline"
+                  >
+                    Cancela pelo WhatsApp
+                  </a>
+                </p>
               </div>
             </div>
           );

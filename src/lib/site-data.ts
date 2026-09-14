@@ -46,7 +46,10 @@ export const navLinks: NavLink[] = [
   {
     href: "/sobre",
     label: "Sobre",
-    submenu: [{ href: "/sobre/eventos", label: "Eventos" }],
+    submenu: [
+      { href: "/sobre/equipa", label: "Equipa" },
+      { href: "/sobre/eventos", label: "Eventos" },
+    ],
   },
   {
     href: "/ginasio",
@@ -636,7 +639,7 @@ export const blokosDistribution = [
 export type EquipaMember = {
   name: string;
   roles: string[];
-  qualification: string;
+  qualification: string[];
   /** Preenche quando houver foto real — até lá mostra as iniciais. */
   image?: string;
 };
@@ -645,27 +648,38 @@ export const equipa: EquipaMember[] = [
   {
     name: "André Rodrigues",
     roles: ["Diretor Técnico", "Professor de Padel", "Monitor de Ginásio"],
-    qualification: "Licenciatura em Desporto — IPB",
+    qualification: [
+      "Licenciado em Desporto — UPB",
+      "Mestre em Exercício e Saúde — UPB",
+      "Treinador de Padel Nível I",
+    ],
   },
   {
     name: "André Teixeira",
     roles: ["Professor de Padel", "Monitor de Ginásio"],
-    qualification: "Licenciatura em Desporto — IPB",
+    qualification: [
+      "Licenciatura em Desporto — UPB",
+      "Formação de Professor de Padel Nível 1 pela FPDP",
+    ],
   },
   {
     name: "André Félix",
     roles: ["Monitor de Ginásio", "Personal Trainer"],
-    qualification: "Licenciatura em Desporto — IPB",
+    qualification: ["Licenciatura em Desporto", "Técnico de Exercício e Bem-Estar"],
   },
   {
     name: "Rodrigo Sá",
     roles: ["Monitor de Ginásio", "Personal Trainer"],
-    qualification: "Licenciatura em Desporto — IPB",
+    qualification: ["Licenciatura em Desporto — UPB"],
   },
   {
     name: "Pedro Aires",
     roles: ["Monitor de Ginásio", "Personal Trainer"],
-    qualification: "Licenciatura em Desporto — IPB",
+    qualification: [
+      "Licenciatura — IPG",
+      "Mestrado em Ensino de Educação Física nos Ensinos Básico e Secundário — UC",
+      "Técnico de Exercício Físico e Bem-Estar",
+    ],
   },
 ];
 

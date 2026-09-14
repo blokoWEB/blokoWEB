@@ -652,6 +652,7 @@ export const equipa: EquipaMember[] = [
       "Licenciado em Desporto — UPB",
       "Mestre em Exercício e Saúde — UPB",
       "Treinador de Padel Nível I",
+      "Técnico de Exercício Físico e Bem-Estar",
     ],
   },
   {
@@ -660,17 +661,18 @@ export const equipa: EquipaMember[] = [
     qualification: [
       "Licenciatura em Desporto — UPB",
       "Formação de Professor de Padel Nível 1 pela FPDP",
+      "Técnico de Exercício Físico e Bem-Estar",
     ],
   },
   {
     name: "André Félix",
     roles: ["Monitor de Ginásio", "Personal Trainer"],
-    qualification: ["Licenciatura em Desporto", "Técnico de Exercício e Bem-Estar"],
+    qualification: ["Licenciatura em Desporto", "Técnico de Exercício Físico e Bem-Estar"],
   },
   {
     name: "Rodrigo Sá",
     roles: ["Monitor de Ginásio", "Personal Trainer"],
-    qualification: ["Licenciatura em Desporto — UPB"],
+    qualification: ["Licenciatura em Desporto — UPB", "Técnico de Exercício Físico e Bem-Estar"],
   },
   {
     name: "Pedro Aires",

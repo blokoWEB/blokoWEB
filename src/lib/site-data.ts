@@ -651,7 +651,7 @@ export const equipa: EquipaMember[] = [
     qualification: [
       "Licenciado em Desporto — UPB",
       "Mestre em Exercício e Saúde — UPB",
-      "Treinador de Padel Nível I",
+      "Treinador de Padel Nível I pela FPDP",
       "Técnico de Exercício Físico e Bem-Estar",
     ],
   },
@@ -660,7 +660,7 @@ export const equipa: EquipaMember[] = [
     roles: ["Professor de Padel", "Monitor de Ginásio"],
     qualification: [
       "Licenciatura em Desporto — UPB",
-      "Formação de Professor de Padel Nível 1 pela FPDP",
+      "Treinador de Padel Nível I pela FPDP",
       "Técnico de Exercício Físico e Bem-Estar",
     ],
   },

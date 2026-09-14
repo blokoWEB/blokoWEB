@@ -7,6 +7,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/", priority: 1, changeFrequency: "weekly" },
     { path: "/padel", priority: 0.9, changeFrequency: "weekly" },
     { path: "/ginasio", priority: 0.9, changeFrequency: "weekly" },
+    { path: "/padel/precario", priority: 0.8, changeFrequency: "weekly" },
+    { path: "/ginasio/precario", priority: 0.8, changeFrequency: "weekly" },
     { path: "/aulas", priority: 0.8, changeFrequency: "daily" },
     { path: "/padel/aulas", priority: 0.7, changeFrequency: "weekly" },
     { path: "/academia", priority: 0.7, changeFrequency: "weekly" },

@@ -15,7 +15,7 @@ import { academiaFormat, academiaPolicies, academiaPricing, site } from "@/lib/s
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Academia",
+  title: "Academia de Padel em Bragança",
   description:
     "Formação de padel em Bragança para todas as idades e níveis — da iniciação à competição.",
   path: "/academia",

@@ -6,7 +6,7 @@ import { padelCourtPricing, padelLessonPricing, site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Preçário Padel",
+  title: "Preços de Padel em Bragança",
   description: "Preços dos campos e aulas de padel em Bragança — off peak, peak hour e aluguer de raquetes.",
   path: "/padel/precario",
 });

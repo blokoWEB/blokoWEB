@@ -13,7 +13,7 @@ import {
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Torneios",
+  title: "Torneios de Padel em Bragança",
   description:
     "Torneios Sociais e Nonstops semanais de padel em Bragança, e o sistema de pontos Blokos.",
   path: "/torneios",

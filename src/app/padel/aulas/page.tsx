@@ -5,7 +5,7 @@ import { site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Aulas de Padel",
+  title: "Aulas de Padel em Bragança",
   description:
     "O teu PT de padel em Bragança: aulas individuais, com parceiro ou em grupo, ao teu ritmo.",
   path: "/padel/aulas",

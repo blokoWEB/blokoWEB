@@ -7,7 +7,7 @@ import { courtSponsors, padelFeatures, site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Padel",
+  title: "Padel em Bragança",
   description:
     "4 campos de padel panorâmicos em Bragança, piso Mondo Supercourt. Reserva via Playtomic ou WhatsApp.",
   path: "/padel",

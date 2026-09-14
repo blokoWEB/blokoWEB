@@ -15,7 +15,7 @@ import {
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Preçário Ginásio",
+  title: "Preços do Ginásio em Bragança",
   description:
     "Preços do Ginásio BLOKO em Bragança — mensalidades, pack família, treino personalizado e aulas de grupo.",
   path: "/ginasio/precario",

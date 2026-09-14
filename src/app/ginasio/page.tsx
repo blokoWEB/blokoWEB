@@ -8,7 +8,7 @@ import { classTypes, site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Ginásio",
+  title: "Ginásio em Bragança",
   description:
     "Ginásio moderno em Bragança com aulas de grupo incluídas na mensalidade: GAP, ABS, Funcional e mais.",
   path: "/ginasio",

@@ -110,6 +110,15 @@ export const classTypes = [
       "Movimentos multiarticulares e funcionais para força, mobilidade e resistência geral.",
     image: "/images/class-funcional-real.jpg",
   },
+  {
+    slug: "hiit",
+    category: "ginasio" as ClassCategoryKey,
+    name: "HIIT",
+    full: "High-Intensity Interval Training",
+    description:
+      "Treinos de alta intensidade e curta duração que alternam picos de esforço máximo com curtos períodos de descanso.",
+    image: "/images/class-hiit-stock.avif",
+  },
   // Padel — aulas avulsas, para todos os níveis
   {
     slug: "padel-iniciacao",

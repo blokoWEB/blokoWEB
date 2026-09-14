@@ -113,29 +113,6 @@ export default function SobrePage() {
         </div>
       </section>
 
-      {/* Equipa */}
-      <section className="container-bloko py-24">
-        <ScrollReveal>
-          <div className="glass-card rounded-3xl p-10 md:p-14 text-center max-w-2xl mx-auto">
-            <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
-              A Equipa
-            </p>
-            <h2 className="font-display font-bold text-2xl md:text-3xl uppercase mb-4">
-              Quem te acompanha todos os dias
-            </h2>
-            <p className="text-[var(--color-text-muted)] mb-8">
-              Professores de Padel e monitores de Ginásio.
-            </p>
-            <Link
-              href="/sobre/equipa"
-              className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
-            >
-              Conhecer a Equipa <ArrowRight size={16} />
-            </Link>
-          </div>
-        </ScrollReveal>
-      </section>
-
       {/* Panorama interativo */}
       <section className="container-bloko py-24">
         <ScrollReveal className="max-w-2xl mb-10">

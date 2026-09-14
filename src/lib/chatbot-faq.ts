@@ -5,7 +5,6 @@ import {
   blokosDistribution,
   classTypes,
   courtSponsors,
-  equipa,
   events,
   gymEquipmentCount,
   gymFamilyPack,
@@ -430,19 +429,6 @@ export const faq: FaqEntry[] = [
     answer: `Exemplo de distribuição num Nonstop (8 duplas) — pode variar de torneio para torneio: ${blokosDistribution
       .map((b) => `${b.place} — ${b.blokos} Blokos${b.note ? ` (${b.note})` : ""}`)
       .join("; ")}.`,
-  },
-  {
-    id: "equipa",
-    keywords: [
-      "quem sao os professores",
-      "quem sao os monitores",
-      "quem e o diretor tecnico",
-      "quem trabalha no bloko",
-      "quem da as aulas",
-      "equipa tecnica",
-    ],
-    answer: `A equipa técnica do BLOKO: ${equipa.map((m) => `${m.name} (${m.roles.join(", ")})`).join("; ")}.`,
-    link: { url: "/sobre/equipa", label: "Conhecer a Equipa" },
   },
   {
     id: "academia-formato",

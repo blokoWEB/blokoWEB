@@ -46,10 +46,7 @@ export const navLinks: NavLink[] = [
   {
     href: "/sobre",
     label: "Sobre",
-    submenu: [
-      { href: "/sobre/equipa", label: "Equipa" },
-      { href: "/sobre/eventos", label: "Eventos" },
-    ],
+    submenu: [{ href: "/sobre/eventos", label: "Eventos" }],
   },
   {
     href: "/ginasio",

@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { CalendarClock, Check, Clock, Loader2, MapPin, Users, X } from "lucide-react";
+import { CalendarClock, Check, Clock, Loader2, MapPin, MessageCircle, Users, X } from "lucide-react";
 import Portal from "@/components/Portal";
 import ScrollReveal from "@/components/ScrollReveal";
 import AcademiaLevelPicker from "@/components/AcademiaLevelPicker";
@@ -138,7 +138,25 @@ function AulasContent() {
         )}
 
         {category === "ginasio" && loadError && (
-          <div className="glass-card rounded-2xl p-6 text-sm text-red-400">{loadError}</div>
+          <div className="glass-card rounded-2xl p-10 text-center">
+            <p className="font-display uppercase text-sm text-[var(--color-lime)] mb-3">
+              Marcações de Aulas em Manutenção
+            </p>
+            <p className="text-sm text-[var(--color-text-muted)] mb-6 max-w-md mx-auto">
+              De momento não conseguimos processar marcações online. Marca a tua presença na aula
+              de hoje diretamente pelo WhatsApp.
+            </p>
+            <a
+              href={`${site.whatsappUrl}?text=${encodeURIComponent(
+                "Quero marcar presença na aula de hoje"
+              )}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-8 py-4 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
+            >
+              <MessageCircle size={16} /> Marcar pelo WhatsApp
+            </a>
+          </div>
         )}
 
         {category === "ginasio" && !loading && !loadError && isEmpty && (

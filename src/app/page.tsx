@@ -3,11 +3,13 @@ import Link from "next/link";
 import { ArrowRight, MessageCircle, Star, Trophy, Users, Zap } from "lucide-react";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
+import TournamentCard from "@/components/TournamentCard";
 import {
   classTypes,
   padelFeatures,
   site,
   tournamentFormats,
+  upcomingTournaments,
   whatsappGroups,
 } from "@/lib/site-data";
 
@@ -267,6 +269,29 @@ export default function Home() {
           </Link>
         </div>
       </ParallaxDive>
+
+      {/* PRÓXIMOS TORNEIOS */}
+      {upcomingTournaments.length > 0 && (
+        <section className="bg-[var(--color-bg-elevated)] py-24 glow-lime">
+          <div className="container-bloko">
+            <ScrollReveal className="max-w-2xl mb-14 text-center mx-auto">
+              <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-lime)] mb-4">
+                Agenda
+              </p>
+              <h2 className="font-display font-bold text-3xl md:text-4xl uppercase">
+                Próximos Torneios
+              </h2>
+            </ScrollReveal>
+            <div className="flex flex-wrap justify-center gap-6">
+              {upcomingTournaments.map((t, i) => (
+                <ScrollReveal key={t.slug} delay={i * 0.08} className="w-full sm:w-80">
+                  <TournamentCard tournament={t} />
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* REVIEW CTA */}
       <section className="relative bg-[var(--color-bg)]">

@@ -241,12 +241,12 @@ function SessionGroups({
               className="glass-card rounded-2xl overflow-hidden flex flex-col hover:border-[var(--color-lime)]/40 transition-colors group"
             >
               <div className="p-6 flex flex-col flex-1">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="flex items-center gap-1.5 text-xs font-display bg-white/5 text-white px-3 py-1.5 rounded-full capitalize">
+                <div className="flex flex-wrap items-center gap-2 mb-4">
+                  <span className="flex items-center gap-2 text-base font-display font-bold bg-white/10 text-white px-4 py-2 rounded-full capitalize">
                     {formatDayShort(s.starts_at)}
                   </span>
-                  <span className="flex items-center gap-1.5 text-xs font-display bg-white/5 text-[var(--color-lime)] px-3 py-1.5 rounded-full">
-                    <Clock size={12} /> {formatTime(s.starts_at)}
+                  <span className="flex items-center gap-2 text-base font-display font-bold bg-[var(--color-lime)]/15 text-[var(--color-lime)] px-4 py-2 rounded-full">
+                    <Clock size={16} /> {formatTime(s.starts_at)}
                   </span>
                 </div>
                 <span className="font-display uppercase text-lg mb-2">{s.title}</span>
@@ -270,7 +270,7 @@ function SessionGroups({
                   onClick={() => onSelect(s)}
                   className="mt-auto font-display uppercase text-sm tracking-wide py-3 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  {full ? "Sem vagas" : "Marcar"}
+                  {full ? "Sem vagas" : "Marcar Presença"}
                 </button>
                 <p className="mt-3 text-center text-[11px] text-[var(--color-text-muted)]">
                   Já marcaste e precisas de cancelar?{" "}

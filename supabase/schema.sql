@@ -57,7 +57,18 @@ create index if not exists academia_inscricoes_created_at_idx on academia_inscri
 -- alter table academia_inscricoes alter column contact drop not null;
 -- update academia_inscricoes set phone = contact where phone is null;
 
+create table if not exists experimental_inscricoes (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  phone text not null,
+  email text not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists experimental_inscricoes_created_at_idx on experimental_inscricoes(created_at);
+
 -- RLS ligado, sem policies: só o backend (service role key) acede a estas tabelas.
 alter table class_sessions enable row level security;
 alter table bookings enable row level security;
 alter table academia_inscricoes enable row level security;
+alter table experimental_inscricoes enable row level security;

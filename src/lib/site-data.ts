@@ -63,6 +63,7 @@ export const navLinks: NavLink[] = [
     href: "/padel",
     label: "Padel",
     submenu: [
+      { href: "/padel/aula-experimental", label: "Aula Experimental" },
       { href: "/padel/aulas", label: "Aulas de Padel" },
       { href: "/academia", label: "Academia BLOKO" },
       { href: "/torneios", label: "Torneios" },
@@ -699,4 +700,32 @@ export const academiaFormat = [
   "Turmas fixas, uma ou duas vezes por semana, ao longo do ano",
   "Mensalidade ou packs de aulas válidos por 1 ano",
   "Raquetes de padel disponíveis para empréstimo",
+];
+
+// Aula Experimental Gratuita — para quem nunca jogou padel. Ver página /padel/aula-experimental.
+export const experimentalAulaInfo = {
+  duration: "1 hora",
+  day: "Normalmente às sextas-feiras",
+  equipment: "Raquetes e bolas incluídas",
+  audience: "Para quem nunca jogou padel",
+  booking: "Marcação obrigatória",
+};
+
+export const experimentalAulaTopics = [
+  {
+    title: "Regras Básicas do Padel",
+    body: "Como se joga, como se conta e as regras essenciais para começares a jogar com confiança.",
+  },
+  {
+    title: "Movimentos Básicos de Padel",
+    body: "Técnica de base: pega na raquete, posicionamento e os primeiros golpes.",
+  },
+  {
+    title: "Contexto em Jogo Real",
+    body: "Aplica o que aprendeste num jogo a sério, dentro de campo, com o apoio do professor.",
+  },
+  {
+    title: "Integração na Comunidade WhatsApp",
+    body: "Entra nos grupos do clube para continuares a jogar com outros sócios depois da aula.",
+  },
 ];

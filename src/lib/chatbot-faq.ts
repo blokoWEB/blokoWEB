@@ -7,6 +7,7 @@ import {
   courtSponsors,
   equipa,
   events,
+  experimentalAulaInfo,
   gymEquipmentCount,
   gymFamilyPack,
   gymMembership,
@@ -441,6 +442,19 @@ export const faq: FaqEntry[] = [
     answer: `Exemplo de distribuição num Nonstop (8 duplas) — pode variar de torneio para torneio: ${blokosDistribution
       .map((b) => `${b.place} — ${b.blokos} Blokos${b.note ? ` (${b.note})` : ""}`)
       .join("; ")}.`,
+  },
+  {
+    id: "aula-experimental",
+    keywords: [
+      "nunca joguei padel",
+      "aula experimental",
+      "aula gratis padel",
+      "experimentar padel gratis",
+      "quero experimentar padel",
+      "primeira aula padel",
+    ],
+    answer: `Sim! Temos uma Aula Experimental Gratuita para quem nunca jogou padel — ${experimentalAulaInfo.duration}, ${experimentalAulaInfo.day.toLowerCase()}. ${experimentalAulaInfo.equipment}. ${experimentalAulaInfo.booking}.`,
+    link: { url: "/padel/aula-experimental", label: "Marcar Aula Experimental" },
   },
   {
     id: "equipa",

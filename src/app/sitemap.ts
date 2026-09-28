@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/ginasio/precario", priority: 0.8, changeFrequency: "weekly" },
     { path: "/aulas", priority: 0.8, changeFrequency: "daily" },
     { path: "/padel/aulas", priority: 0.7, changeFrequency: "weekly" },
+    { path: "/padel/aula-experimental", priority: 0.8, changeFrequency: "weekly" },
     { path: "/academia", priority: 0.7, changeFrequency: "weekly" },
     { path: "/torneios", priority: 0.7, changeFrequency: "weekly" },
     { path: "/sobre", priority: 0.6, changeFrequency: "monthly" },

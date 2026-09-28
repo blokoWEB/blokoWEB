@@ -37,3 +37,11 @@ export type AcademiaInscricao = {
   contact?: string | null;
   created_at: string;
 };
+
+export type ExperimentalInscricao = {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  created_at: string;
+};

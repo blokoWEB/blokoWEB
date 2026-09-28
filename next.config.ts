@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
       { source: "/reservas-padel", destination: "/padel", permanent: true },
       { source: "/pt-ginasio", destination: "/ginasio/precario", permanent: true },
       { source: "/bloko-academy", destination: "/academia", permanent: true },
+      { source: "/pt-padel", destination: "/padel/aulas", permanent: true },
     ];
   },
 };

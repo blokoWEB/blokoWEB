@@ -6,6 +6,7 @@ import {
   ArrowRight,
   BarChart3,
   CheckCircle2,
+  ExternalLink,
   PlayCircle,
   Trophy,
   Users,
@@ -73,7 +74,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
       </ParallaxDive>
 
       <section className="container-bloko py-24">
-        <ScrollReveal className="max-w-3xl mb-14">
+        <ScrollReveal className="mb-14">
           <Link
             href="/torneios"
             className="inline-flex items-center gap-2 text-xs uppercase tracking-wide text-[var(--color-text-muted)] hover:text-white transition-colors mb-8"
@@ -81,93 +82,103 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
             <ArrowLeft size={14} /> Todos os torneios
           </Link>
 
-          {tournament.poster && (
-            <div className="relative w-full max-w-sm mx-auto aspect-[4/5] rounded-2xl overflow-hidden mb-10 glow-lime">
-              <Image src={tournament.poster} alt={tournament.name} fill className="object-cover" />
-            </div>
-          )}
+          <div
+            className={
+              tournament.poster
+                ? "grid lg:grid-cols-[380px_1fr] gap-10 lg:gap-14 items-start"
+                : "max-w-3xl"
+            }
+          >
+            {tournament.poster && (
+              <div className="relative w-full max-w-sm mx-auto lg:max-w-none lg:mx-0 aspect-[4/5] rounded-2xl overflow-hidden glow-lime">
+                <Image src={tournament.poster} alt={tournament.name} fill className="object-cover" />
+              </div>
+            )}
 
-          <p className="text-[var(--color-text-muted)] mb-6">{tournament.summary}</p>
+            <div>
+              <p className="text-[var(--color-text-muted)] mb-6">{tournament.summary}</p>
 
-          {tournament.details && tournament.details.length > 0 && (
-            <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 mb-8">
-              {tournament.details.map((d) => (
-                <li
-                  key={d}
-                  className="text-sm text-[var(--color-text-muted)] flex items-start gap-2"
-                >
-                  <CheckCircle2 size={15} className="text-[var(--color-lime)] shrink-0 mt-0.5" />
-                  {d}
-                </li>
-              ))}
-            </ul>
-          )}
+              {tournament.details && tournament.details.length > 0 && (
+                <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 mb-8">
+                  {tournament.details.map((d) => (
+                    <li
+                      key={d}
+                      className="text-sm text-[var(--color-text-muted)] flex items-start gap-2"
+                    >
+                      <CheckCircle2 size={15} className="text-[var(--color-lime)] shrink-0 mt-0.5" />
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              )}
 
-          {stats && (
-            <div className="glass-card rounded-2xl p-6 mb-8">
-              <p className="flex items-center gap-2 font-display uppercase text-xs text-[var(--color-lime)] mb-4">
-                <BarChart3 size={15} /> Inscrições em tempo real
-              </p>
-              <div className="grid grid-cols-3 gap-4">
-                {stats.categorias !== undefined && (
-                  <div>
-                    <p className="font-display text-2xl">{stats.categorias}</p>
-                    <p className="text-[10px] uppercase tracking-wide text-[var(--color-text-muted)]">
-                      Categorias
-                    </p>
+              {stats && (
+                <div className="glass-card rounded-2xl p-6 mb-8">
+                  <p className="flex items-center gap-2 font-display uppercase text-xs text-[var(--color-lime)] mb-4">
+                    <BarChart3 size={15} /> Inscrições em tempo real
+                  </p>
+                  <div className="grid grid-cols-3 gap-4">
+                    {stats.categorias !== undefined && (
+                      <div>
+                        <p className="font-display text-2xl">{stats.categorias}</p>
+                        <p className="text-[10px] uppercase tracking-wide text-[var(--color-text-muted)]">
+                          Categorias
+                        </p>
+                      </div>
+                    )}
+                    {stats.participantes !== undefined && (
+                      <div>
+                        <p className="font-display text-2xl">{stats.participantes}</p>
+                        <p className="text-[10px] uppercase tracking-wide text-[var(--color-text-muted)]">
+                          Duplas inscritas
+                        </p>
+                      </div>
+                    )}
+                    {stats.jogadores !== undefined && (
+                      <div>
+                        <p className="font-display text-2xl">{stats.jogadores}</p>
+                        <p className="text-[10px] uppercase tracking-wide text-[var(--color-text-muted)]">
+                          Jogadores
+                        </p>
+                      </div>
+                    )}
                   </div>
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-3">
+                {tournament.registerUrl && (
+                  <a
+                    href={tournament.registerUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
+                  >
+                    Inscrever <ArrowRight size={15} />
+                  </a>
                 )}
-                {stats.participantes !== undefined && (
-                  <div>
-                    <p className="font-display text-2xl">{stats.participantes}</p>
-                    <p className="text-[10px] uppercase tracking-wide text-[var(--color-text-muted)]">
-                      Duplas inscritas
-                    </p>
-                  </div>
+                {tournament.resultsUrl && (
+                  <a
+                    href={tournament.resultsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+                  >
+                    <Trophy size={15} /> Ver Resultados
+                  </a>
                 )}
-                {stats.jogadores !== undefined && (
-                  <div>
-                    <p className="font-display text-2xl">{stats.jogadores}</p>
-                    <p className="text-[10px] uppercase tracking-wide text-[var(--color-text-muted)]">
-                      Jogadores
-                    </p>
-                  </div>
+                {tournament.partnerUrl && (
+                  <a
+                    href={tournament.partnerUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+                  >
+                    <Users size={15} /> Encontrar Parceiro
+                  </a>
                 )}
               </div>
             </div>
-          )}
-
-          <div className="flex flex-wrap gap-3">
-            {tournament.registerUrl && (
-              <a
-                href={tournament.registerUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
-              >
-                Inscrever <ArrowRight size={15} />
-              </a>
-            )}
-            {tournament.resultsUrl && (
-              <a
-                href={tournament.resultsUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
-              >
-                <Trophy size={15} /> Ver Resultados
-              </a>
-            )}
-            {tournament.partnerUrl && (
-              <a
-                href={tournament.partnerUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
-              >
-                <Users size={15} /> Encontrar Parceiro
-              </a>
-            )}
           </div>
         </ScrollReveal>
       </section>
@@ -184,6 +195,19 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
             <TournamentSchedule days={schedule} />
+            {tournament.padelteamsStatsUrl && (
+              <p className="mt-8 text-sm text-[var(--color-text-muted)]">
+                Consulte os dados completos em:{" "}
+                <a
+                  href={tournament.padelteamsStatsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-[var(--color-lime)] hover:underline"
+                >
+                  PadelTeams <ExternalLink size={13} />
+                </a>
+              </p>
+            )}
           </ScrollReveal>
         </section>
       )}

@@ -13,9 +13,10 @@ import {
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import TournamentGallerySection from "@/components/TournamentGallerySection";
+import TournamentSchedule, { type DaySchedule } from "@/components/TournamentSchedule";
 import { pastTournaments, upcomingTournaments, type TournamentEntry } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
-import { fetchPadelteamsStats } from "@/lib/padelteams";
+import { fetchPadelteamsStats, fetchPadelteamsDaySchedule } from "@/lib/padelteams";
 
 const allTournaments: TournamentEntry[] = [...upcomingTournaments, ...pastTournaments];
 
@@ -47,6 +48,17 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
   const stats = tournament.padelteamsStatsUrl
     ? await fetchPadelteamsStats(tournament.padelteamsStatsUrl)
     : null;
+
+  const daysWithDates = (tournament.days ?? []).filter((d) => d.date);
+  const schedule: DaySchedule[] =
+    tournament.padelteamsCid && daysWithDates.length > 0
+      ? await Promise.all(
+          daysWithDates.map(async (d) => ({
+            label: d.label,
+            courts: await fetchPadelteamsDaySchedule(tournament.padelteamsCid!, d.date!),
+          }))
+        )
+      : [];
 
   return (
     <div>
@@ -159,6 +171,22 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
           </div>
         </ScrollReveal>
       </section>
+
+      {tournament.padelteamsCid && (
+        <section className="container-bloko py-24">
+          <ScrollReveal className="max-w-2xl mb-10">
+            <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
+              Cronograma
+            </p>
+            <h2 className="font-display font-bold text-3xl md:text-4xl uppercase">
+              Campos e horários
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal delay={0.1}>
+            <TournamentSchedule days={schedule} />
+          </ScrollReveal>
+        </section>
+      )}
 
       {tournament.days && tournament.days.length > 0 && (
         <section className="bg-[var(--color-bg-elevated)] py-24">

@@ -435,6 +435,8 @@ export type TournamentDay = {
   label: string;
   /** Subpasta dentro de gallery/torneios/<slug>/ para as fotos deste dia. */
   gallerySlug: string;
+  /** Data ISO (YYYY-MM-DD) deste dia, para ir buscar o cronograma à PadelTeams. */
+  date?: string;
 };
 
 export type TournamentWinner = {
@@ -475,6 +477,8 @@ export type TournamentEntry = {
   resultsUrl?: string;
   /** URL de onde ler estatísticas de inscrição da PadelTeams (normalmente = registerUrl). */
   padelteamsStatsUrl?: string;
+  /** Id da competição na PadelTeams (o "cid" no "k" da página de inscrição), para ir buscar o cronograma por dia. */
+  padelteamsCid?: string;
 };
 
 // Torneios Sociais — os grandes eventos do clube, 3 a 4 por ano.
@@ -500,12 +504,13 @@ export const upcomingTournaments: TournamentEntry[] = [
     partnerUrl: site.whatsappCommunityUrl,
     hasDetailPage: true,
     days: [
-      { label: "Dia 1 — Sexta-feira, 9 de Outubro", gallerySlug: "dia-1" },
-      { label: "Dia 2 — Sábado, 10 de Outubro", gallerySlug: "dia-2" },
-      { label: "Dia 3 — Domingo, 11 de Outubro", gallerySlug: "dia-3" },
+      { label: "Dia 1 — Sexta-feira, 9 de Outubro", gallerySlug: "dia-1", date: "2026-10-09" },
+      { label: "Dia 2 — Sábado, 10 de Outubro", gallerySlug: "dia-2", date: "2026-10-10" },
+      { label: "Dia 3 — Domingo, 11 de Outubro", gallerySlug: "dia-3", date: "2026-10-11" },
     ],
     resultsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
     padelteamsStatsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
+    padelteamsCid: "7544",
   },
 ];
 

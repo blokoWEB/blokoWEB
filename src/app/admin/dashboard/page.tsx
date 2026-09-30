@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+  Copy,
   GraduationCap,
   History,
   Loader2,
@@ -53,6 +54,7 @@ export default function AdminDashboardPage() {
   const [dayFilter, setDayFilter] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [editingSession, setEditingSession] = useState<ClassSessionWithCount | null>(null);
+  const [duplicatingSession, setDuplicatingSession] = useState<ClassSessionWithCount | null>(null);
   const [activeSession, setActiveSession] = useState<ClassSessionWithCount | null>(null);
 
   useEffect(() => {
@@ -306,6 +308,16 @@ export default function AdminDashboardPage() {
                       <Users size={14} /> {s.booked_count} inscritos
                     </button>
                     <div className="flex items-center gap-3">
+                      {timeScope === "past" && (
+                        <button
+                          onClick={() => setDuplicatingSession(s)}
+                          className="text-[var(--color-text-muted)] hover:text-[var(--color-lime)] transition-colors"
+                          aria-label="Recriar aula"
+                          title="Recriar aula"
+                        >
+                          <Copy size={15} />
+                        </button>
+                      )}
                       <button
                         onClick={() => setEditingSession(s)}
                         className="text-[var(--color-text-muted)] hover:text-white transition-colors"
@@ -363,6 +375,18 @@ export default function AdminDashboardPage() {
         />
       )}
 
+      {duplicatingSession && (
+        <SessionFormModal
+          duplicateFrom={duplicatingSession}
+          defaultCategory={duplicatingSession.category}
+          onClose={() => setDuplicatingSession(null)}
+          onSaved={() => {
+            setDuplicatingSession(null);
+            selectTimeScope("upcoming");
+          }}
+        />
+      )}
+
       {activeSession && (
         <BookingsModal session={activeSession} onClose={() => setActiveSession(null)} />
       )}
@@ -386,25 +410,29 @@ type SavedSession = {
 
 function SessionFormModal({
   session,
+  duplicateFrom,
   defaultCategory,
   onClose,
   onSaved,
 }: {
   session?: ClassSessionWithCount;
+  /** Pré-preenche os campos a partir de uma aula anterior, mas cria uma aula nova (POST), sem data. */
+  duplicateFrom?: ClassSessionWithCount;
   defaultCategory: ClassCategoryKey;
   onClose: () => void;
   onSaved: (sessions: SavedSession[]) => void;
 }) {
   const isEditing = !!session;
-  const [category, setCategory] = useState<ClassCategoryKey>(session?.category ?? defaultCategory);
-  const [title, setTitle] = useState(session?.title ?? "");
-  const [description, setDescription] = useState(session?.description ?? "");
-  const [instructor, setInstructor] = useState(session?.instructor ?? "");
+  const source = session ?? duplicateFrom;
+  const [category, setCategory] = useState<ClassCategoryKey>(source?.category ?? defaultCategory);
+  const [title, setTitle] = useState(source?.title ?? "");
+  const [description, setDescription] = useState(source?.description ?? "");
+  const [instructor, setInstructor] = useState(source?.instructor ?? "");
   const [startsAt, setStartsAt] = useState(session ? toDatetimeLocal(session.starts_at) : "");
-  const [duration, setDuration] = useState(session?.duration_minutes ?? 45);
-  const [capacity, setCapacity] = useState(session?.capacity ?? 14);
+  const [duration, setDuration] = useState(source?.duration_minutes ?? 45);
+  const [capacity, setCapacity] = useState(source?.capacity ?? 14);
   const [location, setLocation] = useState(
-    session?.location ?? "BLOKO - Rua Coronel Teófilo Morais, 40, Bragança"
+    source?.location ?? "BLOKO - Rua Coronel Teófilo Morais, 40, Bragança"
   );
   const [recurring, setRecurring] = useState(false);
   const [everyDays, setEveryDays] = useState(7);
@@ -478,7 +506,7 @@ function SessionFormModal({
           <X size={20} />
         </button>
         <h3 className="font-display uppercase text-2xl mb-6">
-          {isEditing ? "Editar aula" : "Nova aula"}
+          {isEditing ? "Editar aula" : duplicateFrom ? "Recriar aula" : "Nova aula"}
         </h3>
 
         {needsScopeChoice ? (

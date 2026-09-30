@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Clock, MapPin } from "lucide-react";
+import { courtSponsors } from "@/lib/site-data";
 import type { ScheduleCourt } from "@/lib/padelteams";
 
 export type DaySchedule = {
@@ -9,11 +10,17 @@ export type DaySchedule = {
   courts: ScheduleCourt[];
 };
 
+// Placeholder — os 4 campos reais do BLOKO, mostrados vazios até a PadelTeams
+// publicar o sorteio, para a secção já aparecer pronta a receber os jogos.
+const placeholderCourts: ScheduleCourt[] = courtSponsors.map((c) => ({
+  court: `Campo ${c.court}${c.sponsor ? ` — ${c.sponsor}` : ""}`,
+  matches: [],
+}));
+
 export default function TournamentSchedule({ days }: { days: DaySchedule[] }) {
-  const daysWithGames = days.filter((d) => d.courts.length > 0);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  if (daysWithGames.length === 0) {
+  if (days.length === 0) {
     return (
       <div className="glass-card rounded-2xl p-10 text-center text-[var(--color-text-muted)]">
         Cronograma em breve — publicado pela organização perto da data.
@@ -21,12 +28,13 @@ export default function TournamentSchedule({ days }: { days: DaySchedule[] }) {
     );
   }
 
-  const active = daysWithGames[activeIndex];
+  const active = days[activeIndex];
+  const courts = active.courts.length > 0 ? active.courts : placeholderCourts;
 
   return (
     <div>
       <div className="flex flex-wrap gap-2 mb-6">
-        {daysWithGames.map((d, i) => (
+        {days.map((d, i) => (
           <button
             key={d.label}
             onClick={() => setActiveIndex(i)}
@@ -42,30 +50,34 @@ export default function TournamentSchedule({ days }: { days: DaySchedule[] }) {
       </div>
 
       <div className="grid sm:grid-cols-2 gap-5">
-        {active.courts.map((court) => (
+        {courts.map((court) => (
           <div key={court.court} className="glass-card rounded-2xl p-5">
             <h3 className="font-display uppercase text-sm text-[var(--color-lime)] mb-4 flex items-center gap-2">
               <MapPin size={15} /> {court.court}
             </h3>
-            <div className="space-y-3">
-              {court.matches.map((match, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 border-b border-white/10 pb-3 last:border-0 last:pb-0"
-                >
-                  <div className="flex items-center gap-1.5 text-xs font-display text-white shrink-0 w-16">
-                    <Clock size={12} className="text-[var(--color-text-muted)]" />
-                    {match.time}
+            {court.matches.length === 0 ? (
+              <p className="text-sm text-[var(--color-text-muted)]">Sem jogos agendados ainda.</p>
+            ) : (
+              <div className="space-y-3">
+                {court.matches.map((match, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 border-b border-white/10 pb-3 last:border-0 last:pb-0"
+                  >
+                    <div className="flex items-center gap-1.5 text-xs font-display text-white shrink-0 w-16">
+                      <Clock size={12} className="text-[var(--color-text-muted)]" />
+                      {match.time}
+                    </div>
+                    <div className="text-sm text-[var(--color-text-muted)] flex-1">
+                      <span className="text-[10px] uppercase tracking-wide text-[var(--color-blue-soft)] mr-1">
+                        {match.category}
+                      </span>
+                      {match.team1} vs {match.team2}
+                    </div>
                   </div>
-                  <div className="text-sm text-[var(--color-text-muted)] flex-1">
-                    <span className="text-[10px] uppercase tracking-wide text-[var(--color-blue-soft)] mr-1">
-                      {match.category}
-                    </span>
-                    {match.team1} vs {match.team2}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>

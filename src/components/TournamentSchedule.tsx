@@ -73,7 +73,8 @@ export default function TournamentSchedule({ days }: { days: DaySchedule[] }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Procura o teu nome ou o da tua equipa..."
-          className="input pl-11 pr-11"
+          className="input"
+          style={{ paddingLeft: "2.75rem", paddingRight: "2.75rem" }}
         />
         {isSearching && (
           <button

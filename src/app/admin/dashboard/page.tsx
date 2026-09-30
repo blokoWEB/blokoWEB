@@ -31,6 +31,11 @@ const categoryStyle: Record<ClassCategoryKey, string> = {
 
 const weekdayLabels = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
+// Padel e Academia ficam ocultos do filtro de categorias no admin — as
+// aulas geridas por aqui são só de Ginásio; Padel e Academia seguem outros
+// fluxos (Playtomic/WhatsApp e turmas fixas, respetivamente).
+const adminCategories = classCategories.filter((c) => c.key === "ginasio");
+
 function toDatetimeLocal(iso: string) {
   const d = new Date(iso);
   const pad = (n: number) => String(n).padStart(2, "0");
@@ -200,7 +205,7 @@ export default function AdminDashboardPage() {
 
         <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
           <div className="flex flex-wrap gap-2">
-            {classCategories.map((c) => (
+            {adminCategories.map((c) => (
               <button
                 key={c.key}
                 onClick={() => selectCategory(c.key)}

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight, MessageCircle, Star, Trophy, Users, Zap } from "lucide-react";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
-import TournamentCard from "@/components/TournamentCard";
+import FeaturedTournamentCard from "@/components/FeaturedTournamentCard";
 import {
   classTypes,
   padelFeatures,
@@ -282,10 +282,10 @@ export default function Home() {
                 Próximos Torneios
               </h2>
             </ScrollReveal>
-            <div className="flex flex-wrap justify-center gap-6">
+            <div className="flex flex-col gap-6 max-w-5xl mx-auto">
               {upcomingTournaments.map((t, i) => (
-                <ScrollReveal key={t.slug} delay={i * 0.08} className="w-full sm:w-80">
-                  <TournamentCard tournament={t} />
+                <ScrollReveal key={t.slug} delay={i * 0.08}>
+                  <FeaturedTournamentCard tournament={t} />
                 </ScrollReveal>
               ))}
             </div>

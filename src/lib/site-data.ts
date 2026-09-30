@@ -431,6 +431,21 @@ export const nonstopRegulamento = [
   },
 ];
 
+export type TournamentDay = {
+  label: string;
+  /** Subpasta dentro de gallery/torneios/<slug>/ para as fotos deste dia. */
+  gallerySlug: string;
+};
+
+export type TournamentWinner = {
+  category: string;
+  players: string;
+  /** URL/caminho completo, mesma convenção do campo "poster". */
+  photo?: string;
+  sponsor?: string;
+  sponsorLogo?: string;
+};
+
 export type TournamentEntry = {
   slug: string;
   name: string;
@@ -448,6 +463,18 @@ export type TournamentEntry = {
   gallerySlug?: string;
   /** Whether a recap video exists under gallery/<type>/<gallerySlug>/video/. */
   hasVideo?: boolean;
+  /** Se true, este torneio tem página própria em /torneios/<slug>. */
+  hasDetailPage?: boolean;
+  /** Dias com galeria separada (só para torneios com hasDetailPage). */
+  days?: TournamentDay[];
+  /** Vencedores por categoria — undefined/vazio mostra "Vencedores em breve". */
+  winners?: TournamentWinner[];
+  /** Vídeos de stream no YouTube. */
+  youtube?: { id: string; title: string }[];
+  /** Link para resultados (ex: página do torneio na PadelTeams). */
+  resultsUrl?: string;
+  /** URL de onde ler estatísticas de inscrição da PadelTeams (normalmente = registerUrl). */
+  padelteamsStatsUrl?: string;
 };
 
 // Torneios Sociais — os grandes eventos do clube, 3 a 4 por ano.
@@ -471,6 +498,14 @@ export const upcomingTournaments: TournamentEntry[] = [
     comingSoon: true,
     registerUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
     partnerUrl: site.whatsappCommunityUrl,
+    hasDetailPage: true,
+    days: [
+      { label: "Dia 1 — Sexta-feira, 9 de Outubro", gallerySlug: "dia-1" },
+      { label: "Dia 2 — Sábado, 10 de Outubro", gallerySlug: "dia-2" },
+      { label: "Dia 3 — Domingo, 11 de Outubro", gallerySlug: "dia-3" },
+    ],
+    resultsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
+    padelteamsStatsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
   },
 ];
 

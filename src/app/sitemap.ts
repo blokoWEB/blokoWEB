@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { pastTournaments, upcomingTournaments } from "@/lib/site-data";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bloko.com.pt";
 
@@ -23,6 +24,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/politica-privacidade", priority: 0.2, changeFrequency: "monthly" },
     { path: "/politica-cookies", priority: 0.2, changeFrequency: "monthly" },
     { path: "/termos-condicoes", priority: 0.2, changeFrequency: "monthly" },
+    ...[...upcomingTournaments, ...pastTournaments]
+      .filter((t) => t.hasDetailPage)
+      .map((t) => ({
+        path: `/torneios/${t.slug}`,
+        priority: 0.6,
+        changeFrequency: "weekly" as const,
+      })),
   ];
 
   const lastModified = new Date();

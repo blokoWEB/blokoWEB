@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight, CheckCircle2, Trophy, Users } from "lucide-react";
 import type { TournamentEntry } from "@/lib/site-data";
 
@@ -66,6 +67,14 @@ export default function FeaturedTournamentCard({ tournament }: { tournament: Tou
             >
               <Users size={15} /> Encontrar Parceiro
             </a>
+          )}
+          {tournament.hasDetailPage && (
+            <Link
+              href={`/torneios/${tournament.slug}`}
+              className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+            >
+              Ver Torneio Completo <ArrowRight size={15} />
+            </Link>
           )}
         </div>
       </div>

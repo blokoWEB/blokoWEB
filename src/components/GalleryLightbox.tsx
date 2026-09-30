@@ -14,12 +14,18 @@ export default function GalleryLightbox({
   type,
   slug,
   title,
+  day,
+  dayLabel,
 }: {
   open: boolean;
   onClose: () => void;
   type: "torneios" | "eventos";
   slug: string;
   title: string;
+  /** Subpasta opcional (ex: "dia-1") para mostrar só as fotos desse dia. */
+  day?: string;
+  /** Rótulo do dia a mostrar no título do modal (ex: "Dia 1"). */
+  dayLabel?: string;
 }) {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [loading, setLoading] = useState(false);
@@ -33,7 +39,9 @@ export default function GalleryLightbox({
       setLoading(true);
       try {
         const res = await fetch(
-          `/api/gallery?type=${type}&slug=${slug}&offset=${offset}&limit=${LIMIT}`
+          `/api/gallery?type=${type}&slug=${slug}&offset=${offset}&limit=${LIMIT}${
+            day ? `&day=${day}` : ""
+          }`
         );
         const data = await res.json();
         setImages((prev) => (offset === 0 ? data.images : [...prev, ...data.images]));
@@ -45,7 +53,7 @@ export default function GalleryLightbox({
         setLoadedOnce(true);
       }
     },
-    [type, slug]
+    [type, slug, day]
   );
 
   useEffect(() => {
@@ -87,6 +95,7 @@ export default function GalleryLightbox({
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
         <h3 className="font-display uppercase text-sm text-white truncate pr-4">
           Galeria — {title}
+          {dayLabel ? ` — ${dayLabel}` : ""}
         </h3>
         <button
           onClick={onClose}

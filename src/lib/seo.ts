@@ -6,11 +6,15 @@ export function pageMetadata({
   title,
   description,
   path,
+  image,
 }: {
   title: string;
   description: string;
   path: string;
+  /** Imagem OG/Twitter customizada (ex: cartaz de um torneio). Por omissão usa a imagem geral do site. */
+  image?: string;
 }): Metadata {
+  const ogImage = image || "/images/og-image.jpg";
   return {
     title,
     description,
@@ -24,7 +28,7 @@ export function pageMetadata({
       locale: "pt_PT",
       images: [
         {
-          url: "/images/og-image.jpg",
+          url: ogImage,
           width: 1200,
           height: 630,
           alt: "BLOKO — Padel, Ginásio & Lounge em Bragança",
@@ -35,7 +39,7 @@ export function pageMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: ["/images/og-image.jpg"],
+      images: [ogImage],
     },
   };
 }

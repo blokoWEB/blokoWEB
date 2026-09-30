@@ -8,6 +8,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const type = searchParams.get("type");
   const slug = searchParams.get("slug");
+  const day = searchParams.get("day");
   const offset = Number(searchParams.get("offset") ?? "0");
   const limit = Math.min(Number(searchParams.get("limit") ?? DEFAULT_LIMIT), 60);
 
@@ -15,7 +16,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Parâmetros type/slug inválidos." }, { status: 400 });
   }
 
-  const base = `${type}/${slug}`;
+  const base = day ? `${type}/${slug}/${day}` : `${type}/${slug}`;
 
   try {
     const supabase = getSupabaseAdmin();

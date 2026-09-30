@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight, FileText, Images, PlayCircle, Sparkles, Trophy, Users, X } from "lucide-react";
 import type { TournamentEntry } from "@/lib/site-data";
 import GalleryLightbox from "./GalleryLightbox";
@@ -25,12 +26,11 @@ export default function TournamentCard({
     tournament.gallerySlug
   );
 
-  return (
+  const cardClassName =
+    "w-full text-left glass-card rounded-2xl overflow-hidden h-full flex flex-col relative hover:border-[var(--color-lime)]/40 transition-colors group";
+
+  const cardContent = (
     <>
-      <button
-        onClick={() => hasMore && setOpen(true)}
-        className="w-full text-left glass-card rounded-2xl overflow-hidden h-full flex flex-col relative hover:border-[var(--color-lime)]/40 transition-colors group"
-      >
         {tournament.poster ? (
           <div className="relative aspect-[4/3] overflow-hidden shrink-0">
             <Image
@@ -82,13 +82,27 @@ export default function TournamentCard({
           <p className="text-xs text-[var(--color-text-muted)] flex-1">{tournament.summary}</p>
           {hasMore && (
             <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-display uppercase tracking-wide text-[var(--color-lime)]">
-              Ver detalhes <ArrowRight size={13} />
+              {tournament.hasDetailPage ? "Ver torneio completo" : "Ver detalhes"}{" "}
+              <ArrowRight size={13} />
             </span>
           )}
         </div>
-      </button>
+    </>
+  );
 
-      {open && (
+  return (
+    <>
+      {tournament.hasDetailPage ? (
+        <Link href={`/torneios/${tournament.slug}`} className={cardClassName}>
+          {cardContent}
+        </Link>
+      ) : (
+        <button onClick={() => hasMore && setOpen(true)} className={cardClassName}>
+          {cardContent}
+        </button>
+      )}
+
+      {open && !tournament.hasDetailPage && (
         <Portal>
         <div
           className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm"

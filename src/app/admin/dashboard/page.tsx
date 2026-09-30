@@ -2,7 +2,18 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { GraduationCap, Loader2, LogOut, Pencil, Plus, Sparkles, Trash2, Users, X } from "lucide-react";
+import {
+  GraduationCap,
+  History,
+  Loader2,
+  LogOut,
+  Pencil,
+  Plus,
+  Sparkles,
+  Trash2,
+  Users,
+  X,
+} from "lucide-react";
 import { classCategories, type ClassCategoryKey } from "@/lib/site-data";
 import type {
   AcademiaInscricao,
@@ -35,6 +46,7 @@ function toDateInput(d: Date) {
 export default function AdminDashboardPage() {
   const router = useRouter();
   const [view, setView] = useState<"aulas" | "academia" | "experimental">("aulas");
+  const [timeScope, setTimeScope] = useState<"upcoming" | "past">("upcoming");
   const [sessions, setSessions] = useState<ClassSessionWithCount[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<ClassCategoryKey>("ginasio");
@@ -45,7 +57,7 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/classes")
+    fetch(`/api/classes${timeScope === "past" ? "?scope=past" : ""}`)
       .then((res) => res.json())
       .then((data) => {
         if (!cancelled) setSessions(data.sessions ?? []);
@@ -56,7 +68,12 @@ export default function AdminDashboardPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [timeScope]);
+
+  function selectTimeScope(scope: "upcoming" | "past") {
+    setLoading(true);
+    setTimeScope(scope);
+  }
 
   const byCategory = useMemo(
     () => sessions.filter((s) => s.category === category),
@@ -156,6 +173,29 @@ export default function AdminDashboardPage() {
 
         {view === "aulas" && (
         <>
+        <div className="flex flex-wrap gap-2 mb-5">
+          <button
+            onClick={() => selectTimeScope("upcoming")}
+            className={`font-display uppercase text-xs tracking-wide px-5 py-2.5 rounded-full border transition-colors ${
+              timeScope === "upcoming"
+                ? "bg-white text-black border-white"
+                : "border-white/15 text-[var(--color-text-muted)] hover:border-white/30 hover:text-white"
+            }`}
+          >
+            Próximas
+          </button>
+          <button
+            onClick={() => selectTimeScope("past")}
+            className={`flex items-center gap-2 font-display uppercase text-xs tracking-wide px-5 py-2.5 rounded-full border transition-colors ${
+              timeScope === "past"
+                ? "bg-white text-black border-white"
+                : "border-white/15 text-[var(--color-text-muted)] hover:border-white/30 hover:text-white"
+            }`}
+          >
+            <History size={14} /> Anteriores
+          </button>
+        </div>
+
         <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
           <div className="flex flex-wrap gap-2">
             {classCategories.map((c) => (
@@ -214,8 +254,9 @@ export default function AdminDashboardPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="glass-card rounded-2xl p-10 text-center text-[var(--color-text-muted)]">
-            Sem aulas de {classCategories.find((c) => c.key === category)?.label.toLowerCase()}{" "}
-            agendadas. Cria a primeira acima.
+            {timeScope === "past"
+              ? `Sem aulas anteriores de ${classCategories.find((c) => c.key === category)?.label.toLowerCase()}.`
+              : `Sem aulas de ${classCategories.find((c) => c.key === category)?.label.toLowerCase()} agendadas. Cria a primeira acima.`}
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

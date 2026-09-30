@@ -6,14 +6,18 @@ import type { ClassSession, ClassSessionWithCount } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
   const supabase = getSupabaseAdmin();
 
-  const { data: sessions, error } = await supabase
-    .from("class_sessions")
-    .select("*")
-    .gte("starts_at", new Date().toISOString())
-    .order("starts_at", { ascending: true });
+  const { searchParams } = new URL(request.url);
+  const past = searchParams.get("scope") === "past";
+
+  let query = supabase.from("class_sessions").select("*");
+  query = past
+    ? query.lt("starts_at", new Date().toISOString()).order("starts_at", { ascending: false })
+    : query.gte("starts_at", new Date().toISOString()).order("starts_at", { ascending: true });
+
+  const { data: sessions, error } = await query;
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

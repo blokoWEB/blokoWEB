@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { X } from "lucide-react";
 import Portal from "@/components/Portal";
 
 // Muda esta key sempre que trocares de campanha — garante que quem já viu
 // (e fechou) a campanha anterior volta a ver a nova.
-const DISMISSED_KEY = "bloko-campaign-setembro-2026-dismissed";
+const DISMISSED_KEY = "bloko-campaign-aula-experimental-padel-dismissed";
+const CAMPAIGN_HREF = "/padel/aula-experimental";
 const SHOW_AFTER_MS = 4000;
 
 export default function CampaignPopup() {
@@ -49,7 +51,7 @@ export default function CampaignPopup() {
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-sm rounded-2xl overflow-hidden glow-lime"
+              className="relative w-full max-w-sm max-h-[90vh] rounded-2xl overflow-hidden glow-lime"
             >
               <button
                 onClick={dismiss}
@@ -58,14 +60,16 @@ export default function CampaignPopup() {
               >
                 <X size={16} />
               </button>
-              <Image
-                src="/images/campaigns/setembro-2026.jpg"
-                alt="Setembro já começou — 50% de desconto na 1ª mensalidade"
-                width={750}
-                height={890}
-                className="w-full h-auto"
-                priority
-              />
+              <Link href={CAMPAIGN_HREF} onClick={dismiss} className="block">
+                <Image
+                  src="/images/campaigns/aula-experimental-padel.jpg"
+                  alt="Aula experimental de padel gratuita — marcação obrigatória"
+                  width={1080}
+                  height={1350}
+                  className="w-full h-auto max-h-[90vh] object-contain"
+                  priority
+                />
+              </Link>
             </motion.div>
           </motion.div>
         )}

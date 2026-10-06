@@ -501,8 +501,8 @@ export const faq: FaqEntry[] = [
       "desconto ginasio",
       "oferta",
     ],
-    answer: `Setembro trouxe uma campanha especial: 50% de desconto na 1ª mensalidade se pagares as 4 mensalidades seguintes adiantado até ao fim do ano — e ainda levas 1 hora de PT + toalha BLOKO.`,
-    prompt: `Fala connosco no WhatsApp para aproveitares!`,
+    answer: `A campanha em destaque é a Aula Experimental Gratuita de Padel, para quem nunca jogou — ${experimentalAulaInfo.duration}, ${experimentalAulaInfo.day.toLowerCase()}, sem custo e com todo o equipamento. ${experimentalAulaInfo.booking}.`,
+    link: { url: "/padel/aula-experimental", label: "Marcar Aula Experimental" },
   },
   {
     id: "fidelizacao",

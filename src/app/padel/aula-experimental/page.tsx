@@ -79,16 +79,6 @@ export default function AulaExperimentalPage() {
           ))}
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-5 mb-20">
-          {espaco.map((e) => (
-            <ScrollReveal key={e.image} delay={0.05}>
-              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
-                <Image src={e.image} alt={e.alt} fill className="object-cover" />
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
-
         <ScrollReveal className="max-w-2xl mx-auto text-center mb-10">
           <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-lime)] mb-4 flex items-center justify-center gap-2">
             <Sparkles size={14} /> Inscrição
@@ -102,9 +92,19 @@ export default function AulaExperimentalPage() {
           </p>
         </ScrollReveal>
 
-        <ScrollReveal delay={0.1}>
+        <ScrollReveal delay={0.1} className="mb-20">
           <ExperimentalAulaForm />
         </ScrollReveal>
+
+        <div className="grid sm:grid-cols-2 gap-5">
+          {espaco.map((e) => (
+            <ScrollReveal key={e.image} delay={0.05}>
+              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
+                <Image src={e.image} alt={e.alt} fill className="object-cover" />
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
       </section>
     </div>
   );

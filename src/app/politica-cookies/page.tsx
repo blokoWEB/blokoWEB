@@ -10,7 +10,7 @@ export const metadata = pageMetadata({
 
 export default function PoliticaCookiesPage() {
   return (
-    <LegalPageLayout eyebrow="Legal" title="Política de Cookies" updated="12 de setembro de 2026">
+    <LegalPageLayout eyebrow="Legal" title="Política de Cookies" updated="9 de outubro de 2026">
       <h2>1. O que são cookies</h2>
       <p>
         Cookies são pequenos ficheiros guardados no teu dispositivo quando visitas um site, usados
@@ -32,11 +32,19 @@ export default function PoliticaCookiesPage() {
           mostrar o mesmo aviso. Esta informação fica guardada apenas no teu dispositivo e nunca é
           enviada para os nossos servidores.
         </li>
+        <li>
+          <strong>Vídeos do YouTube:</strong> as páginas com vídeos e diretos mostram apenas uma
+          imagem de pré-visualização. O leitor do YouTube (em modo de privacidade reforçada,
+          youtube-nocookie.com) só é carregado quando carregas em reproduzir; nessa altura o
+          YouTube pode guardar cookies ou dados no teu dispositivo e tratar o teu endereço IP,
+          de acordo com a política de privacidade da Google.
+        </li>
       </ul>
 
       <h2>3. O que não utilizamos</h2>
       <p>
-        Não utilizamos cookies de analítica, publicidade ou redes sociais de terceiros. Se isso vier
+        Fora do leitor de vídeo do YouTube, que só ativas ao reproduzir um vídeo, não utilizamos
+        cookies de analítica, publicidade ou redes sociais de terceiros. Se isso vier
         a mudar no futuro, atualizaremos esta política e, sempre que exigido por lei, pediremos o teu
         consentimento antes de os ativar.
       </p>

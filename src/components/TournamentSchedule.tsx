@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Check, Clock, MapPin, RefreshCw, Search, X } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Check, Clock, MapPin, Search, X } from "lucide-react";
 import { courtSponsors } from "@/lib/site-data";
 import type { DayScheduleData, ScheduleCourt, ScheduleMatch, SetScore } from "@/lib/padelteams";
 
@@ -9,6 +9,9 @@ export type DaySchedule = DayScheduleData;
 
 type FoundMatch = ScheduleMatch & { day: string; dayIndex: number; court: string };
 type Filter = "todos" | "por-jogar" | "ao-vivo" | "terminados";
+
+/** Jogos visíveis por campo antes de carregar em "Ver todos". */
+const COLLAPSED_COUNT = 6;
 
 // Placeholder — os 4 campos reais do BLOKO, mostrados vazios até a PadelTeams
 // publicar o sorteio, para a secção já aparecer pronta a receber os jogos.
@@ -18,9 +21,6 @@ const placeholderCourts: ScheduleCourt[] = courtSponsors.map((c) => ({
   matches: [],
 }));
 
-const POLL_LIVE_MS = 30_000;
-const POLL_IDLE_MS = 5 * 60_000;
-
 function normalize(value: string): string {
   return value
     .normalize("NFD")
@@ -29,25 +29,13 @@ function normalize(value: string): string {
     .trim();
 }
 
-function todayInLisbon(): string {
-  return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Lisbon" }).format(new Date());
-}
-
-function formatClock(iso: string): string {
-  return new Date(iso).toLocaleTimeString("pt-PT", {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Europe/Lisbon",
-  });
-}
-
 function matchBucket(m: ScheduleMatch): Exclude<Filter, "todos"> {
   if (m.status === "live") return "ao-vivo";
   if (m.status === "finished") return "terminados";
   return "por-jogar";
 }
 
-function SetCells({ sets, side, win }: { sets: SetScore[]; side: 1 | 2; win: boolean }) {
+export function SetCells({ sets, side, win }: { sets: SetScore[]; side: 1 | 2; win: boolean }) {
   return (
     <div className="flex gap-2 shrink-0">
       {sets.map((s, i) => {
@@ -161,6 +149,59 @@ function MatchRow({ match, extra }: { match: ScheduleMatch; extra?: React.ReactN
   );
 }
 
+/** Um campo com os seus jogos: mostra os próximos e deixa abrir a lista completa. */
+function CourtCard({
+  court,
+  emptyText,
+  showAll,
+}: {
+  court: ScheduleCourt;
+  emptyText: string;
+  showAll: boolean;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const matches = court.matches;
+
+  // Começa no último resultado antes do primeiro jogo por jogar, para dar contexto.
+  const firstPending = matches.findIndex((m) => m.status !== "finished");
+  const start = showAll || expanded ? 0 : Math.max(0, (firstPending < 0 ? matches.length : firstPending) - 1);
+  const visible = showAll || expanded ? matches : matches.slice(start, start + COLLAPSED_COUNT);
+  const hiddenBefore = start;
+  const hiddenAfter = matches.length - (start + visible.length);
+  const canToggle = !showAll && matches.length > COLLAPSED_COUNT;
+
+  return (
+    <div className="glass-card rounded-2xl p-5">
+      <h3 className="font-display uppercase text-sm text-[var(--color-lime)] mb-4 flex items-center gap-2">
+        <MapPin size={15} /> {court.court}
+      </h3>
+      {matches.length === 0 ? (
+        <p className="text-sm text-[var(--color-text-muted)]">{emptyText}</p>
+      ) : (
+        <>
+          <div className="space-y-3">
+            {visible.map((match, i) => (
+              <MatchRow key={i} match={match} />
+            ))}
+          </div>
+          {canToggle && (
+            <button
+              onClick={() => setExpanded((v) => !v)}
+              className="mt-4 w-full rounded-full border border-white/10 py-2 text-xs text-[var(--color-text-muted)] hover:border-white/30 hover:text-white transition-colors"
+            >
+              {expanded
+                ? "Mostrar menos"
+                : `Ver todos os ${matches.length} jogos${
+                    hiddenBefore + hiddenAfter > 0 ? ` (+${hiddenBefore + hiddenAfter})` : ""
+                  }`}
+            </button>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
 const filterLabels: Record<Filter, string> = {
   todos: "Todos",
   "por-jogar": "Por jogar",
@@ -169,78 +210,15 @@ const filterLabels: Record<Filter, string> = {
 };
 
 export default function TournamentSchedule({
-  slug,
-  initialDays,
-  initialUpdatedAt,
+  days,
   defaultDayIndex = 0,
 }: {
-  slug: string;
-  initialDays: DaySchedule[];
-  initialUpdatedAt: string;
+  days: DaySchedule[];
   defaultDayIndex?: number;
 }) {
-  const [days, setDays] = useState<DaySchedule[]>(initialDays);
-  const [updatedAt, setUpdatedAt] = useState(initialUpdatedAt);
-  const [refreshing, setRefreshing] = useState(false);
-  const [failed, setFailed] = useState(false);
-  const [pollMs, setPollMs] = useState<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(defaultDayIndex);
   const [filter, setFilter] = useState<Filter>("todos");
   const [search, setSearch] = useState("");
-
-  const refresh = useCallback(async () => {
-    setRefreshing(true);
-    try {
-      const res = await fetch(`/api/torneios/cronograma?slug=${encodeURIComponent(slug)}`, {
-        cache: "no-store",
-      });
-      if (!res.ok) throw new Error("falhou");
-      const data: { updatedAt: string; days: DaySchedule[] } = await res.json();
-      // Se a PadelTeams falhar por instantes e devolver um dia vazio, mantém o que já tínhamos.
-      setDays((prev) =>
-        data.days.map((d, i) =>
-          d.courts.length === 0 && prev[i] && prev[i].courts.length > 0 ? prev[i] : d
-        )
-      );
-      setUpdatedAt(data.updatedAt);
-      setFailed(false);
-    } catch {
-      setFailed(true);
-    } finally {
-      setRefreshing(false);
-    }
-  }, [slug]);
-
-  // Atualização automática: de 30 em 30 s nos dias do torneio, de 5 em 5 min antes de começar, e nada depois de acabar.
-  useEffect(() => {
-    const first = initialDays[0]?.date;
-    const last = initialDays[initialDays.length - 1]?.date;
-    if (!first || !last) return;
-
-    function computeInterval(): number | null {
-      const today = todayInLisbon();
-      if (today > last) return null;
-      return today >= first ? POLL_LIVE_MS : POLL_IDLE_MS;
-    }
-
-    setPollMs(computeInterval());
-    const onVisible = () => {
-      if (document.visibilityState === "visible") {
-        setPollMs(computeInterval());
-        if (computeInterval() !== null) refresh();
-      }
-    };
-    document.addEventListener("visibilitychange", onVisible);
-    return () => document.removeEventListener("visibilitychange", onVisible);
-  }, [initialDays, refresh]);
-
-  useEffect(() => {
-    if (pollMs === null) return;
-    const id = setInterval(() => {
-      if (document.visibilityState === "visible") refresh();
-    }, pollMs);
-    return () => clearInterval(id);
-  }, [pollMs, refresh]);
 
   const hasAnyRealMatches = days.some((d) => d.courts.length > 0);
 
@@ -284,55 +262,31 @@ export default function TournamentSchedule({
     matches: filter === "todos" ? c.matches : c.matches.filter((m) => matchBucket(m) === filter),
   }));
   const showFilters = active.courts.length > 0;
-  const liveNow = days.some((d) => d.courts.some((c) => c.matches.some((m) => m.status === "live")));
 
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-4 mb-8">
-        <div className="relative max-w-md flex-1 min-w-[240px]">
-          <Search
-            size={16}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]"
-          />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Procura o teu nome..."
-            className="input"
-            style={{ paddingLeft: "2.75rem", paddingRight: "2.75rem" }}
-          />
-          {isSearching && (
-            <button
-              onClick={() => setSearch("")}
-              aria-label="Limpar pesquisa"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-white transition-colors"
-            >
-              <X size={16} />
-            </button>
-          )}
-        </div>
-
-        <div className="flex items-center gap-3 text-xs text-[var(--color-text-muted)]">
-          {liveNow && (
-            <span className="inline-flex items-center gap-1.5 font-display uppercase text-[var(--color-lime)]">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-lime)] opacity-70" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-lime)]" />
-              </span>
-              Ao vivo
-            </span>
-          )}
+      <div className="relative max-w-md mb-6">
+        <Search
+          size={16}
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]"
+        />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Procura o teu nome..."
+          className="input"
+          style={{ paddingLeft: "2.75rem", paddingRight: "2.75rem" }}
+        />
+        {isSearching && (
           <button
-            onClick={refresh}
-            disabled={refreshing}
-            className="inline-flex items-center gap-1.5 hover:text-white transition-colors disabled:opacity-60"
-            aria-label="Atualizar agora"
+            onClick={() => setSearch("")}
+            aria-label="Limpar pesquisa"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-white transition-colors"
           >
-            <RefreshCw size={13} className={refreshing ? "animate-spin" : ""} />
-            {failed ? "Sem ligação — a tentar de novo" : `Atualizado às ${formatClock(updatedAt)}`}
+            <X size={16} />
           </button>
-        </div>
+        )}
       </div>
 
       {isSearching ? (
@@ -399,22 +353,14 @@ export default function TournamentSchedule({
 
           <div className="grid sm:grid-cols-2 gap-5">
             {visibleCourts.map((court) => (
-              <div key={court.court} className="glass-card rounded-2xl p-5">
-                <h3 className="font-display uppercase text-sm text-[var(--color-lime)] mb-4 flex items-center gap-2">
-                  <MapPin size={15} /> {court.court}
-                </h3>
-                {court.matches.length === 0 ? (
-                  <p className="text-sm text-[var(--color-text-muted)]">
-                    {active.courts.length === 0 ? "Sem jogos agendados ainda." : "Sem jogos nesta vista."}
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {court.matches.map((match, i) => (
-                      <MatchRow key={i} match={match} />
-                    ))}
-                  </div>
-                )}
-              </div>
+              <CourtCard
+                key={`${active.date}-${filter}-${court.court}`}
+                court={court}
+                showAll={filter !== "todos"}
+                emptyText={
+                  active.courts.length === 0 ? "Sem jogos agendados ainda." : "Sem jogos nesta vista."
+                }
+              />
             ))}
           </div>
         </>

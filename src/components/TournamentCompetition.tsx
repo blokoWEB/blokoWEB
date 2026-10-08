@@ -1,0 +1,178 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import { Clock, RefreshCw, Trophy, Users } from "lucide-react";
+import TournamentSchedule from "@/components/TournamentSchedule";
+import TournamentGroups from "@/components/TournamentGroups";
+import TournamentBracket from "@/components/TournamentBracket";
+import { todayInLisbon } from "@/lib/tournament-status";
+import type { TournamentScheduleData } from "@/lib/tournament-schedule";
+
+type Tab = "jogos" | "grupos" | "quadro";
+
+const POLL_LIVE_MS = 30_000;
+const POLL_IDLE_MS = 5 * 60_000;
+
+const tabs: { id: Tab; label: string; icon: typeof Clock }[] = [
+  { id: "jogos", label: "Jogos e resultados", icon: Clock },
+  { id: "grupos", label: "Grupos", icon: Users },
+  { id: "quadro", label: "Quadro", icon: Trophy },
+];
+
+function formatClock(iso: string): string {
+  return new Date(iso).toLocaleTimeString("pt-PT", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Lisbon",
+  });
+}
+
+export default function TournamentCompetition({
+  slug,
+  initial,
+}: {
+  slug: string;
+  initial: TournamentScheduleData;
+}) {
+  const [data, setData] = useState<TournamentScheduleData>(initial);
+  const [refreshing, setRefreshing] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [pollMs, setPollMs] = useState<number | null>(null);
+  const [tab, setTab] = useState<Tab>("jogos");
+  const [categoryName, setCategoryName] = useState<string | null>(() => {
+    // Abre na categoria que tem um jogo a decorrer; senão, na primeira.
+    const live = initial.categories.find((c) => c.groups.some((g) => /em jogo/i.test(g.status ?? "")));
+    return live?.name ?? initial.categories[0]?.name ?? null;
+  });
+
+  const refresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const res = await fetch(`/api/torneios/cronograma?slug=${encodeURIComponent(slug)}`, {
+        cache: "no-store",
+      });
+      if (!res.ok) throw new Error("falhou");
+      const next: TournamentScheduleData = await res.json();
+      // Se a PadelTeams falhar por instantes e devolver algo vazio, mantém o que já tínhamos.
+      setData((prev) => ({
+        ...next,
+        days: next.days.map((d, i) =>
+          d.courts.length === 0 && prev.days[i] && prev.days[i].courts.length > 0 ? prev.days[i] : d
+        ),
+        categories: next.categories.length > 0 ? next.categories : prev.categories,
+      }));
+      setFailed(false);
+    } catch {
+      setFailed(true);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [slug]);
+
+  // Atualização automática: de 30 em 30 s nos dias do torneio, de 5 em 5 min antes de começar, e nada depois de acabar.
+  const first = initial.days[0]?.date;
+  const last = initial.days[initial.days.length - 1]?.date;
+  useEffect(() => {
+    if (!first || !last) return;
+
+    function computeInterval(): number | null {
+      const today = todayInLisbon();
+      if (today > last!) return null;
+      return today >= first! ? POLL_LIVE_MS : POLL_IDLE_MS;
+    }
+
+    setPollMs(computeInterval());
+    const onVisible = () => {
+      if (document.visibilityState === "visible") {
+        const interval = computeInterval();
+        setPollMs(interval);
+        if (interval !== null) refresh();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [first, last, refresh]);
+
+  useEffect(() => {
+    if (pollMs === null) return;
+    const id = setInterval(() => {
+      if (document.visibilityState === "visible") refresh();
+    }, pollMs);
+    return () => clearInterval(id);
+  }, [pollMs, refresh]);
+
+  const liveNow = data.days.some((d) => d.courts.some((c) => c.matches.some((m) => m.status === "live")));
+  const category = data.categories.find((c) => c.name === categoryName) ?? data.categories[0];
+
+  return (
+    <div>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap gap-2" role="tablist" aria-label="Competição">
+          {tabs.map(({ id, label, icon: Icon }) => {
+            if (id !== "jogos" && data.categories.length === 0) return null;
+            return (
+              <button
+                key={id}
+                role="tab"
+                aria-selected={tab === id}
+                onClick={() => setTab(id)}
+                className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 font-display text-xs uppercase tracking-wide transition-colors ${
+                  tab === id
+                    ? "border-[var(--color-lime)] bg-[var(--color-lime)] text-black"
+                    : "border-white/15 text-[var(--color-text-muted)] hover:border-white/30 hover:text-white"
+                }`}
+              >
+                <Icon size={14} /> {label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex items-center gap-3 text-xs text-[var(--color-text-muted)]">
+          {liveNow && (
+            <span className="inline-flex items-center gap-1.5 font-display uppercase text-[var(--color-lime)]">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-lime)] opacity-70" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-lime)]" />
+              </span>
+              Ao vivo
+            </span>
+          )}
+          <button
+            onClick={refresh}
+            disabled={refreshing}
+            className="inline-flex items-center gap-1.5 transition-colors hover:text-white disabled:opacity-60"
+            aria-label="Atualizar agora"
+          >
+            <RefreshCw size={13} className={refreshing ? "animate-spin" : ""} />
+            {failed ? "Sem ligação — a tentar de novo" : `Atualizado às ${formatClock(data.updatedAt)}`}
+          </button>
+        </div>
+      </div>
+
+      {tab !== "jogos" && data.categories.length > 0 && (
+        <div className="mb-6 flex flex-wrap gap-2" role="group" aria-label="Categoria">
+          {data.categories.map((c) => (
+            <button
+              key={c.name}
+              onClick={() => setCategoryName(c.name)}
+              className={`rounded-full border px-4 py-1.5 text-xs transition-colors ${
+                c.name === category?.name
+                  ? "border-[var(--color-lime)] text-[var(--color-lime)]"
+                  : "border-white/10 text-[var(--color-text-muted)] hover:text-white"
+              }`}
+            >
+              {c.name}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {tab === "jogos" && (
+        <TournamentSchedule days={data.days} defaultDayIndex={data.defaultDayIndex} />
+      )}
+      {tab === "grupos" && <TournamentGroups category={category} />}
+      {tab === "quadro" && <TournamentBracket category={category} />}
+    </div>
+  );
+}

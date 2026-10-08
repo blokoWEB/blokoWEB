@@ -471,8 +471,10 @@ export type TournamentEntry = {
   days?: TournamentDay[];
   /** Vencedores por categoria — undefined/vazio mostra "Vencedores em breve". */
   winners?: TournamentWinner[];
-  /** Vídeos de stream no YouTube. */
+  /** Vídeos de stream no YouTube (lista fixa). */
   youtube?: { id: string; title: string }[];
+  /** Mostra os diretos e os vídeos mais recentes do canal cujo título contém este texto (ex.: "torneio social"). */
+  youtubeFilter?: string;
   /** Link para resultados (ex: página do torneio na PadelTeams). */
   resultsUrl?: string;
   /** URL de onde ler estatísticas de inscrição da PadelTeams (normalmente = registerUrl). */
@@ -512,6 +514,7 @@ export const upcomingTournaments: TournamentEntry[] = [
     resultsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
     padelteamsStatsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
     padelteamsCid: "7544",
+    youtubeFilter: "torneio social",
   },
 ];
 

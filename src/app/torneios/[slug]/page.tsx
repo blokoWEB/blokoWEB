@@ -14,10 +14,13 @@ import {
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import TournamentGallerySection from "@/components/TournamentGallerySection";
-import TournamentSchedule from "@/components/TournamentSchedule";
+import TournamentCompetition from "@/components/TournamentCompetition";
 import { pageMetadata } from "@/lib/seo";
+import YouTubeShowcase from "@/components/YouTubeShowcase";
 import { fetchPadelteamsStats } from "@/lib/padelteams";
+import { fetchLatestVideos, youtubeChannelUrl, youtubeLiveUrl } from "@/lib/youtube";
 import { allTournaments, getTournamentSchedule } from "@/lib/tournament-schedule";
+import { tournamentDates, tournamentPhase } from "@/lib/tournament-status";
 
 function findTournament(slug: string) {
   return allTournaments.find((t) => t.slug === slug && t.hasDetailPage);
@@ -49,6 +52,20 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
     : null;
 
   const schedule = await getTournamentSchedule(tournament);
+
+  // A parte do YouTube (diretos + últimos vídeos) só aparece enquanto o torneio está a decorrer.
+  const ongoing = tournamentPhase(tournamentDates(tournament)) === "a-decorrer";
+  const showYoutube = ongoing && !!tournament.youtubeFilter;
+  const ytVideos = showYoutube
+    ? await fetchLatestVideos({ limit: 3, filter: tournament.youtubeFilter })
+    : [];
+
+  const sections = [
+    tournament.padelteamsCid && schedule ? { id: "competicao", label: "Jogos e grupos" } : null,
+    showYoutube ? { id: "diretos", label: "Diretos" } : null,
+    tournament.days && tournament.days.length > 0 ? { id: "galeria", label: "Fotos" } : null,
+    { id: "vencedores", label: "Vencedores" },
+  ].filter((s): s is { id: string; label: string } => s !== null);
 
   return (
     <div>
@@ -172,23 +189,37 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
         </ScrollReveal>
       </section>
 
-      {tournament.padelteamsCid && (
-        <section className="container-bloko py-24">
+      {sections.length > 1 && (
+        <nav
+          aria-label="Secções do torneio"
+          className="sticky top-16 z-30 border-y border-white/10 bg-[var(--color-bg)]/85 backdrop-blur-md"
+        >
+          <div className="container-bloko flex gap-2 overflow-x-auto py-3">
+            {sections.map((s) => (
+              <a
+                key={s.id}
+                href={`#${s.id}`}
+                className="shrink-0 rounded-full border border-white/15 px-4 py-1.5 font-display text-[11px] uppercase tracking-wide text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-lime)] hover:text-[var(--color-lime)]"
+              >
+                {s.label}
+              </a>
+            ))}
+          </div>
+        </nav>
+      )}
+
+      {tournament.padelteamsCid && schedule && (
+        <section id="competicao" className="container-bloko scroll-mt-32 py-20">
           <ScrollReveal className="max-w-2xl mb-10">
             <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
-              Cronograma
+              Competição
             </p>
             <h2 className="font-display font-bold text-3xl md:text-4xl uppercase">
-              Campos, horários e resultados
+              Jogos, grupos e quadro
             </h2>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <TournamentSchedule
-              slug={tournament.slug}
-              initialDays={schedule?.days ?? []}
-              initialUpdatedAt={schedule?.updatedAt ?? new Date().toISOString()}
-              defaultDayIndex={schedule?.defaultDayIndex ?? 0}
-            />
+            <TournamentCompetition slug={tournament.slug} initial={schedule} />
             {tournament.padelteamsStatsUrl && (
               <p className="mt-8 text-sm text-[var(--color-text-muted)]">
                 Consulte os dados completos em:{" "}
@@ -206,8 +237,23 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
         </section>
       )}
 
+      {showYoutube && (
+        <div id="diretos" className="scroll-mt-32">
+          <YouTubeShowcase
+            initialVideos={ytVideos}
+            filter={tournament.youtubeFilter}
+            limit={3}
+            channelUrl={youtubeChannelUrl}
+            liveUrl={youtubeLiveUrl}
+            eyebrow="Streams"
+            title="Diretos e vídeos do torneio"
+            sectionClassName="bg-[var(--color-bg-elevated)] py-20"
+          />
+        </div>
+      )}
+
       {tournament.days && tournament.days.length > 0 && (
-        <section className="bg-[var(--color-bg-elevated)] py-24">
+        <section id="galeria" className="scroll-mt-32 bg-[var(--color-bg-elevated)] py-20">
           <div className="container-bloko">
             <ScrollReveal className="max-w-2xl mb-10">
               <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
@@ -228,7 +274,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
         </section>
       )}
 
-      <section className="container-bloko py-24">
+      <section id="vencedores" className="container-bloko scroll-mt-32 py-20">
         <ScrollReveal className="max-w-2xl mb-10">
           <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
             Pódio

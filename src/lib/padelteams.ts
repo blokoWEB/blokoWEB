@@ -291,3 +291,216 @@ export async function fetchPadelteamsSchedule(
     }))
   );
 }
+
+// ---------------------------------------------------------------------------
+// Categorias: grupos e quadro (página "Info - Categoria" da PadelTeams)
+// ---------------------------------------------------------------------------
+
+export type GroupTeam = {
+  /** Posição atual no grupo (classificação provisória). */
+  position: number;
+  name: string;
+  /** Posição que passa à fase seguinte. */
+  qualifies: boolean;
+  played?: number;
+  won?: number;
+  lost?: number;
+  gamesFor?: number;
+  gamesAgainst?: number;
+};
+
+export type GroupInfo = {
+  name: string;
+  /** "Em Jogo", "Terminado"… quando a PadelTeams mostra estado do grupo. */
+  status?: string;
+  classificationUrl?: string;
+  teams: GroupTeam[];
+};
+
+export type BracketMatch = {
+  /** "2.1", "3.2", "4.1" — número do jogo no quadro. */
+  code: string;
+  team1: string;
+  team2: string;
+  sets: SetScore[];
+  winner?: 1 | 2;
+};
+
+export type BracketRound = { name: string; matches: BracketMatch[] };
+
+export type CategoryInfo = {
+  tid: string;
+  name: string;
+  groups: GroupInfo[];
+  rounds: BracketRound[];
+  stats?: { pendente: number; programado: number; emJogo: number; terminado: number };
+};
+
+const CATEGORY_ORDER = ["M3", "M4", "M5", "M6", "F6", "X6", "MX"];
+
+function encodeK(params: string): string {
+  return encodeURIComponent(Buffer.from(params).toString("base64"));
+}
+
+/** Lê a página de uma categoria: grupos (com posições) e quadro de eliminatórias. */
+export function parseCategoryPage(html: string): {
+  options: { tid: string; name: string; selected: boolean }[];
+  groups: GroupInfo[];
+  rounds: BracketRound[];
+  stats?: CategoryInfo["stats"];
+} {
+  const select = html.match(/<select id="phase-group"[\s\S]*?<\/select>/)?.[0] ?? "";
+  const options = [...select.matchAll(/<option value="(\d+)"([^>]*)>\s*([^<]+?)\s*<\/option>/g)].map((m) => ({
+    tid: m[1],
+    name: m[3].trim(),
+    selected: /selected/.test(m[2]),
+  }));
+
+  // --- grupos ---
+  const bracketStart = html.indexOf('<div class="fixed-wrapper">');
+  const groupsHtml = bracketStart > 0 ? html.slice(0, bracketStart) : html;
+  const starts = [...groupsHtml.matchAll(/<div id="grp\d+" class="col-12 col-sm-6[^"]*">/g)].map((m) => m.index!);
+  const groups: GroupInfo[] = starts.map((start, i) => {
+    const chunk = groupsHtml.slice(start, starts[i + 1] ?? groupsHtml.length);
+    const name = stripTags(chunk.match(/text-bold text-center px-2 my-auto">([\s\S]*?)<\/div>/)?.[1] ?? "");
+    const status = chunk.match(/competition-status[^>]*>\s*([^<]+?)\s*<\/div>/)?.[1]?.trim();
+    const classHref = chunk.match(/href="(\/info\/group-classification\?k=[^"]+)"/)?.[1];
+    const teams: GroupTeam[] = [
+      ...chunk.matchAll(
+        /badge (position-selected|position-not-selected)">(\d+)<\/div>[\s\S]*?<div class="team-name">([\s\S]*?)<\/div>/g
+      ),
+    ].map((t) => ({ position: Number(t[2]), qualifies: t[1] === "position-selected", name: stripTags(t[3]) }));
+    return {
+      name,
+      status: status || undefined,
+      classificationUrl: classHref ? `https://padelteams.pt${classHref}` : undefined,
+      teams,
+    };
+  });
+
+  // --- quadro ---
+  const headers = [
+    ...html.matchAll(/fs-s bold text-center p-2 border-gradient" style="width:250px;">([^<]+)<\/div>/g),
+  ].map((m) => m[1].trim());
+  const matchBlocks = [...html.matchAll(/<div class="match border item-link[^"]*">([\s\S]*?)<\/a>/g)].map((m) => m[1]);
+  const byPrefix = new Map<number, BracketMatch[]>();
+  for (const block of matchBlocks) {
+    const code = block.match(/<div class="text-bold p-0">\s*([\d.]+)\s*<\/div>/)?.[1];
+    const teamEls = [...block.matchAll(/<span class="team-name([^"]*)">([\s\S]*?)<\/span>/g)];
+    if (!code || teamEls.length < 2) continue;
+    const prefix = Number(code.split(".")[0]);
+    const winner: 1 | 2 | undefined = /\bwinner\b/.test(teamEls[0][1])
+      ? 1
+      : /\bwinner\b/.test(teamEls[1][1])
+        ? 2
+        : undefined;
+    const arr = byPrefix.get(prefix) ?? [];
+    arr.push({
+      code,
+      team1: stripTags(teamEls[0][2]),
+      team2: stripTags(teamEls[1][2]),
+      sets: parseSets(block),
+      winner,
+    });
+    byPrefix.set(prefix, arr);
+  }
+  // Os cabeçalhos vêm da final para trás (Final, 1/2, 1/4…); os números dos jogos crescem para a final.
+  const prefixes = [...byPrefix.keys()].sort((a, b) => a - b);
+  const namesAsc = [...headers].reverse();
+  const rounds: BracketRound[] = prefixes.map((p, i) => ({
+    name: namesAsc[i] ?? `Ronda ${i + 1}`,
+    matches: byPrefix.get(p)!.sort((a, b) => a.code.localeCompare(b.code, undefined, { numeric: true })),
+  }));
+
+  const statsAt = html.indexOf("Estatisticas");
+  const text = stripTags(statsAt >= 0 ? html.slice(statsAt) : html);
+  const st = text.match(/(\d+)\s+Pendente\s+(\d+)\s+Programado\s+(\d+)\s+Em Jogo\s+(\d+)\s+Terminado/i);
+  const stats = st
+    ? { pendente: Number(st[1]), programado: Number(st[2]), emJogo: Number(st[3]), terminado: Number(st[4]) }
+    : undefined;
+
+  return { options, groups, rounds, stats };
+}
+
+/** "Classificação Provisória" de um grupo: J, V, D, jogos ganhos/perdidos por dupla. */
+export function parseGroupClassification(html: string): Map<string, Partial<GroupTeam>> {
+  const out = new Map<string, Partial<GroupTeam>>();
+  // A posição vem num "badge" nas duplas que passam; nas restantes é só o número.
+  const rows = [
+    ...html.matchAll(/<tr>\s*<td[^>]*>\s*(?:<div class="badge[^"]*">)?\s*(\d+)\s*(?:<\/div>)?\s*<\/td>([\s\S]*?)<\/tr>/g),
+  ];
+  for (const r of rows) {
+    const cells = [...r[2].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((c) => stripTags(c[1]));
+    if (cells.length < 6) continue;
+    const [name, j, v, d, pg, ps] = cells;
+    out.set(name, {
+      played: Number(j),
+      won: Number(v),
+      lost: Number(d),
+      gamesFor: Number(pg),
+      gamesAgainst: Number(ps),
+    });
+  }
+  return out;
+}
+
+async function fetchHtml(url: string, revalidateSeconds: number): Promise<string | null> {
+  try {
+    const res = await fetch(url, { next: { revalidate: revalidateSeconds } });
+    return res.ok ? await res.text() : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Grupos e quadro de todas as categorias de uma competição. Devolve [] em qualquer falha.
+ * Só busca a classificação provisória dos grupos que já começaram.
+ */
+export async function fetchPadelteamsCategories(cid: string, revalidateSeconds = 30): Promise<CategoryInfo[]> {
+  try {
+    const firstHtml = await fetchHtml(
+      `https://padelteams.pt/info/tournaments?k=${encodeK(`cid=${cid}`)}`,
+      revalidateSeconds
+    );
+    if (!firstHtml) return [];
+    const first = parseCategoryPage(firstHtml);
+    if (first.options.length === 0) return [];
+    const firstTid = first.options.find((o) => o.selected)?.tid ?? first.options[0].tid;
+
+    const pages = await Promise.all(
+      first.options.map(async (o) => {
+        if (o.tid === firstTid) return { o, page: first };
+        const html = await fetchHtml(
+          `https://padelteams.pt/info/tournaments?k=${encodeK(`cid=${cid}&tid=${o.tid}`)}`,
+          revalidateSeconds
+        );
+        return { o, page: html ? parseCategoryPage(html) : null };
+      })
+    );
+
+    const categories: CategoryInfo[] = [];
+    for (const { o, page } of pages) {
+      if (!page) continue;
+      await Promise.all(
+        page.groups
+          .filter((g) => g.status && g.classificationUrl)
+          .map(async (g) => {
+            const html = await fetchHtml(g.classificationUrl!, revalidateSeconds);
+            if (!html) return;
+            const table = parseGroupClassification(html);
+            for (const t of g.teams) Object.assign(t, table.get(t.name) ?? {});
+          })
+      );
+      categories.push({ tid: o.tid, name: o.name, groups: page.groups, rounds: page.rounds, stats: page.stats });
+    }
+
+    const rank = (n: string) => {
+      const i = CATEGORY_ORDER.indexOf(n);
+      return i < 0 ? 99 : i;
+    };
+    return categories.sort((a, b) => rank(a.name) - rank(b.name) || a.name.localeCompare(b.name));
+  } catch {
+    return [];
+  }
+}

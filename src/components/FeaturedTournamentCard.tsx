@@ -2,8 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Trophy, Users } from "lucide-react";
 import type { TournamentEntry } from "@/lib/site-data";
+import TournamentStatusBadge from "@/components/TournamentStatusBadge";
+import { tournamentDates, tournamentPhase } from "@/lib/tournament-status";
 
 export default function FeaturedTournamentCard({ tournament }: { tournament: TournamentEntry }) {
+  const dates = tournamentDates(tournament);
+  const phase = tournamentPhase(dates);
+
   return (
     <div className="glass-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
       <div className="relative w-full md:w-2/5 aspect-[4/3] md:aspect-auto shrink-0">
@@ -20,11 +25,11 @@ export default function FeaturedTournamentCard({ tournament }: { tournament: Tou
             <Trophy size={40} className="text-[var(--color-lime)]" />
           </div>
         )}
-        {tournament.comingSoon && (
-          <span className="absolute top-4 right-4 text-[10px] font-display uppercase tracking-wide px-3 py-1.5 rounded-full bg-[var(--color-lime)] text-black glow-lime">
-            Brevemente
-          </span>
-        )}
+        <TournamentStatusBadge
+          dates={dates}
+          initialPhase={phase}
+          className="absolute top-4 right-4 text-[10px] px-3 py-1.5"
+        />
       </div>
 
       <div className="p-8 md:p-10 flex-1 flex flex-col justify-center">

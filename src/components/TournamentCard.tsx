@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, FileText, Images, PlayCircle, Sparkles, Trophy, Users, X } from "lucide-react";
 import type { TournamentEntry } from "@/lib/site-data";
+import { tournamentDates, tournamentPhase } from "@/lib/tournament-status";
+import TournamentStatusBadge from "./TournamentStatusBadge";
 import GalleryLightbox from "./GalleryLightbox";
 import Portal from "./Portal";
 import VideoModal from "./VideoModal";
@@ -19,6 +21,8 @@ export default function TournamentCard({
   const [open, setOpen] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [videoOpen, setVideoOpen] = useState(false);
+  const dates = tournamentDates(tournament);
+  const phase = tournamentPhase(dates);
   const hasMore = !!(
     tournament.details?.length ||
     tournament.poster ||
@@ -46,11 +50,11 @@ export default function TournamentCard({
                 Exemplo
               </span>
             )}
-            {tournament.comingSoon && (
-              <span className="absolute top-3 right-3 text-[9px] font-display uppercase tracking-wide px-2.5 py-1 rounded-full bg-[var(--color-lime)] text-black glow-lime">
-                Brevemente
-              </span>
-            )}
+            <TournamentStatusBadge
+              dates={dates}
+              initialPhase={phase}
+              className="absolute top-3 right-3 text-[9px] px-2.5 py-1"
+            />
             {tournament.hasVideo && (
               <span className="absolute bottom-3 left-3 flex items-center gap-1.5 text-[10px] font-display uppercase tracking-wide px-2.5 py-1.5 rounded-full bg-black/60 backdrop-blur-sm text-white">
                 <PlayCircle size={13} className="text-[var(--color-lime)]" /> Vídeo
@@ -64,11 +68,11 @@ export default function TournamentCard({
                 Exemplo
               </span>
             )}
-            {tournament.comingSoon && (
-              <span className="absolute top-4 right-4 text-[9px] font-display uppercase tracking-wide px-2.5 py-1 rounded-full bg-[var(--color-lime)] text-black glow-lime">
-                Brevemente
-              </span>
-            )}
+            <TournamentStatusBadge
+              dates={dates}
+              initialPhase={phase}
+              className="absolute top-4 right-4 text-[9px] px-2.5 py-1"
+            />
           </>
         )}
         <div className="p-6 flex flex-col flex-1">

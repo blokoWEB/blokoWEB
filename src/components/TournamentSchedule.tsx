@@ -331,7 +331,6 @@ export default function TournamentSchedule({
           >
             <RefreshCw size={13} className={refreshing ? "animate-spin" : ""} />
             {failed ? "Sem ligação — a tentar de novo" : `Atualizado às ${formatClock(updatedAt)}`}
-            {pollMs !== null && !failed && <span className="hidden sm:inline"> · atualiza sozinho</span>}
           </button>
         </div>
       </div>

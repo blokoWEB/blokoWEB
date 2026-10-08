@@ -69,7 +69,7 @@ export default function TournamentGallerySection({
       ) : activeImages.length === 0 ? (
         <div className="glass-card rounded-2xl p-10 text-center text-[var(--color-text-muted)]">
           <ImageOff size={24} className="mx-auto mb-3" />
-          Galeria em breve — volta mais tarde.
+          Galeria em breve. Volta mais tarde.
         </div>
       ) : (
         <>
@@ -83,7 +83,7 @@ export default function TournamentGallerySection({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={img.thumb}
-                  alt={`${title} — ${activeDayEntry?.label ?? ""}`}
+                  alt={`${title}, ${activeDayEntry?.label ?? ""}`}
                   loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />

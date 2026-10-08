@@ -65,10 +65,13 @@ export default function TournamentBracket({ category }: { category: CategoryInfo
         {category.rounds.map((r) => r.name).join(" → ")}. Os nomes aparecem à medida que os jogos
         se decidem.
       </p>
-      <div className="-mx-4 overflow-x-auto px-4 pb-3 sm:mx-0 sm:px-0">
-        <div className="flex gap-5">
+      <p className="mb-3 text-xs text-[var(--color-text-muted)] sm:hidden">
+        Desliza para o lado para ver as fases seguintes.
+      </p>
+      <div className="no-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto px-4 pb-3 sm:mx-0 sm:px-0">
+        <div className="flex gap-4 sm:gap-5">
           {category.rounds.map((round) => (
-            <div key={round.name} className="w-60 shrink-0">
+            <div key={round.name} className="w-[16.5rem] shrink-0 snap-start scroll-ml-4 sm:w-60">
               <p className="mb-3 border-b border-white/10 pb-2 font-display text-xs uppercase tracking-wide text-[var(--color-lime)]">
                 {round.name}
               </p>

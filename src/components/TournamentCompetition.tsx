@@ -14,7 +14,7 @@ const POLL_LIVE_MS = 30_000;
 const POLL_IDLE_MS = 5 * 60_000;
 
 const tabs: { id: Tab; label: string; icon: typeof Clock }[] = [
-  { id: "jogos", label: "Jogos e resultados", icon: Clock },
+  { id: "jogos", label: "Jogos", icon: Clock },
   { id: "grupos", label: "Grupos", icon: Users },
   { id: "quadro", label: "Quadro", icon: Trophy },
 ];
@@ -81,7 +81,8 @@ export default function TournamentCompetition({
       return today >= first! ? POLL_LIVE_MS : POLL_IDLE_MS;
     }
 
-    setPollMs(computeInterval());
+    // Fora do corpo síncrono do efeito: o intervalo depende da data do navegador.
+    const first0 = setTimeout(() => setPollMs(computeInterval()), 0);
     const onVisible = () => {
       if (document.visibilityState === "visible") {
         const interval = computeInterval();
@@ -90,7 +91,10 @@ export default function TournamentCompetition({
       }
     };
     document.addEventListener("visibilitychange", onVisible);
-    return () => document.removeEventListener("visibilitychange", onVisible);
+    return () => {
+      clearTimeout(first0);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, [first, last, refresh]);
 
   useEffect(() => {
@@ -106,20 +110,23 @@ export default function TournamentCompetition({
 
   return (
     <div>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap gap-2" role="tablist" aria-label="Competição">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+        <div
+          className="grid w-full grid-cols-3 gap-1 rounded-full border border-white/10 bg-white/5 p-1 sm:w-auto"
+          role="group"
+          aria-label="Competição"
+        >
           {tabs.map(({ id, label, icon: Icon }) => {
             if (id !== "jogos" && data.categories.length === 0) return null;
             return (
               <button
                 key={id}
-                role="tab"
-                aria-selected={tab === id}
+                aria-pressed={tab === id}
                 onClick={() => setTab(id)}
-                className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 font-display text-xs uppercase tracking-wide transition-colors ${
+                className={`touch-manipulation inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 font-display text-xs uppercase tracking-wide transition-colors sm:px-6 ${
                   tab === id
-                    ? "border-[var(--color-lime)] bg-[var(--color-lime)] text-black"
-                    : "border-white/15 text-[var(--color-text-muted)] hover:border-white/30 hover:text-white"
+                    ? "bg-[var(--color-lime)] text-black"
+                    : "text-[var(--color-text-muted)] hover:text-white"
                 }`}
               >
                 <Icon size={14} /> {label}
@@ -141,22 +148,27 @@ export default function TournamentCompetition({
           <button
             onClick={refresh}
             disabled={refreshing}
-            className="inline-flex items-center gap-1.5 transition-colors hover:text-white disabled:opacity-60"
+            className="touch-manipulation inline-flex min-h-9 items-center gap-1.5 transition-colors hover:text-white disabled:opacity-60"
             aria-label="Atualizar agora"
           >
             <RefreshCw size={13} className={refreshing ? "animate-spin" : ""} />
-            {failed ? "Sem ligação — a tentar de novo" : `Atualizado às ${formatClock(data.updatedAt)}`}
+            {failed ? "Sem ligação, a tentar de novo" : `Atualizado às ${formatClock(data.updatedAt)}`}
           </button>
         </div>
       </div>
 
       {tab !== "jogos" && data.categories.length > 0 && (
-        <div className="mb-6 flex flex-wrap gap-2" role="group" aria-label="Categoria">
+        <div
+          className="no-scrollbar -mx-4 mb-5 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+          role="group"
+          aria-label="Categoria"
+        >
           {data.categories.map((c) => (
             <button
               key={c.name}
               onClick={() => setCategoryName(c.name)}
-              className={`rounded-full border px-4 py-1.5 text-xs transition-colors ${
+              aria-pressed={c.name === category?.name}
+              className={`touch-manipulation min-h-10 shrink-0 rounded-full border px-5 text-xs transition-colors ${
                 c.name === category?.name
                   ? "border-[var(--color-lime)] text-[var(--color-lime)]"
                   : "border-white/10 text-[var(--color-text-muted)] hover:text-white"

@@ -36,7 +36,7 @@ export type ScheduleMatch = {
 };
 
 export type ScheduleCourt = {
-  /** "Campo 1 — McDonald’s" */
+  /** "Campo 1 · McDonald’s" */
   court: string;
   number: number;
   matches: ScheduleMatch[];
@@ -106,7 +106,7 @@ function parseCourtName(raw: string): { number: number; name: string } {
   const number = numMatch ? Number(numMatch[1]) : 99;
   const sponsor = right.replace(/^campo\s*\d*\s*[-–:]?\s*/i, "").trim();
   const name = numMatch
-    ? `Campo ${number}${sponsor ? ` — ${sponsor}` : ""}`
+    ? `Campo ${number}${sponsor ? ` · ${sponsor}` : ""}`
     : right || clean;
   return { number, name };
 }

@@ -118,7 +118,7 @@ export default function YouTubeShowcase({
   }, [filter, limit]);
 
   useEffect(() => {
-    refresh();
+    const first = setTimeout(refresh, 0);
     const id = setInterval(() => {
       if (document.visibilityState === "visible") refresh();
     }, POLL_MS);
@@ -128,6 +128,7 @@ export default function YouTubeShowcase({
     };
     document.addEventListener("visibilitychange", onVisible);
     return () => {
+      clearTimeout(first);
       clearInterval(id);
       document.removeEventListener("visibilitychange", onVisible);
     };
@@ -137,7 +138,7 @@ export default function YouTubeShowcase({
 
   const content = (
     <div>
-      <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4 sm:mb-10">
         <div className="max-w-2xl">
           <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
             {eyebrow}
@@ -149,7 +150,7 @@ export default function YouTubeShowcase({
             href={liveUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/20 px-4 py-2 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+            className="touch-manipulation inline-flex min-h-11 items-center gap-1.5 rounded-full border border-white/20 px-4 text-white transition-colors hover:border-[var(--color-lime)] hover:text-[var(--color-lime)]"
           >
             Diretos no YouTube <ExternalLink size={13} />
           </a>
@@ -157,7 +158,7 @@ export default function YouTubeShowcase({
             href={channelUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/20 px-4 py-2 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+            className="touch-manipulation inline-flex min-h-11 items-center gap-1.5 rounded-full border border-white/20 px-4 text-white transition-colors hover:border-[var(--color-lime)] hover:text-[var(--color-lime)]"
           >
             Todos os vídeos <ExternalLink size={13} />
           </a>
@@ -165,7 +166,7 @@ export default function YouTubeShowcase({
       </div>
 
       {live.length === 0 && (
-        <div className="mb-10 glass-card rounded-2xl p-5 flex flex-wrap items-center gap-4">
+        <div className="mb-8 glass-card rounded-2xl p-5 flex flex-wrap items-center gap-4 sm:mb-10">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/5 text-[var(--color-text-muted)]">
             <Radio size={18} />
           </span>
@@ -177,7 +178,7 @@ export default function YouTubeShowcase({
               Consulta o{" "}
               <a
                 href="#competicao"
-                className="text-[var(--color-lime)] underline-offset-4 hover:underline"
+                className="inline-flex min-h-8 items-center text-[var(--color-lime)] underline underline-offset-4"
               >
                 calendário
               </a>{" "}
@@ -196,15 +197,16 @@ export default function YouTubeShowcase({
             </span>
             {live.length === 1 ? "A decorrer agora" : `${live.length} jogos a decorrer agora`}
           </p>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
             {live.map((v) => (
-              <VideoCard
-                key={v.id}
-                video={v}
-                live
-                playing={playing === v.id}
-                onPlay={() => setPlaying(v.id)}
-              />
+              <div key={v.id} className="w-[82vw] max-w-sm shrink-0 snap-start sm:w-auto sm:max-w-none">
+                <VideoCard
+                  video={v}
+                  live
+                  playing={playing === v.id}
+                  onPlay={() => setPlaying(v.id)}
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -216,14 +218,15 @@ export default function YouTubeShowcase({
         </p>
       )}
       {videos.length > 0 && (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
           {videos.map((v) => (
-            <VideoCard
-              key={v.id}
-              video={v}
-              playing={playing === v.id}
-              onPlay={() => setPlaying(v.id)}
-            />
+            <div key={v.id} className="w-[82vw] max-w-sm shrink-0 snap-start sm:w-auto sm:max-w-none">
+              <VideoCard
+                video={v}
+                playing={playing === v.id}
+                onPlay={() => setPlaying(v.id)}
+              />
+            </div>
           ))}
         </div>
       )}

@@ -96,7 +96,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
             }
           >
             {tournament.poster && (
-              <div className="relative w-full max-w-sm mx-auto lg:max-w-none lg:mx-0 aspect-[4/5] rounded-2xl overflow-hidden glow-lime">
+              <div className="relative w-full max-w-[14rem] mx-auto sm:max-w-sm lg:max-w-none lg:mx-0 aspect-[4/5] rounded-2xl overflow-hidden glow-lime">
                 <Image src={tournament.poster} alt={tournament.name} fill className="object-cover" />
               </div>
             )}
@@ -192,14 +192,14 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
       {sections.length > 1 && (
         <nav
           aria-label="Secções do torneio"
-          className="sticky top-16 z-30 border-y border-white/10 bg-[var(--color-bg)]/85 backdrop-blur-md"
+          className="sticky top-20 z-30 border-y border-white/10 bg-[var(--color-bg)]/90 backdrop-blur-md"
         >
-          <div className="container-bloko flex gap-2 overflow-x-auto py-3">
+          <div className="no-scrollbar container-bloko flex gap-2 overflow-x-auto py-3">
             {sections.map((s) => (
               <a
                 key={s.id}
                 href={`#${s.id}`}
-                className="shrink-0 rounded-full border border-white/15 px-4 py-1.5 font-display text-[11px] uppercase tracking-wide text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-lime)] hover:text-[var(--color-lime)]"
+                className="touch-manipulation inline-flex min-h-10 shrink-0 items-center rounded-full border border-white/15 px-4 font-display text-[11px] uppercase tracking-wide text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-lime)] hover:text-[var(--color-lime)]"
               >
                 {s.label}
               </a>
@@ -209,7 +209,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
       )}
 
       {tournament.padelteamsCid && schedule && (
-        <section id="competicao" className="container-bloko scroll-mt-32 py-20">
+        <section id="competicao" className="container-bloko scroll-mt-40 py-12 sm:py-20">
           <ScrollReveal className="max-w-2xl mb-10">
             <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
               Competição
@@ -238,7 +238,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
       )}
 
       {showYoutube && (
-        <div id="diretos" className="scroll-mt-32">
+        <div id="diretos" className="scroll-mt-40">
           <YouTubeShowcase
             initialVideos={ytVideos}
             filter={tournament.youtubeFilter}
@@ -247,13 +247,13 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
             liveUrl={youtubeLiveUrl}
             eyebrow="Streams"
             title="Diretos e vídeos do torneio"
-            sectionClassName="bg-[var(--color-bg-elevated)] py-20"
+            sectionClassName="bg-[var(--color-bg-elevated)] py-12 sm:py-20"
           />
         </div>
       )}
 
       {tournament.days && tournament.days.length > 0 && (
-        <section id="galeria" className="scroll-mt-32 bg-[var(--color-bg-elevated)] py-20">
+        <section id="galeria" className="scroll-mt-40 bg-[var(--color-bg-elevated)] py-12 sm:py-20">
           <div className="container-bloko">
             <ScrollReveal className="max-w-2xl mb-10">
               <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
@@ -274,7 +274,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
         </section>
       )}
 
-      <section id="vencedores" className="container-bloko scroll-mt-32 py-20">
+      <section id="vencedores" className="container-bloko scroll-mt-40 py-12 sm:py-20">
         <ScrollReveal className="max-w-2xl mb-10">
           <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
             Pódio
@@ -313,7 +313,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
           </div>
         ) : (
           <div className="glass-card rounded-2xl p-10 text-center text-[var(--color-text-muted)]">
-            Vencedores em breve — volta depois do torneio.
+            Vencedores em breve. Volta depois do torneio.
           </div>
         )}
       </section>

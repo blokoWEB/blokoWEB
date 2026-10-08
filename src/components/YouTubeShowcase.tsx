@@ -174,7 +174,14 @@ export default function YouTubeShowcase({
               {checked ? "Sem diretos no momento" : "A verificar diretos…"}
             </p>
             <p className="text-xs text-[var(--color-text-muted)] mt-0.5">
-              Quando houver jogos em direto, aparecem aqui automaticamente.
+              Consulta o{" "}
+              <a
+                href="#competicao"
+                className="text-[var(--color-lime)] underline-offset-4 hover:underline"
+              >
+                calendário
+              </a>{" "}
+              para ver o horário dos diretos.
             </p>
           </div>
         </div>

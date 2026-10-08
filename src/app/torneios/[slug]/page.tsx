@@ -14,12 +14,10 @@ import {
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import TournamentGallerySection from "@/components/TournamentGallerySection";
-import TournamentSchedule, { type DaySchedule } from "@/components/TournamentSchedule";
-import { pastTournaments, upcomingTournaments, type TournamentEntry } from "@/lib/site-data";
+import TournamentSchedule from "@/components/TournamentSchedule";
 import { pageMetadata } from "@/lib/seo";
-import { fetchPadelteamsStats, fetchPadelteamsDaySchedule } from "@/lib/padelteams";
-
-const allTournaments: TournamentEntry[] = [...upcomingTournaments, ...pastTournaments];
+import { fetchPadelteamsStats } from "@/lib/padelteams";
+import { allTournaments, getTournamentSchedule } from "@/lib/tournament-schedule";
 
 function findTournament(slug: string) {
   return allTournaments.find((t) => t.slug === slug && t.hasDetailPage);
@@ -50,16 +48,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
     ? await fetchPadelteamsStats(tournament.padelteamsStatsUrl)
     : null;
 
-  const daysWithDates = (tournament.days ?? []).filter((d) => d.date);
-  const schedule: DaySchedule[] =
-    tournament.padelteamsCid && daysWithDates.length > 0
-      ? await Promise.all(
-          daysWithDates.map(async (d) => ({
-            label: d.label,
-            courts: await fetchPadelteamsDaySchedule(tournament.padelteamsCid!, d.date!),
-          }))
-        )
-      : [];
+  const schedule = await getTournamentSchedule(tournament);
 
   return (
     <div>
@@ -190,11 +179,16 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
               Cronograma
             </p>
             <h2 className="font-display font-bold text-3xl md:text-4xl uppercase">
-              Campos e horários
+              Campos, horários e resultados
             </h2>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <TournamentSchedule days={schedule} />
+            <TournamentSchedule
+              slug={tournament.slug}
+              initialDays={schedule?.days ?? []}
+              initialUpdatedAt={schedule?.updatedAt ?? new Date().toISOString()}
+              defaultDayIndex={schedule?.defaultDayIndex ?? 0}
+            />
             {tournament.padelteamsStatsUrl && (
               <p className="mt-8 text-sm text-[var(--color-text-muted)]">
                 Consulte os dados completos em:{" "}

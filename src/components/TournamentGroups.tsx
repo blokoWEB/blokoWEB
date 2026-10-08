@@ -21,8 +21,22 @@ function StatusPill({ status }: { status?: string }) {
   );
 }
 
-function TeamRow({ team }: { team: GroupTeam }) {
-  const hasStats = team.played !== undefined;
+/** Número de uma coluna; "–" quando a dupla ainda não jogou, para não encher o cartão de zeros. */
+function StatCell({ value, played, title }: { value?: number; played: boolean; title: string }) {
+  return (
+    <span
+      className={`w-6 text-center text-sm font-medium tabular-nums ${
+        played && value ? "text-white" : "text-[var(--color-text-muted)]/60"
+      }`}
+      title={title}
+    >
+      {played ? value : "–"}
+    </span>
+  );
+}
+
+function TeamRow({ team, showStats }: { team: GroupTeam; showStats: boolean }) {
+  const played = (team.played ?? 0) > 0;
   return (
     <li className="flex items-center gap-3">
       <span
@@ -42,9 +56,11 @@ function TeamRow({ team }: { team: GroupTeam }) {
       >
         {team.name}
       </span>
-      {hasStats && (
-        <span className="shrink-0 font-display text-[11px] tabular-nums text-[var(--color-text-muted)]">
-          {team.played}J · {team.won}V · {team.lost}D
+      {showStats && (
+        <span className="flex shrink-0">
+          <StatCell value={team.played} played={played} title="Jogos" />
+          <StatCell value={team.won} played={played} title="Vitórias" />
+          <StatCell value={team.lost} played={played} title="Derrotas" />
         </span>
       )}
     </li>
@@ -52,17 +68,33 @@ function TeamRow({ team }: { team: GroupTeam }) {
 }
 
 function GroupCard({ group }: { group: GroupInfo }) {
+  const showStats = group.teams.some((t) => t.played !== undefined);
   return (
     <div className="glass-card rounded-2xl p-5">
       <div className="mb-4 flex items-center justify-between gap-3">
         <h3 className="font-display uppercase text-sm text-[var(--color-lime)]">{group.name}</h3>
         <StatusPill status={group.status} />
       </div>
+      {showStats && (
+        <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-wide text-[var(--color-text-muted)]">
+          <span>Dupla</span>
+          <span className="flex">
+            <span className="w-6 text-center" title="Jogos">J</span>
+            <span className="w-6 text-center" title="Vitórias">V</span>
+            <span className="w-6 text-center" title="Derrotas">D</span>
+          </span>
+        </div>
+      )}
       <ul className="space-y-3">
         {group.teams.map((t) => (
-          <TeamRow key={t.name} team={t} />
+          <TeamRow key={t.name} team={t} showStats={showStats} />
         ))}
       </ul>
+      {showStats && (
+        <p className="mt-3 text-[11px] text-[var(--color-text-muted)]">
+          J jogos · V vitórias · D derrotas
+        </p>
+      )}
       {group.classificationUrl && (
         <a
           href={group.classificationUrl}

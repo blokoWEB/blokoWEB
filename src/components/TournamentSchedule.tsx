@@ -46,7 +46,7 @@ export function SetCells({ sets, side, win }: { sets: SetScore[]; side: 1 | 2; w
         return (
           <span
             key={i}
-            className={`w-5 text-center font-display text-sm tabular-nums ${
+            className={`w-5 text-center text-sm font-semibold tabular-nums ${
               wonSet ? "text-[var(--color-lime)]" : win ? "text-white" : "text-[var(--color-text-muted)]"
             }`}
           >

@@ -504,9 +504,10 @@ export const upcomingTournaments: TournamentEntry[] = [
     partnerUrl: site.whatsappCommunityUrl,
     hasDetailPage: true,
     days: [
-      { label: "Dia 1 — Sexta-feira, 9 de Outubro", gallerySlug: "dia-1", date: "2026-10-09" },
-      { label: "Dia 2 — Sábado, 10 de Outubro", gallerySlug: "dia-2", date: "2026-10-10" },
-      { label: "Dia 3 — Domingo, 11 de Outubro", gallerySlug: "dia-3", date: "2026-10-11" },
+      { label: "Quinta-feira, 8 de Outubro", gallerySlug: "dia-0", date: "2026-10-08" },
+      { label: "Sexta-feira, 9 de Outubro", gallerySlug: "dia-1", date: "2026-10-09" },
+      { label: "Sábado, 10 de Outubro", gallerySlug: "dia-2", date: "2026-10-10" },
+      { label: "Domingo, 11 de Outubro", gallerySlug: "dia-3", date: "2026-10-11" },
     ],
     resultsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
     padelteamsStatsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",

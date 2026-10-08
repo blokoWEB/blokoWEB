@@ -7,6 +7,7 @@ export type PadelteamsStats = {
 
 export type ScheduleMatch = {
   time: string;
+  tbd: boolean;
   category: string;
   group: string;
   team1: string;
@@ -102,7 +103,7 @@ export async function fetchPadelteamsDaySchedule(
     let lastName: string | null = null;
     while ((m = courtHeaderRe.exec(html)) !== null) {
       if (lastName !== null) sections.push({ name: lastName, start: lastIndex, end: m.index });
-      lastName = stripTags(m[1]).split("|").pop()?.trim() ?? stripTags(m[1]);
+      lastName = (stripTags(m[1]).split("|").pop()?.trim() ?? stripTags(m[1])).replace(/`/g, "’");
       lastIndex = courtHeaderRe.lastIndex;
     }
     if (lastName !== null) sections.push({ name: lastName, start: lastIndex, end: html.length });
@@ -119,8 +120,11 @@ export async function fetchPadelteamsDaySchedule(
         if (!schedMatch) continue; // já terminado (mostra resultado) — não é cronograma
 
         const parts = schedMatch[1].split("<br>").map((s) => s.trim());
-        const time = parts[parts.length - 1] ?? "";
-        if (!time) continue;
+        const rawTime = parts[parts.length - 1] ?? "";
+        if (!rawTime) continue;
+        // A PadelTeams guarda 00:00–06:59 em jogos ainda sem hora real (eliminatórias por sortear)
+        const tbd = /^\d{2}:\d{2}$/.test(rawTime) && rawTime < "07:00";
+        const time = tbd ? "A definir" : rawTime;
 
         const catMatch = part.match(/text-center pt-1 ">\s*([^<]+?)\s*<\/div>/);
         const groupMatch = part.match(/fs-s text-center pb-1">([\s\S]*?)<\/div>/);
@@ -130,12 +134,15 @@ export async function fetchPadelteamsDaySchedule(
 
         matches.push({
           time,
+          tbd,
           category: catMatch ? stripTags(catMatch[1]) : "",
           group: groupMatch ? stripTags(groupMatch[1]) : "",
           team1: stripTags(teamMatches[0][1]),
           team2: stripTags(teamMatches[1][1]),
         });
       }
+
+      matches.sort((a, b) => Number(a.tbd) - Number(b.tbd) || a.time.localeCompare(b.time));
 
       return { court: sec.name, matches };
     });

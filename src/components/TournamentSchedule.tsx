@@ -10,7 +10,7 @@ export type DaySchedule = {
   courts: ScheduleCourt[];
 };
 
-type FoundMatch = ScheduleMatch & { day: string; court: string };
+type FoundMatch = ScheduleMatch & { day: string; dayIndex: number; court: string };
 
 // Placeholder — os 4 campos reais do BLOKO, mostrados vazios até a PadelTeams
 // publicar o sorteio, para a secção já aparecer pronta a receber os jogos.
@@ -37,16 +37,19 @@ export default function TournamentSchedule({ days }: { days: DaySchedule[] }) {
     const query = normalize(search);
     if (!query) return [];
     const results: FoundMatch[] = [];
-    for (const day of days) {
+    days.forEach((day, dayIndex) => {
       for (const court of day.courts) {
         for (const match of court.matches) {
           if (normalize(match.team1).includes(query) || normalize(match.team2).includes(query)) {
-            results.push({ ...match, day: day.label, court: court.court });
+            results.push({ ...match, day: day.label, dayIndex, court: court.court });
           }
         }
       }
-    }
-    return results;
+    });
+    return results.sort(
+      (a, b) =>
+        a.dayIndex - b.dayIndex || Number(a.tbd) - Number(b.tbd) || a.time.localeCompare(b.time)
+    );
   }, [days, search]);
 
   if (days.length === 0) {
@@ -92,7 +95,11 @@ export default function TournamentSchedule({ days }: { days: DaySchedule[] }) {
           <div className="space-y-3">
             {searchResults.map((match, i) => (
               <div key={i} className="glass-card rounded-2xl p-5 flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-1.5 text-sm font-display text-white shrink-0">
+                <div
+                  className={`flex items-center gap-1.5 text-sm font-display shrink-0 ${
+                    match.tbd ? "text-[var(--color-text-muted)]" : "text-white"
+                  }`}
+                >
                   <Clock size={13} className="text-[var(--color-text-muted)]" />
                   {match.time}
                 </div>
@@ -105,6 +112,7 @@ export default function TournamentSchedule({ days }: { days: DaySchedule[] }) {
                 <div className="text-sm text-white flex-1 min-w-[180px]">
                   <span className="text-[10px] uppercase tracking-wide text-[var(--color-blue-soft)] mr-1">
                     {match.category}
+                    {match.group ? ` · ${match.group}` : ""}
                   </span>
                   {match.team1} vs {match.team2}
                 </div>
@@ -151,13 +159,18 @@ export default function TournamentSchedule({ days }: { days: DaySchedule[] }) {
                         key={i}
                         className="flex items-center gap-3 border-b border-white/10 pb-3 last:border-0 last:pb-0"
                       >
-                        <div className="flex items-center gap-1.5 text-xs font-display text-white shrink-0 w-16">
+                        <div
+                          className={`flex items-center gap-1.5 text-xs font-display shrink-0 w-24 ${
+                            match.tbd ? "text-[var(--color-text-muted)]" : "text-white"
+                          }`}
+                        >
                           <Clock size={12} className="text-[var(--color-text-muted)]" />
                           {match.time}
                         </div>
                         <div className="text-sm text-[var(--color-text-muted)] flex-1">
                           <span className="text-[10px] uppercase tracking-wide text-[var(--color-blue-soft)] mr-1">
                             {match.category}
+                            {match.group ? ` · ${match.group}` : ""}
                           </span>
                           {match.team1} vs {match.team2}
                         </div>

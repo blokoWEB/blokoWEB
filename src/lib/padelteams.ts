@@ -178,8 +178,9 @@ export function parseDaySchedule(html: string): ScheduleCourt[] {
       const catMatch = part.match(/text-center pt-1 ">\s*([^<]+?)\s*<\/div>/);
       const groupMatch = part.match(/fs-s text-center pb-1">([\s\S]*?)<\/div>/);
 
+      // Verde enquanto a hora não chegou; passa a vermelho (text-danger) se o jogo já devia ter começado
       const schedMatch = part.match(
-        /small text-bold text-success text-center px-2">([\s\S]*?)<\/div>/
+        /small text-bold text-(?:success|danger|warning) text-center px-2">([\s\S]*?)<\/div>/
       );
       const statusMatch = part.match(/<span class="match-status">([\s\S]*?)<\/span>/);
       const sets = parseSets(part);

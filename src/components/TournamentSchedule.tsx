@@ -133,6 +133,8 @@ function MatchRow({
   court?: string;
 }) {
   const hasScore = match.sets.length > 0;
+  // Na lista do telemóvel (traz o campo) o estado vai por cima e os nomes ocupam a largura toda.
+  const stacked = court !== undefined;
   const label = (
     <span className="block text-[10px] uppercase tracking-wide text-[var(--color-blue-soft)] mb-1">
       {match.category}
@@ -141,16 +143,24 @@ function MatchRow({
   );
 
   return (
-    <div className="flex items-center gap-3 border-b border-white/10 pb-3 last:border-0 last:pb-0">
-      <div className="w-24 shrink-0">
+    <div
+      className={`border-b border-white/10 pb-3 last:border-0 last:pb-0 ${
+        stacked ? "" : "flex items-center gap-3"
+      }`}
+    >
+      <div className={stacked ? "mb-2 flex items-center justify-between gap-3" : "w-24 shrink-0"}>
         <StatusMain match={match} />
         {court && (
-          <p className="mt-1 inline-flex items-center gap-1 text-[11px] text-[var(--color-text-muted)]">
+          <p
+            className={`inline-flex items-center gap-1 text-[11px] text-[var(--color-text-muted)] ${
+              stacked ? "" : "mt-1"
+            }`}
+          >
             <MapPin size={10} /> {court}
           </p>
         )}
       </div>
-      <div className="flex-1 min-w-0">
+      <div className={stacked ? "" : "flex-1 min-w-0"}>
         {extra}
         {label}
         {hasScore ? (
@@ -161,7 +171,7 @@ function MatchRow({
               return (
                 <div key={side} className="flex items-center justify-between gap-3">
                   <span
-                    className={`text-sm truncate ${
+                    className={`min-w-0 text-sm leading-snug break-words ${
                       won ? "text-white font-semibold" : "text-[var(--color-text-muted)]"
                     }`}
                   >

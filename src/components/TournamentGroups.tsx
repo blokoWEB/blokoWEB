@@ -38,7 +38,7 @@ function StatCell({ value, played, title }: { value?: number; played: boolean; t
 function TeamRow({ team, showStats }: { team: GroupTeam; showStats: boolean }) {
   const played = (team.played ?? 0) > 0;
   return (
-    <li className="flex items-center gap-3">
+    <li className="flex items-center gap-2.5 sm:gap-3">
       <span
         className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-display text-xs ${
           team.qualifies
@@ -50,7 +50,7 @@ function TeamRow({ team, showStats }: { team: GroupTeam; showStats: boolean }) {
         {team.position}
       </span>
       <span
-        className={`min-w-0 flex-1 truncate text-sm ${
+        className={`min-w-0 flex-1 break-words text-sm leading-snug ${
           team.qualifies ? "text-white" : "text-[var(--color-text-muted)]"
         }`}
       >
@@ -92,8 +92,8 @@ function GroupCard({ group: rawGroup }: { group: GroupInfo }) {
   const group = sortByWins(rawGroup);
   const showStats = group.teams.some((t) => t.played !== undefined);
   return (
-    <div className="glass-card rounded-2xl p-5">
-      <div className="mb-4 flex items-center justify-between gap-3">
+    <div className="glass-card rounded-2xl p-4 sm:p-5">
+      <div className="mb-3 flex items-center justify-between gap-3 sm:mb-4">
         <h3 className="font-display uppercase text-sm text-[var(--color-lime)]">{group.name}</h3>
         <StatusPill status={group.status} />
       </div>
@@ -107,22 +107,17 @@ function GroupCard({ group: rawGroup }: { group: GroupInfo }) {
           </span>
         </div>
       )}
-      <ul className="space-y-3">
+      <ul className="space-y-2.5 sm:space-y-3">
         {group.teams.map((t) => (
           <TeamRow key={t.name} team={t} showStats={showStats} />
         ))}
       </ul>
-      {showStats && (
-        <p className="mt-3 text-[11px] text-[var(--color-text-muted)]">
-          J jogos · V vitórias · D derrotas. Ordenado por mais vitórias.
-        </p>
-      )}
       {group.classificationUrl && (
         <a
           href={group.classificationUrl}
           target="_blank"
           rel="noreferrer"
-          className="mt-4 inline-block text-xs text-[var(--color-text-muted)] underline-offset-4 hover:text-white hover:underline"
+          className="-mb-2 mt-2 inline-flex min-h-10 items-center text-xs text-[var(--color-text-muted)] underline-offset-4 hover:text-white hover:underline"
         >
           Classificação completa
         </a>
@@ -142,6 +137,7 @@ export default function TournamentGroups({ category }: { category: CategoryInfo 
 
   const qualifiersPerGroup = category.groups[0].teams.filter((t) => t.qualifies).length;
   const s = category.stats;
+  const hasStats = category.groups.some((g) => g.teams.some((t) => t.played !== undefined));
 
   return (
     <div>
@@ -152,6 +148,7 @@ export default function TournamentGroups({ category }: { category: CategoryInfo 
             <span className="inline-block h-2 w-2 rounded-full bg-[var(--color-lime)] align-middle" />.{" "}
           </>
         )}
+        {hasStats && <>J jogos, V vitórias, D derrotas; ordenado por mais vitórias. </>}
         {s && (
           <>
             Nesta categoria: {s.terminado} jogo{s.terminado === 1 ? "" : "s"} terminado

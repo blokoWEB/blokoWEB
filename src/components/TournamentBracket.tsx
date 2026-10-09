@@ -29,14 +29,13 @@ function MatchCard({ match }: { match: BracketMatch }) {
           return (
             <div key={side} className="flex items-center justify-between gap-2">
               <span
-                className={`min-w-0 truncate text-xs ${
+                className={`min-w-0 break-words text-xs leading-snug ${
                   placeholder
                     ? "italic text-[var(--color-text-muted)]"
                     : won
                       ? "font-semibold text-white"
                       : "text-white/90"
                 }`}
-                title={name}
               >
                 {shortName(name)}
               </span>
@@ -71,7 +70,7 @@ export default function TournamentBracket({ category }: { category: CategoryInfo
       <div className="no-scrollbar -mx-4 snap-x snap-mandatory overflow-x-auto px-4 pb-3 sm:mx-0 sm:px-0">
         <div className="flex gap-4 sm:gap-5">
           {category.rounds.map((round) => (
-            <div key={round.name} className="w-[16.5rem] shrink-0 snap-start scroll-ml-4 sm:w-60">
+            <div key={round.name} className="w-[18rem] shrink-0 snap-start scroll-ml-4 sm:w-60">
               <p className="mb-3 border-b border-white/10 pb-2 font-display text-xs uppercase tracking-wide text-[var(--color-lime)]">
                 {round.name}
               </p>

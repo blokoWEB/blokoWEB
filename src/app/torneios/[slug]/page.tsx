@@ -102,10 +102,10 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
             )}
 
             <div>
-              <p className="text-[var(--color-text-muted)] mb-6">{tournament.summary}</p>
+              <p className="hidden sm:block text-[var(--color-text-muted)] mb-6">{tournament.summary}</p>
 
               {tournament.details && tournament.details.length > 0 && (
-                <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2 mb-8">
+                <ul className="hidden sm:grid sm:grid-cols-2 gap-x-6 gap-y-2 mb-8">
                   {tournament.details.map((d) => (
                     <li
                       key={d}
@@ -119,7 +119,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
               )}
 
               {stats && (
-                <div className="glass-card rounded-2xl p-6 mb-8">
+                <div className="glass-card rounded-2xl p-6 sm:mb-8">
                   <p className="flex items-center gap-2 font-display uppercase text-xs text-[var(--color-lime)] mb-4">
                     <BarChart3 size={15} /> Inscrições em tempo real
                   </p>
@@ -152,7 +152,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
                 </div>
               )}
 
-              <div className="flex flex-wrap gap-3">
+              <div className="hidden sm:flex flex-wrap gap-3">
                 {tournament.registerUrl && (
                   <a
                     href={tournament.registerUrl}

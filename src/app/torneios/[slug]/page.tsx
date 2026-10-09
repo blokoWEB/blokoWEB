@@ -218,22 +218,21 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
               Jogos, grupos e quadro
             </h2>
           </ScrollReveal>
-          <ScrollReveal delay={0.1}>
-            <TournamentCompetition slug={tournament.slug} initial={schedule} />
-            {tournament.padelteamsStatsUrl && (
-              <p className="mt-8 text-sm text-[var(--color-text-muted)]">
-                Consulte os dados completos em:{" "}
-                <a
-                  href={tournament.padelteamsStatsUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1 text-[var(--color-lime)] hover:underline"
-                >
-                  PadelTeams <ExternalLink size={13} />
-                </a>
-              </p>
-            )}
-          </ScrollReveal>
+          {/* Sem animação de entrada neste bloco: é muito alto e deslizava 40 px enquanto se fazia scroll. */}
+          <TournamentCompetition slug={tournament.slug} initial={schedule} />
+          {tournament.padelteamsStatsUrl && (
+            <p className="mt-8 text-sm text-[var(--color-text-muted)]">
+              Consulte os dados completos em:{" "}
+              <a
+                href={tournament.padelteamsStatsUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-[var(--color-lime)] hover:underline"
+              >
+                PadelTeams <ExternalLink size={13} />
+              </a>
+            </p>
+          )}
         </section>
       )}
 

@@ -48,7 +48,6 @@ export default function ParallaxDive({
         style={{
           scale,
           opacity,
-          filter,
           backgroundImage: `url(${image})`,
           backgroundPosition: mobilePosition,
           backgroundSize: mobileSize,

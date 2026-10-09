@@ -67,7 +67,29 @@ function TeamRow({ team, showStats }: { team: GroupTeam; showStats: boolean }) {
   );
 }
 
-function GroupCard({ group }: { group: GroupInfo }) {
+/**
+ * Ordena as duplas por mais vitórias (depois menos derrotas, diferença de jogos e a ordem da PadelTeams).
+ * Os lugares de apuramento mantêm-se em número, mas passam para as primeiras duplas desta ordem.
+ */
+function sortByWins(group: GroupInfo): GroupInfo {
+  if (!group.teams.some((t) => t.played !== undefined)) return group;
+  const qualifiers = group.teams.filter((t) => t.qualifies).length;
+  const diff = (t: GroupTeam) => (t.gamesFor ?? 0) - (t.gamesAgainst ?? 0);
+  const sorted = group.teams
+    .map((team, index) => ({ team, index }))
+    .sort(
+      (a, b) =>
+        (b.team.won ?? 0) - (a.team.won ?? 0) ||
+        (a.team.lost ?? 0) - (b.team.lost ?? 0) ||
+        diff(b.team) - diff(a.team) ||
+        a.index - b.index
+    )
+    .map(({ team }, i) => ({ ...team, position: i + 1, qualifies: i < qualifiers }));
+  return { ...group, teams: sorted };
+}
+
+function GroupCard({ group: rawGroup }: { group: GroupInfo }) {
+  const group = sortByWins(rawGroup);
   const showStats = group.teams.some((t) => t.played !== undefined);
   return (
     <div className="glass-card rounded-2xl p-5">
@@ -92,7 +114,7 @@ function GroupCard({ group }: { group: GroupInfo }) {
       </ul>
       {showStats && (
         <p className="mt-3 text-[11px] text-[var(--color-text-muted)]">
-          J jogos · V vitórias · D derrotas
+          J jogos · V vitórias · D derrotas. Ordenado por mais vitórias.
         </p>
       )}
       {group.classificationUrl && (

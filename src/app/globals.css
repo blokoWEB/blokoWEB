@@ -77,6 +77,16 @@ body {
   backdrop-filter: blur(14px);
 }
 
+/* Em telemóvel, dezenas de cartões com backdrop-filter obrigam a repintar o desfoque a cada frame do scroll
+   (dá a sensação de saltos). O fundo já é quase opaco, por isso o desfoque nem se nota. O cabeçalho fixo
+   e os botões flutuantes ficam de fora (estão fora do <main>). */
+@media (max-width: 767px) {
+  main .glass-card {
+    backdrop-filter: none;
+    background: linear-gradient(160deg, rgba(16, 21, 29, 0.96), rgba(12, 16, 22, 0.9));
+  }
+}
+
 .glow-lime {
   box-shadow: 0 0 0 1px rgba(169, 200, 30, 0.25), 0 0 40px -8px rgba(169, 200, 30, 0.45);
 }

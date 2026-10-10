@@ -72,6 +72,7 @@ export default function TournamentCompetition({
   // Atualização automática: de 30 em 30 s nos dias do torneio, de 5 em 5 min antes de começar, e nada depois de acabar.
   const first = initial.days[0]?.date;
   const last = initial.days[initial.days.length - 1]?.date;
+  const initialUpdatedAt = initial.updatedAt;
   useEffect(() => {
     if (!first || !last) return;
 
@@ -82,7 +83,14 @@ export default function TournamentCompetition({
     }
 
     // Fora do corpo síncrono do efeito: o intervalo depende da data do navegador.
-    const first0 = setTimeout(() => setPollMs(computeInterval()), 0);
+    // Os dados que vêm com a página podem ter minutos (página guardada): atualiza logo ao abrir.
+    const first0 = setTimeout(() => {
+      const interval = computeInterval();
+      setPollMs(interval);
+      if (interval !== null && Date.now() - new Date(initialUpdatedAt).getTime() > 15_000) {
+        refresh();
+      }
+    }, 0);
     const onVisible = () => {
       if (document.visibilityState === "visible") {
         const interval = computeInterval();
@@ -95,7 +103,7 @@ export default function TournamentCompetition({
       clearTimeout(first0);
       document.removeEventListener("visibilitychange", onVisible);
     };
-  }, [first, last, refresh]);
+  }, [first, last, initialUpdatedAt, refresh]);
 
   useEffect(() => {
     if (pollMs === null) return;

@@ -141,6 +141,7 @@ export function parseChannelPage(html: string, now = Date.now()): YoutubeVideo[]
 
     const ageMs = relativeAgeMs(texts);
     const liveish =
+      /"badgeStyle":"THUMBNAIL_OVERLAY_BADGE_STYLE_LIVE"/.test(entry) ||
       texts.some((t) => /a assistir|em direto|ao vivo|estreia/i.test(t)) ||
       badges.some((b) => /direto|ao vivo|live/i.test(b));
     // Sem data relativa só interessa se parecer um direto (a decorrer ou marcado).
@@ -156,14 +157,28 @@ export function parseChannelPage(html: string, now = Date.now()): YoutubeVideo[]
   });
 }
 
-let channelPageCache: { at: number; videos: YoutubeVideo[] } | null = null;
-const CHANNEL_PAGE_CACHE_MS = 60_000;
+/** Ids dos vídeos que a página do canal marca como "em direto" (selo LIVE na miniatura). */
+export function parseChannelLiveIds(html: string): Set<string> {
+  const starts = [...html.matchAll(/"richItemRenderer":\{"content":\{"lockupViewModel":\{/g)].map(
+    (m) => m.index!
+  );
+  const ids = new Set<string>();
+  starts.forEach((start, i) => {
+    const entry = html.slice(start, starts[i + 1] ?? start + 20_000);
+    const id = entry.match(/"contentId":"([\w-]{11})"/)?.[1];
+    if (id && /"badgeStyle":"THUMBNAIL_OVERLAY_BADGE_STYLE_LIVE"/.test(entry)) ids.add(id);
+  });
+  return ids;
+}
 
-async function fetchVideosFromChannelPage(): Promise<YoutubeVideo[]> {
+type ChannelPageData = { at: number; videos: YoutubeVideo[]; liveIds: Set<string> };
+let channelPageCache: ChannelPageData | null = null;
+const CHANNEL_PAGE_CACHE_MS = 30_000;
+
+/** Página do canal (vídeos + diretos), em cache 30 s na memória; se falhar usa a última boa. */
+async function loadChannelPage(): Promise<ChannelPageData | null> {
   const now = Date.now();
-  if (channelPageCache && now - channelPageCache.at < CHANNEL_PAGE_CACHE_MS) {
-    return channelPageCache.videos;
-  }
+  if (channelPageCache && now - channelPageCache.at < CHANNEL_PAGE_CACHE_MS) return channelPageCache;
   try {
     const res = await fetch(`https://www.youtube.com/channel/${YOUTUBE_CHANNEL_ID}/videos`, {
       // ~1,3 MB: não vai para a cache de dados do Next; guarda-se em memória acima.
@@ -171,14 +186,19 @@ async function fetchVideosFromChannelPage(): Promise<YoutubeVideo[]> {
       headers: BROWSER_HEADERS,
       signal: AbortSignal.timeout(10_000),
     });
-    if (!res.ok) return channelPageCache?.videos ?? [];
-    const videos = parseChannelPage(await res.text(), now);
-    if (videos.length === 0) return channelPageCache?.videos ?? [];
-    channelPageCache = { at: now, videos };
-    return videos;
+    if (!res.ok) return channelPageCache;
+    const html = await res.text();
+    const videos = parseChannelPage(html, now);
+    if (videos.length === 0) return channelPageCache;
+    channelPageCache = { at: now, videos, liveIds: parseChannelLiveIds(html) };
+    return channelPageCache;
   } catch {
-    return channelPageCache?.videos ?? [];
+    return channelPageCache;
   }
+}
+
+async function fetchVideosFromChannelPage(): Promise<YoutubeVideo[]> {
+  return (await loadChannelPage())?.videos ?? [];
 }
 
 /**
@@ -238,6 +258,14 @@ export async function detectLive(candidates: YoutubeVideo[]): Promise<YoutubeVid
     .filter((v) => now - new Date(v.published).getTime() < LIVE_WINDOW_MS)
     .slice(0, 8);
   if (recent.length === 0) return [];
+
+  // Fonte principal: o selo LIVE da página do canal (as páginas dos vídeos nem sempre respondem
+  // à Vercel). Se a página não marcar nenhum direto, confirma-se vídeo a vídeo, como antes.
+  const channel = await loadChannelPage();
+  if (channel && channel.liveIds.size > 0) {
+    const fromChannel = recent.filter((v) => channel.liveIds.has(v.id));
+    if (fromChannel.length > 0) return fromChannel;
+  }
 
   const key = recent.map((v) => v.id).join(",");
   if (liveCache && liveCache.key === key && now - liveCache.at < LIVE_CACHE_MS) {

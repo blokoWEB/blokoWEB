@@ -494,9 +494,6 @@ export const upcomingTournaments: TournamentEntry[] = [
     summary: "+600€ em prémios, categorias M3 a M6, F6 e Mistos.",
     details: [
       "Categorias: M3, M4, M5, M6, F6 e MX",
-      "Inscrições até 28 de setembro: 1ª categoria 20€, 2ª categoria 15€",
-      "Inscrições após 28 de setembro: 1ª categoria 22€, 2ª categoria 15€",
-      "Data limite de inscrições: 7 de outubro",
       "Welcome kit incluído",
       "Fase de grupos + eliminatórias — melhor de 3 sets, com super tie-break no 3º (exceto finais)",
     ],

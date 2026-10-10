@@ -52,6 +52,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
     : null;
 
   const schedule = await getTournamentSchedule(tournament);
+  const hasCompetition = !!(tournament.padelteamsCid && schedule);
 
   // A parte do YouTube (diretos + últimos vídeos) só aparece enquanto o torneio está a decorrer.
   const phase = tournamentPhase(tournamentDates(tournament));
@@ -165,11 +166,10 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
                     Inscrever <ArrowRight size={15} />
                   </a>
                 )}
-                {tournament.resultsUrl && (
+                {(hasCompetition || tournament.resultsUrl) && (
                   <a
-                    href={tournament.resultsUrl}
-                    target="_blank"
-                    rel="noreferrer"
+                    href={hasCompetition ? "#competicao" : tournament.resultsUrl}
+                    {...(hasCompetition ? {} : { target: "_blank", rel: "noreferrer" })}
                     className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
                   >
                     <Trophy size={15} /> Ver Resultados
@@ -210,7 +210,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
         </nav>
       )}
 
-      {tournament.padelteamsCid && schedule && (
+      {hasCompetition && schedule && (
         <section id="competicao" className="container-bloko scroll-mt-40 py-12 sm:py-20">
           <ScrollReveal className="max-w-2xl mb-10">
             <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">

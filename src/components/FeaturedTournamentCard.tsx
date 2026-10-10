@@ -74,6 +74,14 @@ export default function FeaturedTournamentCard({ tournament }: { tournament: Tou
               <Users size={15} /> Encontrar Parceiro
             </a>
           )}
+          {tournament.hasDetailPage && tournament.padelteamsCid && registrationClosed && (
+            <Link
+              href={`/torneios/${tournament.slug}#competicao`}
+              className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
+            >
+              <Trophy size={15} /> Ver Resultados
+            </Link>
+          )}
           {tournament.hasDetailPage && (
             <Link
               href={`/torneios/${tournament.slug}`}

@@ -210,8 +210,17 @@ export function parseDaySchedule(html: string): ScheduleCourt[] {
         status = "scheduled";
         const parts = schedMatch[1].split("<br>").map((s) => stripTags(s));
         const rawTime = parts[parts.length - 1] ?? "";
-        // A PadelTeams guarda 00:00–06:59 em jogos ainda sem hora real (eliminatórias por sortear)
-        tbd = /^\d{2}:\d{2}$/.test(rawTime) && rawTime < "07:00";
+        // A PadelTeams guarda 00:00–06:59 em eliminatórias ainda sem hora real (equipas por sortear,
+        // "2º Grupo A", "(a determinar)"). Jogos de grupo com equipas reais a essa hora são mesmo
+        // jogos depois da meia-noite (o torneio estende-se pela madrugada), por isso mantêm a hora.
+        const phase = groupMatch ? stripTags(groupMatch[1]) : "";
+        const placeholderTeam = teamMatches.slice(0, 2).some((t) => {
+          const name = stripTags(t[2]);
+          return /^\(a determinar\)$/i.test(name) || /^\d+º\s+grupo\b/i.test(name);
+        });
+        const knockout = /^\d+\/\d+$/.test(phase) || /final|meia/i.test(phase);
+        tbd =
+          /^\d{2}:\d{2}$/.test(rawTime) && rawTime < "07:00" && (placeholderTeam || knockout);
         time = tbd ? "A definir" : rawTime;
       } else if (sets.length > 0 || winner) {
         status = "finished";

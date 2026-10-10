@@ -491,7 +491,7 @@ export const upcomingTournaments: TournamentEntry[] = [
     name: "Torneio Social",
     dates: "9, 10 e 11 de Outubro de 2026",
     tag: "Com o apoio Carlsberg",
-    summary: "+600€ em prémios, categorias M3 a M6, F6 e Mistos. Inscrições abertas.",
+    summary: "+600€ em prémios, categorias M3 a M6, F6 e Mistos.",
     details: [
       "Categorias: M3, M4, M5, M6, F6 e MX",
       "Inscrições até 28 de setembro: 1ª categoria 20€, 2ª categoria 15€",

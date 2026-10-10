@@ -54,7 +54,9 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
   const schedule = await getTournamentSchedule(tournament);
 
   // A parte do YouTube (diretos + últimos vídeos) só aparece enquanto o torneio está a decorrer.
-  const ongoing = tournamentPhase(tournamentDates(tournament)) === "a-decorrer";
+  const phase = tournamentPhase(tournamentDates(tournament));
+  const ongoing = phase === "a-decorrer";
+  const registrationClosed = ongoing || phase === "terminado";
   const showYoutube = ongoing && !!tournament.youtubeFilter;
   const ytVideos = showYoutube
     ? await fetchLatestVideos({ limit: 3, filter: tournament.youtubeFilter })
@@ -153,7 +155,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
               )}
 
               <div className="hidden sm:flex flex-wrap gap-3">
-                {tournament.registerUrl && (
+                {tournament.registerUrl && !registrationClosed && (
                   <a
                     href={tournament.registerUrl}
                     target="_blank"
@@ -173,7 +175,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
                     <Trophy size={15} /> Ver Resultados
                   </a>
                 )}
-                {tournament.partnerUrl && (
+                {tournament.partnerUrl && !registrationClosed && (
                   <a
                     href={tournament.partnerUrl}
                     target="_blank"

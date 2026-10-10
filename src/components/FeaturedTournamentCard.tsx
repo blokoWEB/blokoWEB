@@ -8,6 +8,7 @@ import { tournamentDates, tournamentPhase } from "@/lib/tournament-status";
 export default function FeaturedTournamentCard({ tournament }: { tournament: TournamentEntry }) {
   const dates = tournamentDates(tournament);
   const phase = tournamentPhase(dates);
+  const registrationClosed = phase === "a-decorrer" || phase === "terminado";
 
   return (
     <div className="glass-card rounded-2xl overflow-hidden flex flex-col md:flex-row">
@@ -53,7 +54,7 @@ export default function FeaturedTournamentCard({ tournament }: { tournament: Tou
         )}
 
         <div className="flex flex-wrap gap-3">
-          {tournament.registerUrl && (
+          {tournament.registerUrl && !registrationClosed && (
             <a
               href={tournament.registerUrl}
               target="_blank"
@@ -63,7 +64,7 @@ export default function FeaturedTournamentCard({ tournament }: { tournament: Tou
               Inscrever <ArrowRight size={15} />
             </a>
           )}
-          {tournament.partnerUrl && (
+          {tournament.partnerUrl && !registrationClosed && (
             <a
               href={tournament.partnerUrl}
               target="_blank"

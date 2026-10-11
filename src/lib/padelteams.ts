@@ -352,6 +352,11 @@ function encodeK(params: string): string {
   return encodeURIComponent(Buffer.from(params).toString("base64"));
 }
 
+/** "Atleta 1 <span class='force-line-break'></span> Atleta 2" → "Atleta 1 / Atleta 2". */
+function bracketTeamName(html: string): string {
+  return stripTags(html.replace(/<span[^>]*force-line-break[^>]*>\s*<\/span>/g, " / "));
+}
+
 /** Lê a página de uma categoria: grupos (com posições) e quadro de eliminatórias. */
 export function parseCategoryPage(html: string): {
   options: { tid: string; name: string; selected: boolean }[];
@@ -396,7 +401,9 @@ export function parseCategoryPage(html: string): {
   const byPrefix = new Map<number, BracketMatch[]>();
   for (const block of matchBlocks) {
     const code = block.match(/<div class="text-bold p-0">\s*([\d.]+)\s*<\/div>/)?.[1];
-    const teamEls = [...block.matchAll(/<span class="team-name([^"]*)">([\s\S]*?)<\/span>/g)];
+    // Cada dupla vem como `Atleta 1 <span class='force-line-break'></span> Atleta 2` (span dentro de
+    // span), por isso o span exterior fecha mesmo antes do `</div>`.
+    const teamEls = [...block.matchAll(/<span class="team-name([^"]*)">([\s\S]*?)<\/span>\s*<\/div>/g)];
     if (!code || teamEls.length < 2) continue;
     const prefix = Number(code.split(".")[0]);
     const winner: 1 | 2 | undefined = /\bwinner\b/.test(teamEls[0][1])
@@ -407,8 +414,8 @@ export function parseCategoryPage(html: string): {
     const arr = byPrefix.get(prefix) ?? [];
     arr.push({
       code,
-      team1: stripTags(teamEls[0][2]),
-      team2: stripTags(teamEls[1][2]),
+      team1: bracketTeamName(teamEls[0][2]),
+      team2: bracketTeamName(teamEls[1][2]),
       sets: parseSets(block),
       winner,
     });

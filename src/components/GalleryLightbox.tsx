@@ -143,6 +143,9 @@ export default function GalleryLightbox({
           images={images}
           index={selected}
           title={title}
+          hasMore={hasMore}
+          loading={loading}
+          onNeedMore={() => loadMore(images.length)}
           onBack={() => setSelected(null)}
           onNavigate={setSelected}
         />
@@ -152,23 +155,96 @@ export default function GalleryLightbox({
   );
 }
 
+const SWIPE_THRESHOLD = 60;
+
 function SinglePhotoView({
   images,
   index,
   title,
+  hasMore,
+  loading,
+  onNeedMore,
   onBack,
   onNavigate,
 }: {
   images: GalleryImage[];
   index: number;
   title: string;
+  hasMore: boolean;
+  loading: boolean;
+  onNeedMore: () => void;
   onBack: () => void;
   onNavigate: (i: number) => void;
 }) {
   const img = images[index];
+  const touch = useRef<{ x: number; y: number; horizontal: boolean; dx: number } | null>(null);
+  const [dx, setDx] = useState(0);
+
+  const hasPrev = index > 0;
+  const hasNext = index < images.length - 1;
+
+  // Perto do fim das fotos já carregadas, vai buscar as seguintes (a galeria vem de 24 em 24).
+  useEffect(() => {
+    if (hasMore && !loading && index >= images.length - 3) onNeedMore();
+  }, [hasMore, loading, index, images.length, onNeedMore]);
+
+  // Pré-carrega a foto seguinte para o gesto de deslizar ser instantâneo.
+  useEffect(() => {
+    const next = images[index + 1];
+    if (next) new Image().src = next.full;
+  }, [images, index]);
+
+  // Setas do teclado no computador.
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "ArrowLeft" && hasPrev) onNavigate(index - 1);
+      if (e.key === "ArrowRight" && hasNext) onNavigate(index + 1);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [index, hasPrev, hasNext, onNavigate]);
+
+  function onTouchStart(e: React.TouchEvent) {
+    if (e.touches.length !== 1) {
+      touch.current = null;
+      return;
+    }
+    const t = e.touches[0];
+    touch.current = { x: t.clientX, y: t.clientY, horizontal: false, dx: 0 };
+  }
+
+  function onTouchMove(e: React.TouchEvent) {
+    const start = touch.current;
+    if (!start || e.touches.length !== 1) return;
+    const t = e.touches[0];
+    const mx = t.clientX - start.x;
+    const my = t.clientY - start.y;
+    if (!start.horizontal && Math.abs(mx) > 10 && Math.abs(mx) > Math.abs(my)) start.horizontal = true;
+    if (!start.horizontal) return;
+    // Na primeira/última foto o dedo "puxa" com resistência em vez de ir até ao fim.
+    const blocked = (mx > 0 && !hasPrev) || (mx < 0 && !hasNext);
+    start.dx = mx;
+    setDx(blocked ? mx / 4 : mx);
+  }
+
+  function onTouchEnd() {
+    const start = touch.current;
+    touch.current = null;
+    setDx(0);
+    if (!start?.horizontal) return;
+    if (start.dx <= -SWIPE_THRESHOLD && hasNext) onNavigate(index + 1);
+    else if (start.dx >= SWIPE_THRESHOLD && hasPrev) onNavigate(index - 1);
+  }
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center relative px-4 py-4 min-h-0">
+    <div
+      className="flex-1 flex flex-col items-center justify-center relative px-4 py-4 min-h-0"
+      style={{ touchAction: "pan-y pinch-zoom" }}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+      onTouchCancel={onTouchEnd}
+    >
       <button
         onClick={onBack}
         className="absolute top-4 left-4 font-display uppercase text-xs tracking-wide text-white/70 hover:text-white"
@@ -176,7 +252,7 @@ function SinglePhotoView({
         ← Voltar à galeria
       </button>
 
-      {index > 0 && (
+      {hasPrev && (
         <button
           onClick={() => onNavigate(index - 1)}
           aria-label="Foto anterior"
@@ -185,7 +261,7 @@ function SinglePhotoView({
           <ChevronLeft size={28} />
         </button>
       )}
-      {index < images.length - 1 && (
+      {hasNext && (
         <button
           onClick={() => onNavigate(index + 1)}
           aria-label="Foto seguinte"
@@ -199,7 +275,12 @@ function SinglePhotoView({
       <img
         src={img.full}
         alt={`${title} — foto ${index + 1}`}
-        className="max-w-full max-h-[75vh] object-contain rounded-lg"
+        draggable={false}
+        style={{
+          transform: `translateX(${dx}px)`,
+          transition: dx === 0 ? "transform 0.2s ease-out" : "none",
+        }}
+        className="max-w-full max-h-[75vh] object-contain rounded-lg select-none"
       />
 
       <a

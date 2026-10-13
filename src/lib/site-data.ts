@@ -437,6 +437,8 @@ export type TournamentDay = {
   gallerySlug: string;
   /** Data ISO (YYYY-MM-DD) deste dia, para ir buscar o cronograma à PadelTeams. */
   date?: string;
+  /** true = dia só com jogos, sem fotos: não aparece nos separadores da galeria. */
+  noGallery?: boolean;
 };
 
 export type TournamentWinner = {
@@ -503,7 +505,7 @@ export const upcomingTournaments: TournamentEntry[] = [
     partnerUrl: site.whatsappCommunityUrl,
     hasDetailPage: true,
     days: [
-      { label: "Quinta-feira, 8 de Outubro", gallerySlug: "dia-0", date: "2026-10-08" },
+      { label: "Quinta-feira, 8 de Outubro", gallerySlug: "dia-0", date: "2026-10-08", noGallery: true },
       { label: "Sexta-feira, 9 de Outubro", gallerySlug: "dia-1", date: "2026-10-09" },
       { label: "Sábado, 10 de Outubro", gallerySlug: "dia-2", date: "2026-10-10" },
       { label: "Domingo, 11 de Outubro", gallerySlug: "dia-3", date: "2026-10-11" },

@@ -7,6 +7,7 @@ import {
   BarChart3,
   CheckCircle2,
   ExternalLink,
+  Images,
   PlayCircle,
   Trophy,
   Users,
@@ -59,6 +60,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
   const ongoing = phase === "a-decorrer";
   const registrationClosed = ongoing || phase === "terminado";
   const showYoutube = ongoing && !!tournament.youtubeFilter;
+  const galleryDays = (tournament.days ?? []).filter((d) => !d.noGallery);
   const ytVideos = showYoutube
     ? await fetchLatestVideos({ limit: 3, filter: tournament.youtubeFilter })
     : [];
@@ -66,7 +68,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
   const sections = [
     tournament.padelteamsCid && schedule ? { id: "competicao", label: "Jogos e grupos" } : null,
     showYoutube ? { id: "diretos", label: "Diretos" } : null,
-    tournament.days && tournament.days.length > 0 ? { id: "galeria", label: "Fotos" } : null,
+    galleryDays.length > 0 ? { id: "galeria", label: "Fotos" } : null,
     { id: "vencedores", label: "Vencedores" },
   ].filter((s): s is { id: string; label: string } => s !== null);
 
@@ -175,6 +177,14 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
                     <Trophy size={15} /> Ver Resultados
                   </a>
                 )}
+                {galleryDays.length > 0 && (
+                  <a
+                    href="#galeria"
+                    className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+                  >
+                    <Images size={15} /> Ver Fotos
+                  </a>
+                )}
                 {tournament.partnerUrl && !registrationClosed && (
                   <a
                     href={tournament.partnerUrl}
@@ -253,7 +263,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
         </div>
       )}
 
-      {tournament.days && tournament.days.length > 0 && (
+      {galleryDays.length > 0 && (
         <section id="galeria" className="scroll-mt-40 bg-[var(--color-bg-elevated)] py-12 sm:py-20">
           <div className="container-bloko">
             <ScrollReveal className="max-w-2xl mb-10">
@@ -268,7 +278,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
               <TournamentGallerySection
                 slug={tournament.slug}
                 title={tournament.name}
-                days={tournament.days}
+                days={galleryDays}
               />
             </ScrollReveal>
           </div>

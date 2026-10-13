@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Trophy, Users } from "lucide-react";
+import { ArrowRight, CheckCircle2, Images, Trophy, Users } from "lucide-react";
 import type { TournamentEntry } from "@/lib/site-data";
 import TournamentStatusBadge from "@/components/TournamentStatusBadge";
 import { tournamentDates, tournamentPhase } from "@/lib/tournament-status";
@@ -80,6 +80,14 @@ export default function FeaturedTournamentCard({ tournament }: { tournament: Tou
               className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full bg-[var(--color-lime)] text-black glow-lime hover:bg-[var(--color-lime-soft)] transition-colors"
             >
               <Trophy size={15} /> Ver Resultados
+            </Link>
+          )}
+          {tournament.hasDetailPage && tournament.days?.some((d) => !d.noGallery) && (
+            <Link
+              href={`/torneios/${tournament.slug}#galeria`}
+              className="inline-flex items-center gap-2 font-display uppercase tracking-wide px-6 py-3.5 rounded-full border border-white/20 text-white hover:border-[var(--color-lime)] hover:text-[var(--color-lime)] transition-colors"
+            >
+              <Images size={15} /> Ver Fotos
             </Link>
           )}
           {tournament.hasDetailPage && (

@@ -87,11 +87,40 @@ export default function GalleryLightbox({
     return () => observer.disconnect();
   }, [open, selected, hasMore, loading, images.length, loadMore]);
 
+  // Com a galeria aberta a página de trás não deve mexer (em iOS o overflow:hidden não chega,
+  // por isso fixa-se o body no sítio atual e repõe-se o scroll ao fechar).
+  useEffect(() => {
+    if (!open) return;
+    const { body, documentElement } = document;
+    const scrollY = window.scrollY;
+    const scrollbar = window.innerWidth - documentElement.clientWidth;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+      overflow: body.style.overflow,
+      paddingRight: body.style.paddingRight,
+    };
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
+    if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
+    return () => {
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.width = prev.width;
+      body.style.overflow = prev.overflow;
+      body.style.paddingRight = prev.paddingRight;
+      window.scrollTo({ top: scrollY, behavior: "instant" });
+    };
+  }, [open]);
+
   if (!open) return null;
 
   return (
     <Portal>
-    <div className="fixed inset-0 z-[80] bg-black/90 backdrop-blur-sm flex flex-col">
+    <div className="fixed inset-0 z-[80] bg-black/90 backdrop-blur-sm flex flex-col overscroll-contain">
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
         <h3 className="font-display uppercase text-sm text-white truncate pr-4">
           Galeria — {title}
@@ -107,7 +136,7 @@ export default function GalleryLightbox({
       </div>
 
       {selected === null ? (
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6">
           {loadedOnce && images.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center text-[var(--color-text-muted)] py-20">
               <ImageOff size={28} className="mb-4" />
@@ -239,7 +268,7 @@ function SinglePhotoView({
   return (
     <div
       className="flex-1 flex flex-col items-center justify-center relative px-4 py-4 min-h-0"
-      style={{ touchAction: "pan-y pinch-zoom" }}
+      style={{ touchAction: "pinch-zoom" }}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}

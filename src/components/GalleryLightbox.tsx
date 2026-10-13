@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Download, ImageOff, Loader2, X } from "lucide-react";
 import Portal from "./Portal";
 
@@ -33,6 +33,14 @@ export default function GalleryLightbox({
   const [loadedOnce, setLoadedOnce] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  // Última foto vista, para a grelha voltar a esse ponto quando se volta da vista de uma foto.
+  const lastViewed = useRef<number | null>(null);
+
+  function selectPhoto(i: number | null) {
+    if (i !== null) lastViewed.current = i;
+    setSelected(i);
+  }
 
   const loadMore = useCallback(
     async (offset: number) => {
@@ -59,6 +67,7 @@ export default function GalleryLightbox({
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
+    lastViewed.current = null;
     (async () => {
       setImages([]);
       setHasMore(true);
@@ -86,6 +95,14 @@ export default function GalleryLightbox({
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, [open, selected, hasMore, loading, images.length, loadMore]);
+
+  // Ao voltar da vista de uma foto, a grelha (que fica montada, só escondida) centra a última foto vista.
+  useLayoutEffect(() => {
+    if (!open || selected !== null || lastViewed.current === null) return;
+    gridRef.current
+      ?.querySelector<HTMLElement>(`[data-index="${lastViewed.current}"]`)
+      ?.scrollIntoView({ block: "center", behavior: "instant" });
+  }, [open, selected]);
 
   // Com a galeria aberta a página de trás não deve mexer (em iOS o overflow:hidden não chega,
   // por isso fixa-se o body no sítio atual e repõe-se o scroll ao fechar).
@@ -135,8 +152,11 @@ export default function GalleryLightbox({
         </button>
       </div>
 
-      {selected === null ? (
-        <div className="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6">
+      {/* A grelha fica sempre montada (escondida na vista de uma foto) para não perder o scroll. */}
+      <div
+        ref={gridRef}
+        className={`flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6 ${selected === null ? "" : "hidden"}`}
+      >
           {loadedOnce && images.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center text-[var(--color-text-muted)] py-20">
               <ImageOff size={28} className="mb-4" />
@@ -148,7 +168,8 @@ export default function GalleryLightbox({
                 {images.map((img, i) => (
                   <button
                     key={img.name}
-                    onClick={() => setSelected(i)}
+                    data-index={i}
+                    onClick={() => selectPhoto(i)}
                     className="relative aspect-square rounded-lg overflow-hidden bg-white/5 group"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -166,8 +187,9 @@ export default function GalleryLightbox({
               </div>
             </>
           )}
-        </div>
-      ) : (
+      </div>
+
+      {selected !== null && (
         <SinglePhotoView
           images={images}
           index={selected}
@@ -175,8 +197,8 @@ export default function GalleryLightbox({
           hasMore={hasMore}
           loading={loading}
           onNeedMore={() => loadMore(images.length)}
-          onBack={() => setSelected(null)}
-          onNavigate={setSelected}
+          onBack={() => selectPhoto(null)}
+          onNavigate={selectPhoto}
         />
       )}
     </div>

@@ -22,6 +22,35 @@ export default function TournamentGallerySection({
   const [previews, setPreviews] = useState<Record<string, PreviewImage[]>>({});
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
+  // Links diretos a um dia: ".../torneio-social-outubro-2026#galeria-dia-2" abre a galeria nesse dia.
+  useEffect(() => {
+    function dayFromHash(): string | null {
+      const m = window.location.hash.match(/^#galeria-(.+)$/);
+      return m && days.some((d) => d.gallerySlug === m[1]) ? m[1] : null;
+    }
+    function goToDay() {
+      const day = dayFromHash();
+      if (!day) return;
+      setActiveDay(day);
+      document.getElementById("galeria")?.scrollIntoView({ block: "start", behavior: "instant" });
+    }
+    // Fora do corpo síncrono do efeito; repete uma vez porque o layout acima ainda pode mexer.
+    const first = setTimeout(goToDay, 0);
+    const second = setTimeout(goToDay, 900);
+    window.addEventListener("hashchange", goToDay);
+    return () => {
+      clearTimeout(first);
+      clearTimeout(second);
+      window.removeEventListener("hashchange", goToDay);
+    };
+  }, [days]);
+
+  function selectDay(slug: string) {
+    setActiveDay(slug);
+    // Mantém o endereço do browser com o dia escolhido, para se poder copiar e partilhar.
+    window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}#galeria-${slug}`);
+  }
+
   useEffect(() => {
     if (!activeDay || previews[activeDay]) return;
     let cancelled = false;
@@ -48,7 +77,7 @@ export default function TournamentGallerySection({
         {days.map((d) => (
           <button
             key={d.gallerySlug}
-            onClick={() => setActiveDay(d.gallerySlug)}
+            onClick={() => selectDay(d.gallerySlug)}
             className={`font-display uppercase text-xs tracking-wide px-5 py-2.5 rounded-full border transition-colors ${
               activeDay === d.gallerySlug
                 ? "bg-[var(--color-lime)] text-black border-[var(--color-lime)]"

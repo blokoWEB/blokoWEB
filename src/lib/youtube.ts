@@ -211,7 +211,9 @@ export async function fetchLatestVideos(opts?: {
   filter?: string;
 }): Promise<YoutubeVideo[]> {
   const limit = opts?.limit ?? 6;
-  const fromRss = await fetchVideosFromRss();
+  // O RSS só traz os 15 mais recentes; para listas maiores (ex.: todos os jogos de um torneio)
+  // usa-se a página do canal, que traz cerca de 30.
+  const fromRss = limit > 15 ? [] : await fetchVideosFromRss();
   const all = fromRss.length > 0 ? fromRss : await fetchVideosFromChannelPage();
 
   all.sort((x, y) => new Date(y.published).getTime() - new Date(x.published).getTime());

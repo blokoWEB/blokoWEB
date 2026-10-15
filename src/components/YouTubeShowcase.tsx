@@ -15,7 +15,7 @@ function formatDate(iso: string): string {
   });
 }
 
-function VideoCard({
+export function VideoCard({
   video,
   live,
   playing,

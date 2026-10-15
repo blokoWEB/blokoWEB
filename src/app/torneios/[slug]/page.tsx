@@ -18,6 +18,7 @@ import TournamentGallerySection from "@/components/TournamentGallerySection";
 import TournamentCompetition from "@/components/TournamentCompetition";
 import { pageMetadata } from "@/lib/seo";
 import YouTubeShowcase from "@/components/YouTubeShowcase";
+import TournamentReplays from "@/components/TournamentReplays";
 import { fetchPadelteamsStats } from "@/lib/padelteams";
 import { fetchLatestVideos, youtubeChannelUrl, youtubeLiveUrl } from "@/lib/youtube";
 import { allTournaments, getTournamentSchedule } from "@/lib/tournament-schedule";
@@ -55,7 +56,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
   const schedule = await getTournamentSchedule(tournament);
   const hasCompetition = !!(tournament.padelteamsCid && schedule);
 
-  // A parte do YouTube (diretos + últimos vídeos) só aparece enquanto o torneio está a decorrer.
+  // Enquanto o torneio decorre: diretos + últimos vídeos. Depois de terminar: as finais e a lista de todos os jogos.
   const phase = tournamentPhase(tournamentDates(tournament));
   const ongoing = phase === "a-decorrer";
   const finished = phase === "terminado";
@@ -66,9 +67,31 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
     ? await fetchLatestVideos({ limit: 3, filter: tournament.youtubeFilter })
     : [];
 
+  const replayVideos =
+    finished && tournament.youtubeFilter
+      ? await fetchLatestVideos({ limit: 60, filter: tournament.youtubeFilter })
+      : [];
+  // "Final M3", "Final F6"…, na ordem das categorias do torneio.
+  const CATEGORY_ORDER = ["m3", "m4", "m5", "m6", "f6", "mx", "x6"];
+  const categoryRank = (title: string) => {
+    const c = title.match(/final\s+([a-z]\d)/i)?.[1]?.toLowerCase();
+    const i = c ? CATEGORY_ORDER.indexOf(c) : -1;
+    return i < 0 ? 99 : i;
+  };
+  const finalVideos = replayVideos
+    .filter((v) => /\bfinal\b/i.test(v.title))
+    .sort((a, b) => categoryRank(a.title) - categoryRank(b.title));
+  // Todos os jogos, do primeiro dia para o último (a lista do canal vem do mais recente para o mais antigo).
+  const allGames = [...replayVideos].reverse();
+  const showReplays = replayVideos.length > 0;
+  const searchUrl = `${youtubeChannelUrl}/search?query=${encodeURIComponent(
+    tournament.youtubeFilter ?? tournament.name
+  )}`;
+
   const sections = [
     tournament.padelteamsCid && schedule ? { id: "competicao", label: "Jogos e grupos" } : null,
     showYoutube ? { id: "diretos", label: "Diretos" } : null,
+    showReplays ? { id: "videos", label: "Vídeos" } : null,
     galleryDays.length > 0 ? { id: "galeria", label: "Fotos" } : null,
     { id: "vencedores", label: "Finalistas" },
   ].filter((s): s is { id: string; label: string } => s !== null);
@@ -267,6 +290,19 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
             sectionClassName="bg-[var(--color-bg-elevated)] py-12 sm:py-20"
           />
         </div>
+      )}
+
+      {showReplays && (
+        <section id="videos" className="scroll-mt-40 bg-[var(--color-bg-elevated)] py-12 sm:py-20">
+          <div className="container-bloko">
+            <TournamentReplays
+              finals={finalVideos}
+              all={allGames}
+              channelUrl={youtubeChannelUrl}
+              searchUrl={searchUrl}
+            />
+          </div>
+        </section>
       )}
 
       {galleryDays.length > 0 && (

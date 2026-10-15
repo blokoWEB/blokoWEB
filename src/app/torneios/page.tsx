@@ -7,6 +7,7 @@ import TournamentCard from "@/components/TournamentCard";
 import {
   nonstopRegulamento,
   pastTournaments,
+  site,
   tournamentFormats,
   upcomingTournaments,
 } from "@/lib/site-data";
@@ -92,19 +93,43 @@ export default function TorneiosPage() {
               Próximos torneios
             </h2>
           </ScrollReveal>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {upcomingTournaments.map((t, i) => (
-              <ScrollReveal key={t.slug} delay={i * 0.08}>
-                <TournamentCard tournament={t} />
-              </ScrollReveal>
-            ))}
-          </div>
-          <ScrollReveal delay={0.15}>
-            <p className="text-xs text-[var(--color-text-muted)] mt-8 max-w-xl">
-              A agenda de Torneios Sociais é anunciada com antecedência nos grupos de WhatsApp —
-              vê abaixo como entrar.
-            </p>
-          </ScrollReveal>
+          {upcomingTournaments.length > 0 ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {upcomingTournaments.map((t, i) => (
+                <ScrollReveal key={t.slug} delay={i * 0.08}>
+                  <TournamentCard tournament={t} />
+                </ScrollReveal>
+              ))}
+            </div>
+          ) : (
+            <ScrollReveal>
+              <div className="glass-card rounded-2xl p-8 max-w-2xl">
+                <p className="font-display uppercase text-sm text-[var(--color-lime)] mb-2">
+                  Próximo torneio em breve
+                </p>
+                <p className="text-sm text-[var(--color-text-muted)] mb-5">
+                  Ainda não há data marcada. O próximo Torneio Social é anunciado nos grupos de
+                  WhatsApp do clube — entra para não perderes as inscrições.
+                </p>
+                <a
+                  href={site.whatsappCommunityUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 font-display uppercase text-xs tracking-wide px-6 py-3 rounded-full bg-[var(--color-lime)] text-black hover:bg-[var(--color-lime-soft)] transition-colors"
+                >
+                  Entrar na Comunidade <ArrowRight size={14} />
+                </a>
+              </div>
+            </ScrollReveal>
+          )}
+          {upcomingTournaments.length > 0 && (
+            <ScrollReveal delay={0.15}>
+              <p className="text-xs text-[var(--color-text-muted)] mt-8 max-w-xl">
+                A agenda de Torneios Sociais é anunciada com antecedência nos grupos de WhatsApp —
+                vê abaixo como entrar.
+              </p>
+            </ScrollReveal>
+          )}
         </div>
       </section>
 

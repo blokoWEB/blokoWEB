@@ -8,7 +8,7 @@ import {
 } from "@/lib/tournament-status";
 
 /**
- * Selo "Brevemente" / "A decorrer" de um torneio. O servidor calcula o estado inicial e o navegador
+ * Selo "Brevemente" / "A decorrer" / "Terminado" de um torneio. O servidor calcula o estado inicial e o navegador
  * volta a calculá-lo, para a página não ficar com um selo desatualizado quando o torneio começa.
  */
 export default function TournamentStatusBadge({
@@ -23,9 +23,20 @@ export default function TournamentStatusBadge({
   const [phase, setPhase] = useState<TournamentPhase | null>(initialPhase);
 
   useEffect(() => {
-    setPhase(tournamentPhase(dates));
+    // Fora do corpo síncrono do efeito: o estado depende da data do navegador.
+    const id = setTimeout(() => setPhase(tournamentPhase(dates)), 0);
+    return () => clearTimeout(id);
   }, [dates]);
 
+  if (phase === "terminado") {
+    return (
+      <span
+        className={`inline-flex items-center gap-1.5 font-display uppercase tracking-wide rounded-full border border-white/25 bg-black/50 text-white backdrop-blur-sm ${className}`}
+      >
+        Terminado
+      </span>
+    );
+  }
   if (phase !== "brevemente" && phase !== "a-decorrer") return null;
 
   return (

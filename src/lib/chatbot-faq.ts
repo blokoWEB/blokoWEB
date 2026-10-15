@@ -381,7 +381,11 @@ export const faq: FaqEntry[] = [
     answer:
       upcomingTournaments.length > 0
         ? `O próximo Torneio Social é o ${upcomingTournaments[0].name}, marcado para ${upcomingTournaments[0].dates}. ${upcomingTournaments[0].summary} Temos também Nonstops semanais, todas as semanas.`
-        : `Temos Nonstops semanais e Torneios Sociais várias vezes por ano. As datas são anunciadas nos grupos de WhatsApp do clube.`,
+        : `Temos Nonstops semanais e Torneios Sociais várias vezes por ano. As datas são anunciadas nos grupos de WhatsApp do clube.${
+            pastTournaments.find((t) => t.hasDetailPage)
+              ? ` O último foi o Torneio Social Carlsberg (${pastTournaments.find((t) => t.hasDetailPage)!.dates}) — vê os resultados, as fotos e os finalistas em Padel > Torneios > Torneio Carlsberg.`
+              : ""
+          }`,
     prompt: `Já jogaste algum? Vais adorar a energia!`,
     link: { url: site.whatsappCommunityUrl, label: "Entrar na Comunidade" },
   },

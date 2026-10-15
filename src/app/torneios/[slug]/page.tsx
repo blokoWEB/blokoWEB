@@ -58,7 +58,8 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
   // A parte do YouTube (diretos + últimos vídeos) só aparece enquanto o torneio está a decorrer.
   const phase = tournamentPhase(tournamentDates(tournament));
   const ongoing = phase === "a-decorrer";
-  const registrationClosed = ongoing || phase === "terminado";
+  const finished = phase === "terminado";
+  const registrationClosed = ongoing || finished;
   const showYoutube = ongoing && !!tournament.youtubeFilter;
   const galleryDays = (tournament.days ?? []).filter((d) => !d.noGallery);
   const ytVideos = showYoutube
@@ -69,7 +70,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
     tournament.padelteamsCid && schedule ? { id: "competicao", label: "Jogos e grupos" } : null,
     showYoutube ? { id: "diretos", label: "Diretos" } : null,
     galleryDays.length > 0 ? { id: "galeria", label: "Fotos" } : null,
-    { id: "vencedores", label: "Vencedores" },
+    { id: "vencedores", label: "Finalistas" },
   ].filter((s): s is { id: string; label: string } => s !== null);
 
   return (
@@ -82,6 +83,11 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
           {tournament.name}
         </h1>
         <p className="mt-6 max-w-xl text-white/70">{tournament.dates}</p>
+        {finished && (
+          <span className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 font-display text-xs uppercase tracking-wide text-white backdrop-blur-sm">
+            <Trophy size={14} className="text-[var(--color-lime)]" /> Torneio terminado
+          </span>
+        )}
       </ParallaxDive>
 
       <section className="container-bloko py-24">
@@ -126,7 +132,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
               {stats && (
                 <div className="glass-card rounded-2xl p-6 sm:mb-8">
                   <p className="flex items-center gap-2 font-display uppercase text-xs text-[var(--color-lime)] mb-4">
-                    <BarChart3 size={15} /> Inscrições em tempo real
+                    <BarChart3 size={15} /> {finished ? "O torneio em números" : "Inscrições em tempo real"}
                   </p>
                   <div className="grid grid-cols-3 gap-4">
                     {stats.categorias !== undefined && (
@@ -290,13 +296,13 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
           <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
             Pódio
           </p>
-          <h2 className="font-display font-bold text-3xl md:text-4xl uppercase">Vencedores</h2>
+          <h2 className="font-display font-bold text-3xl md:text-4xl uppercase">Finalistas</h2>
         </ScrollReveal>
 
         {tournament.winners && tournament.winners.length > 0 && tournament.winners.every((w) => w.poster) ? (
           <ScrollReveal>
             <p className="mb-3 text-xs text-[var(--color-text-muted)] md:hidden">
-              Desliza para ver todos os vencedores.
+              Desliza para ver todos os finalistas.
             </p>
             <div className="no-scrollbar -mx-6 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 pb-3 md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 md:pb-0 lg:grid-cols-4">
               {tournament.winners.map((w) => (
@@ -324,7 +330,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
                 <div className="glass-card rounded-2xl overflow-hidden h-full">
                   {w.photo ? (
                     <div className="relative aspect-[4/3]">
-                      <Image src={w.photo} alt={`Vencedores ${w.category}`} fill className="object-cover" />
+                      <Image src={w.photo} alt={`Finalistas ${w.category}`} fill className="object-cover" />
                     </div>
                   ) : (
                     <div className="aspect-[4/3] flex items-center justify-center bg-white/5">
@@ -348,7 +354,7 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
           </div>
         ) : (
           <div className="glass-card rounded-2xl p-10 text-center text-[var(--color-text-muted)]">
-            Vencedores em breve. Volta depois do torneio.
+            Finalistas em breve. Volta depois do torneio.
           </div>
         )}
       </section>

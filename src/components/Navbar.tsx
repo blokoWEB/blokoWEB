@@ -66,8 +66,11 @@ export default function Navbar() {
                       <Link
                         key={sub.href}
                         href={sub.href}
-                        className="block px-4 py-3 rounded-xl text-xs text-[var(--color-text-muted)] hover:text-[var(--color-lime)] hover:bg-white/5 transition-colors normal-case tracking-normal"
+                        className={`block py-3 rounded-xl text-xs text-[var(--color-text-muted)] hover:text-[var(--color-lime)] hover:bg-white/5 transition-colors normal-case tracking-normal ${
+                          sub.nested ? "pl-9 pr-4" : "px-4"
+                        }`}
                       >
+                        {sub.nested && <span className="mr-1.5 text-[var(--color-lime)]/70">↳</span>}
                         {sub.label}
                       </Link>
                     ))}
@@ -154,8 +157,11 @@ export default function Navbar() {
                           <Link
                             href={sub.href}
                             onClick={() => setOpen(false)}
-                            className="block py-2.5 text-sm normal-case tracking-normal text-[var(--color-text-muted)]"
+                            className={`block py-2.5 text-sm normal-case tracking-normal text-[var(--color-text-muted)] ${
+                              sub.nested ? "pl-5" : ""
+                            }`}
                           >
+                            {sub.nested && <span className="mr-1.5 text-[var(--color-lime)]/70">↳</span>}
                             {sub.label}
                           </Link>
                         </li>

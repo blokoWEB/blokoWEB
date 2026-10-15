@@ -7,6 +7,7 @@ import FeaturedTournamentCard from "@/components/FeaturedTournamentCard";
 import {
   classTypes,
   padelFeatures,
+  pastTournaments,
   site,
   tournamentFormats,
   upcomingTournaments,
@@ -14,6 +15,13 @@ import {
 } from "@/lib/site-data";
 
 const gymClasses = classTypes.filter((c) => c.category === "ginasio");
+
+// Sem torneios marcados, a homepage destaca o último que já tem página própria (resultados, fotos).
+const featuredTournaments =
+  upcomingTournaments.length > 0
+    ? upcomingTournaments
+    : pastTournaments.filter((t) => t.hasDetailPage).slice(0, 1);
+const featuredIsUpcoming = upcomingTournaments.length > 0;
 
 export default function Home() {
   return (
@@ -270,20 +278,20 @@ export default function Home() {
         </div>
       </ParallaxDive>
 
-      {/* PRÓXIMOS TORNEIOS */}
-      {upcomingTournaments.length > 0 && (
+      {/* PRÓXIMOS TORNEIOS (ou o último torneio, se não houver nenhum marcado) */}
+      {featuredTournaments.length > 0 && (
         <section className="bg-[var(--color-bg-elevated)] py-24 glow-lime">
           <div className="container-bloko">
             <ScrollReveal className="max-w-2xl mb-14 text-center mx-auto">
               <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-lime)] mb-4">
-                Agenda
+                {featuredIsUpcoming ? "Agenda" : "Resultados"}
               </p>
               <h2 className="font-display font-bold text-3xl md:text-4xl uppercase">
-                Próximos Torneios
+                {featuredIsUpcoming ? "Próximos Torneios" : "Último Torneio"}
               </h2>
             </ScrollReveal>
             <div className="flex flex-col gap-6 max-w-5xl mx-auto">
-              {upcomingTournaments.map((t, i) => (
+              {featuredTournaments.map((t, i) => (
                 <ScrollReveal key={t.slug} delay={i * 0.08}>
                   <FeaturedTournamentCard tournament={t} />
                 </ScrollReveal>

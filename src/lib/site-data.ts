@@ -38,7 +38,8 @@ export const site = {
 export type NavLink = {
   href: string;
   label: string;
-  submenu: { href: string; label: string }[];
+  /** `nested`: item que pertence ao item anterior do submenu (mostra-se recuado). */
+  submenu: { href: string; label: string; nested?: boolean }[];
   icon?: string;
 };
 
@@ -67,6 +68,7 @@ export const navLinks: NavLink[] = [
       { href: "/padel/aulas", label: "Aulas de Padel" },
       { href: "/academia", label: "Academia BLOKO" },
       { href: "/torneios", label: "Torneios" },
+      { href: "/torneios/torneio-social-outubro-2026", label: "Torneio Carlsberg", nested: true },
       { href: "/padel/precario", label: "Preçário" },
     ],
   },
@@ -475,7 +477,7 @@ export type TournamentEntry = {
   hasDetailPage?: boolean;
   /** Dias com galeria separada (só para torneios com hasDetailPage). */
   days?: TournamentDay[];
-  /** Vencedores por categoria — undefined/vazio mostra "Vencedores em breve". */
+  /** Finalistas por categoria (1.º e 2.º lugar) — undefined/vazio mostra "Finalistas em breve". */
   winners?: TournamentWinner[];
   /** Vídeos de stream no YouTube (lista fixa). */
   youtube?: { id: string; title: string }[];
@@ -491,53 +493,55 @@ export type TournamentEntry = {
 
 // Torneios Sociais — os grandes eventos do clube, 3 a 4 por ano.
 // Datas/resultados de próximos eventos são anunciados no grupo de WhatsApp.
-export const upcomingTournaments: TournamentEntry[] = [
-  {
-    slug: "torneio-social-outubro-2026",
-    name: "Torneio Social",
-    dates: "9, 10 e 11 de Outubro de 2026",
-    tag: "Com o apoio Carlsberg",
-    summary: "+600€ em prémios, categorias M3 a M6, F6 e Mistos.",
-    details: [
-      "Categorias: M3, M4, M5, M6, F6 e MX",
-      "Welcome kit incluído",
-      "Fase de grupos + eliminatórias — melhor de 3 sets, com super tie-break no 3º (exceto finais)",
-    ],
-    poster: "/images/posters/poster-torneio-social-outubro-2026.webp",
-    comingSoon: true,
-    registerUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
-    partnerUrl: site.whatsappCommunityUrl,
-    hasDetailPage: true,
-    days: [
-      { label: "Quinta-feira, 8 de Outubro", gallerySlug: "dia-0", date: "2026-10-08", noGallery: true },
-      { label: "Sexta-feira, 9 de Outubro", gallerySlug: "dia-1", date: "2026-10-09" },
-      { label: "Sábado, 10 de Outubro", gallerySlug: "dia-2", date: "2026-10-10" },
-      { label: "Domingo, 11 de Outubro", gallerySlug: "dia-3", date: "2026-10-11" },
-    ],
-    resultsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
-    padelteamsStatsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
-    padelteamsCid: "7544",
-    youtubeFilter: "torneio social",
-    winners: [
-      { category: "M3", place: 1, players: "João Matos / Luis Pisco", poster: "/images/winners/torneio-social-outubro-2026/m3-1.webp" },
-      { category: "M3", place: 2, players: "Diogo Macedo / Fábio Sobral", poster: "/images/winners/torneio-social-outubro-2026/m3-2.webp" },
-      { category: "M4", place: 1, players: "Francisco Neto / Bebeto", poster: "/images/winners/torneio-social-outubro-2026/m4-1.webp" },
-      { category: "M4", place: 2, players: "João Machado / Francisco", poster: "/images/winners/torneio-social-outubro-2026/m4-2.webp" },
-      { category: "M5", place: 1, players: "Eduardo Preto / Pedro Oura", poster: "/images/winners/torneio-social-outubro-2026/m5-1.webp" },
-      { category: "M5", place: 2, players: "Nelson Torres / André Félix", poster: "/images/winners/torneio-social-outubro-2026/m5-2.webp" },
-      { category: "M6", place: 1, players: "Tó Macedo / Miguel Santos", poster: "/images/winners/torneio-social-outubro-2026/m6-1.webp" },
-      { category: "M6", place: 2, players: "Artur Gonçalves / Hugo Trigo", poster: "/images/winners/torneio-social-outubro-2026/m6-2.webp" },
-      { category: "F6", place: 1, players: "Alexandra Pisco / Francisca", poster: "/images/winners/torneio-social-outubro-2026/f6-1.webp" },
-      { category: "F6", place: 2, players: "Lidia Alves / Willemijn Leeuwen", poster: "/images/winners/torneio-social-outubro-2026/f6-2.webp" },
-      { category: "MX", place: 1, players: "Lara Bastos / Manu Gomes", poster: "/images/winners/torneio-social-outubro-2026/mx-1.webp" },
-      { category: "MX", place: 2, players: "Catarina Costa / Pedro Ribeiro", poster: "/images/winners/torneio-social-outubro-2026/mx-2.webp" },
-    ],
-  },
-];
+// Torneio Social de Outubro 2026 (terminado): aparece em "anteriores"; a página própria
+// (/torneios/torneio-social-outubro-2026) mantém resultados, fotos e finalistas.
+const torneioSocialOutubro2026: TournamentEntry = {
+  slug: "torneio-social-outubro-2026",
+  name: "Torneio Social",
+  dates: "9, 10 e 11 de Outubro de 2026",
+  tag: "Com o apoio Carlsberg",
+  summary: "+600€ em prémios, categorias M3 a M6, F6 e Mistos.",
+  details: [
+    "Categorias: M3, M4, M5, M6, F6 e MX",
+    "Welcome kit incluído",
+    "Fase de grupos + eliminatórias — melhor de 3 sets, com super tie-break no 3º (exceto finais)",
+  ],
+  poster: "/images/posters/poster-torneio-social-outubro-2026.webp",
+  registerUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
+  partnerUrl: site.whatsappCommunityUrl,
+  hasDetailPage: true,
+  days: [
+    { label: "Quinta-feira, 8 de Outubro", gallerySlug: "dia-0", date: "2026-10-08", noGallery: true },
+    { label: "Sexta-feira, 9 de Outubro", gallerySlug: "dia-1", date: "2026-10-09" },
+    { label: "Sábado, 10 de Outubro", gallerySlug: "dia-2", date: "2026-10-10" },
+    { label: "Domingo, 11 de Outubro", gallerySlug: "dia-3", date: "2026-10-11" },
+  ],
+  resultsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
+  padelteamsStatsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
+  padelteamsCid: "7544",
+  youtubeFilter: "torneio social",
+  winners: [
+    { category: "M3", place: 1, players: "João Matos / Luis Pisco", poster: "/images/winners/torneio-social-outubro-2026/m3-1.webp" },
+    { category: "M3", place: 2, players: "Diogo Macedo / Fábio Sobral", poster: "/images/winners/torneio-social-outubro-2026/m3-2.webp" },
+    { category: "M4", place: 1, players: "Francisco Neto / Bebeto", poster: "/images/winners/torneio-social-outubro-2026/m4-1.webp" },
+    { category: "M4", place: 2, players: "João Machado / Francisco", poster: "/images/winners/torneio-social-outubro-2026/m4-2.webp" },
+    { category: "M5", place: 1, players: "Eduardo Preto / Pedro Oura", poster: "/images/winners/torneio-social-outubro-2026/m5-1.webp" },
+    { category: "M5", place: 2, players: "Nelson Torres / André Félix", poster: "/images/winners/torneio-social-outubro-2026/m5-2.webp" },
+    { category: "M6", place: 1, players: "Tó Macedo / Miguel Santos", poster: "/images/winners/torneio-social-outubro-2026/m6-1.webp" },
+    { category: "M6", place: 2, players: "Artur Gonçalves / Hugo Trigo", poster: "/images/winners/torneio-social-outubro-2026/m6-2.webp" },
+    { category: "F6", place: 1, players: "Alexandra Pisco / Francisca", poster: "/images/winners/torneio-social-outubro-2026/f6-1.webp" },
+    { category: "F6", place: 2, players: "Lidia Alves / Willemijn Leeuwen", poster: "/images/winners/torneio-social-outubro-2026/f6-2.webp" },
+    { category: "MX", place: 1, players: "Lara Bastos / Manu Gomes", poster: "/images/winners/torneio-social-outubro-2026/mx-1.webp" },
+    { category: "MX", place: 2, players: "Catarina Costa / Pedro Ribeiro", poster: "/images/winners/torneio-social-outubro-2026/mx-2.webp" },
+  ],
+};
+
+export const upcomingTournaments: TournamentEntry[] = [];
 
 // Torneios Sociais já realizados — nomes reais dos eventos do clube.
 // Ordenados do mais recente para o mais antigo.
 export const pastTournaments: TournamentEntry[] = [
+  torneioSocialOutubro2026,
   {
     slug: "big-padel-masters-ii",
     name: "Big Padel Masters II",

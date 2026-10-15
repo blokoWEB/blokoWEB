@@ -43,3 +43,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# originais das fotos reduzidas por scripts/optimize-images.js
+/.imagens-originais/

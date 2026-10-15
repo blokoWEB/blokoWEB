@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "audit:images": "node scripts/audit-site-images.js",
+    "optimize:images": "node scripts/optimize-images.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",

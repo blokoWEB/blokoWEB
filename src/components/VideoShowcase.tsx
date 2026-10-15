@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { optimizedImageUrl } from "@/lib/images";
 
 export default function VideoShowcase({ src, poster }: { src: string; poster?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,7 +44,7 @@ export default function VideoShowcase({ src, poster }: { src: string; poster?: s
         playsInline
         controls
         preload="metadata"
-        poster={poster}
+        poster={poster ? optimizedImageUrl(poster, 750) : undefined}
         className="w-full h-full object-cover"
       >
         <source src={src} type="video/mp4" />

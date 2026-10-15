@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import type { ReactNode } from "react";
+import { optimizedImageUrl } from "@/lib/images";
 
 /**
  * Full-viewport section that "dives" as the user scrolls past it:
@@ -42,20 +43,25 @@ export default function ParallaxDive({
   const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const filter = useTransform(blur, (b) => `blur(${b}px)`);
 
+  // Fundo CSS não passa pelo next/image: pede-se ao otimizador (webp, na largura certa) em vez do
+  // ficheiro original. Em telemóvel com recorte ampliado ("auto 170%") precisa de mais pixéis.
+  const mobileImage = optimizedImageUrl(image, mobileSize === "cover" ? 1080 : 1920);
+  const desktopImage = optimizedImageUrl(image, 1920);
+
   return (
     <section ref={ref} className="relative h-[100svh] overflow-hidden bg-[var(--color-bg)]">
       <motion.div
         style={{
           scale,
           opacity,
-          backgroundImage: `url(${image})`,
+          backgroundImage: `url("${mobileImage}")`,
           backgroundPosition: mobilePosition,
           backgroundSize: mobileSize,
         }}
         className="absolute inset-0 sm:hidden"
       />
       <motion.div
-        style={{ scale, opacity, filter, backgroundImage: `url(${image})` }}
+        style={{ scale, opacity, filter, backgroundImage: `url("${desktopImage}")` }}
         className="absolute inset-0 bg-cover bg-center hidden sm:block"
       />
       {overlay && (

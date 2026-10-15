@@ -293,7 +293,31 @@ export default async function TournamentDetailPage({ params }: PageProps<"/torne
           <h2 className="font-display font-bold text-3xl md:text-4xl uppercase">Vencedores</h2>
         </ScrollReveal>
 
-        {tournament.winners && tournament.winners.length > 0 ? (
+        {tournament.winners && tournament.winners.length > 0 && tournament.winners.every((w) => w.poster) ? (
+          <ScrollReveal>
+            <p className="mb-3 text-xs text-[var(--color-text-muted)] md:hidden">
+              Desliza para ver todos os vencedores.
+            </p>
+            <div className="no-scrollbar -mx-6 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 pb-3 md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 md:pb-0 lg:grid-cols-4">
+              {tournament.winners.map((w) => (
+                <div
+                  key={`${w.category}-${w.place}`}
+                  className="w-[78vw] max-w-[20rem] shrink-0 snap-center md:w-auto md:max-w-none"
+                >
+                  <div className="glass-card relative aspect-[4/5] overflow-hidden rounded-2xl">
+                    <Image
+                      src={w.poster!}
+                      alt={`${w.category}${w.place ? ` — ${w.place}º lugar` : ""}: ${w.players}`}
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 78vw"
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ScrollReveal>
+        ) : tournament.winners && tournament.winners.length > 0 ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {tournament.winners.map((w) => (
               <ScrollReveal key={w.category}>

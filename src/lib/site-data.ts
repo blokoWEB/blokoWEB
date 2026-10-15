@@ -443,7 +443,11 @@ export type TournamentDay = {
 
 export type TournamentWinner = {
   category: string;
+  /** 1 ou 2 (só usado no texto alternativo do cartaz). */
+  place?: 1 | 2;
   players: string;
+  /** Cartaz do pódio já com lugar, categoria e nomes: nesse caso mostra-se só a imagem. */
+  poster?: string;
   /** URL/caminho completo, mesma convenção do campo "poster". */
   photo?: string;
   sponsor?: string;
@@ -514,6 +518,20 @@ export const upcomingTournaments: TournamentEntry[] = [
     padelteamsStatsUrl: "https://padelteams.pt/info/competition?k=Y2lkPTc1NDQ%3D",
     padelteamsCid: "7544",
     youtubeFilter: "torneio social",
+    winners: [
+      { category: "M3", place: 1, players: "João Matos / Luis Pisco", poster: "/images/winners/torneio-social-outubro-2026/m3-1.webp" },
+      { category: "M3", place: 2, players: "Diogo Macedo / Fábio Sobral", poster: "/images/winners/torneio-social-outubro-2026/m3-2.webp" },
+      { category: "M4", place: 1, players: "Francisco Neto / Bebeto", poster: "/images/winners/torneio-social-outubro-2026/m4-1.webp" },
+      { category: "M4", place: 2, players: "João Machado / Francisco", poster: "/images/winners/torneio-social-outubro-2026/m4-2.webp" },
+      { category: "M5", place: 1, players: "Eduardo Preto / Pedro Oura", poster: "/images/winners/torneio-social-outubro-2026/m5-1.webp" },
+      { category: "M5", place: 2, players: "Nelson Torres / André Félix", poster: "/images/winners/torneio-social-outubro-2026/m5-2.webp" },
+      { category: "M6", place: 1, players: "Tó Macedo / Miguel Santos", poster: "/images/winners/torneio-social-outubro-2026/m6-1.webp" },
+      { category: "M6", place: 2, players: "Artur Gonçalves / Hugo Trigo", poster: "/images/winners/torneio-social-outubro-2026/m6-2.webp" },
+      { category: "F6", place: 1, players: "Alexandra Pisco / Francisca", poster: "/images/winners/torneio-social-outubro-2026/f6-1.webp" },
+      { category: "F6", place: 2, players: "Lidia Alves / Willemijn Leeuwen", poster: "/images/winners/torneio-social-outubro-2026/f6-2.webp" },
+      { category: "MX", place: 1, players: "Lara Bastos / Manu Gomes", poster: "/images/winners/torneio-social-outubro-2026/mx-1.webp" },
+      { category: "MX", place: 2, players: "Catarina Costa / Pedro Ribeiro", poster: "/images/winners/torneio-social-outubro-2026/mx-2.webp" },
+    ],
   },
 ];
 

@@ -16,6 +16,7 @@ import {
   X,
 } from "lucide-react";
 import { classCategories, type ClassCategoryKey } from "@/lib/site-data";
+import { dateToLisbonLocalInput, lisbonLocalInputToDate, lisbonWeekday } from "@/lib/lisbon-time";
 import type {
   AcademiaInscricao,
   Booking,
@@ -36,17 +37,9 @@ const weekdayLabels = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 // fluxos (Playtomic/WhatsApp e turmas fixas, respetivamente).
 const adminCategories = classCategories.filter((c) => c.key === "ginasio");
 
+// As horas das aulas são sempre horas de Lisboa, seja qual for o fuso do computador de quem edita.
 function toDatetimeLocal(iso: string) {
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(
-    d.getHours()
-  )}:${pad(d.getMinutes())}`;
-}
-
-function toDateInput(d: Date) {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  return dateToLisbonLocalInput(new Date(iso));
 }
 
 export default function AdminDashboardPage() {
@@ -88,7 +81,7 @@ export default function AdminDashboardPage() {
   );
 
   const availableDays = useMemo(() => {
-    const days = new Set(byCategory.map((s) => new Date(s.starts_at).getDay()));
+    const days = new Set(byCategory.map((s) => lisbonWeekday(s.starts_at)));
     return Array.from(days).sort((a, b) => (a === 0 ? 7 : a) - (b === 0 ? 7 : b));
   }, [byCategory]);
 
@@ -96,7 +89,7 @@ export default function AdminDashboardPage() {
     () =>
       dayFilter === null
         ? byCategory
-        : byCategory.filter((s) => new Date(s.starts_at).getDay() === dayFilter),
+        : byCategory.filter((s) => lisbonWeekday(s.starts_at) === dayFilter),
     [byCategory, dayFilter]
   );
 
@@ -288,6 +281,7 @@ export default function AdminDashboardPage() {
                   <p className="font-display uppercase text-lg mb-1">{s.title}</p>
                   <p className="text-sm text-[var(--color-lime)] mb-1 capitalize">
                     {new Date(s.starts_at).toLocaleString("pt-PT", {
+                      timeZone: "Europe/Lisbon",
                       weekday: "short",
                       day: "2-digit",
                       month: "short",
@@ -461,12 +455,12 @@ function SessionFormModal({
         capacity: Number(capacity),
         location,
         ...(isEditing
-          ? { ...(scope === "series" ? {} : { starts_at: new Date(startsAt).toISOString() }), scope }
+          ? { ...(scope === "series" ? {} : { starts_at: lisbonLocalInputToDate(startsAt).toISOString() }), scope }
           : {
-              starts_at: new Date(startsAt).toISOString(),
+              starts_at: lisbonLocalInputToDate(startsAt).toISOString(),
               ...(recurring &&
                 until && {
-                  recurrence: { every_days: Number(everyDays), until: new Date(until).toISOString() },
+                  recurrence: { every_days: Number(everyDays), until: lisbonLocalInputToDate(`${until}T23:59`).toISOString() },
                 }),
             }),
       };
@@ -648,7 +642,7 @@ function SessionFormModal({
                         <input
                           required={recurring}
                           type="date"
-                          min={startsAt ? toDateInput(new Date(startsAt)) : undefined}
+                          min={startsAt ? startsAt.slice(0, 10) : undefined}
                           value={until}
                           onChange={(e) => setUntil(e.target.value)}
                           className="input"
@@ -732,6 +726,7 @@ function BookingsModal({
         <h3 className="font-display uppercase text-2xl mb-1">{session.title}</h3>
         <p className="text-sm text-[var(--color-text-muted)] mb-6">
           {new Date(session.starts_at).toLocaleString("pt-PT", {
+            timeZone: "Europe/Lisbon",
             weekday: "long",
             day: "2-digit",
             month: "long",

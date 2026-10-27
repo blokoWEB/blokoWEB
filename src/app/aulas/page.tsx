@@ -7,6 +7,7 @@ import Portal from "@/components/Portal";
 import ScrollReveal from "@/components/ScrollReveal";
 import AcademiaLevelPicker from "@/components/AcademiaLevelPicker";
 import { classCategories, site, type ClassCategoryKey } from "@/lib/site-data";
+import { lisbonWeekday } from "@/lib/lisbon-time";
 import type { ClassSessionWithCount } from "@/lib/types";
 
 // Aulas de padel avulsas saíram do sistema de marcação por agora (ver /padel/aulas).
@@ -18,17 +19,17 @@ function isClassCategory(value: string | null): value is ClassCategoryKey {
 
 function formatDay(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleDateString("pt-PT", { weekday: "long", day: "2-digit", month: "long" });
+  return d.toLocaleDateString("pt-PT", { timeZone: "Europe/Lisbon", weekday: "long", day: "2-digit", month: "long" });
 }
 
 function formatDayShort(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleDateString("pt-PT", { weekday: "short", day: "2-digit", month: "short" });
+  return d.toLocaleDateString("pt-PT", { timeZone: "Europe/Lisbon", weekday: "short", day: "2-digit", month: "short" });
 }
 
 function formatTime(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleTimeString("pt-PT", { hour: "2-digit", minute: "2-digit" });
+  return d.toLocaleTimeString("pt-PT", { timeZone: "Europe/Lisbon", hour: "2-digit", minute: "2-digit" });
 }
 
 const weekdayLabels = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -189,7 +190,7 @@ function SessionGroups({
   const [dayFilter, setDayFilter] = useState<number | null>(null);
 
   const availableDays = useMemo(() => {
-    const days = new Set(sessions.map((s) => new Date(s.starts_at).getDay()));
+    const days = new Set(sessions.map((s) => lisbonWeekday(s.starts_at)));
     return Array.from(days).sort((a, b) => (a === 0 ? 7 : a) - (b === 0 ? 7 : b));
   }, [sessions]);
 
@@ -197,7 +198,7 @@ function SessionGroups({
     () =>
       dayFilter === null
         ? sessions
-        : sessions.filter((s) => new Date(s.starts_at).getDay() === dayFilter),
+        : sessions.filter((s) => lisbonWeekday(s.starts_at) === dayFilter),
     [sessions, dayFilter]
   );
 

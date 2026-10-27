@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { isAdminAuthenticated } from "@/lib/session";
+import { recurringStarts } from "@/lib/lisbon-time";
 import type { ClassSession, ClassSessionWithCount } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -102,16 +103,12 @@ export async function POST(request: Request) {
 
   if (isRecurring) {
     const seriesId = randomUUID();
-    const occurrences =
-      Math.floor(
-        (untilDate!.getTime() - startDate.getTime()) / (everyDays * 24 * 60 * 60 * 1000)
-      ) + 1;
-    const rows = Array.from({ length: Math.min(occurrences, 104) }, (_, i) => ({
+    // Todas as aulas da série à mesma hora do relógio de Lisboa, mesmo que a série atravesse a
+    // mudança de hora (somar 24 h fixas fazia as aulas passar a uma hora errada depois de 25/10).
+    const rows = recurringStarts(startDate, everyDays, untilDate!).map((d) => ({
       ...base,
       series_id: seriesId,
-      starts_at: new Date(
-        startDate.getTime() + i * everyDays * 24 * 60 * 60 * 1000
-      ).toISOString(),
+      starts_at: d.toISOString(),
     }));
 
     const { data, error } = await supabase.from("class_sessions").insert(rows).select();

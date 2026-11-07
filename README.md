@@ -38,6 +38,12 @@ cp .env.local.example .env.local
   ```
   e cola o resultado.
 - `ADMIN_SESSION_SECRET` — qualquer string aleatória longa (ex: `openssl rand -hex 32`).
+- `PT_USERNAME` e `PT_PASSWORD_HASH_B64` (opcionais) — login **partilhado dos professores** em `/admin/professores`
+  (só vêem e alteram o calendário de aulas/PTs; o nome que escolhem ao entrar fica no histórico). Usa uma palavra-passe
+  diferente da do admin e gera o hash com:
+  ```bash
+  node scripts/hash-password.mjs "a-password-dos-professores" PT_PASSWORD_HASH_B64
+  ```
 
 ### 4. Correr localmente
 

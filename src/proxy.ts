@@ -10,8 +10,8 @@ export async function proxy(request: NextRequest) {
   let authenticated = false;
   if (token && secret) {
     try {
-      await jwtVerify(token, new TextEncoder().encode(secret));
-      authenticated = true;
+      const { payload } = await jwtVerify(token, new TextEncoder().encode(secret));
+      authenticated = payload.role === "admin"; // o cookie dos professores não abre o painel
     } catch {
       authenticated = false;
     }

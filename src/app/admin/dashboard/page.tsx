@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+  CalendarDays,
   Copy,
   GraduationCap,
   History,
@@ -15,6 +16,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import PtCalendar from "@/components/admin/pt/PtCalendar";
 import { classCategories, type ClassCategoryKey } from "@/lib/site-data";
 import { dateToLisbonLocalInput, lisbonLocalInputToDate, lisbonWeekday } from "@/lib/lisbon-time";
 import type {
@@ -44,7 +46,7 @@ function toDatetimeLocal(iso: string) {
 
 export default function AdminDashboardPage() {
   const router = useRouter();
-  const [view, setView] = useState<"aulas" | "academia" | "experimental">("aulas");
+  const [view, setView] = useState<"aulas" | "pt" | "academia" | "experimental">("aulas");
   const [timeScope, setTimeScope] = useState<"upcoming" | "past">("upcoming");
   const [sessions, setSessions] = useState<ClassSessionWithCount[]>([]);
   const [loading, setLoading] = useState(true);
@@ -121,9 +123,11 @@ export default function AdminDashboardPage() {
             <h1 className="font-display uppercase text-3xl md:text-4xl">
               {view === "aulas"
                 ? "Gestão de aulas"
-                : view === "academia"
-                  ? "Inscrições Academia"
-                  : "Inscrições Aula Experimental"}
+                : view === "pt"
+                  ? "PT & Aulas de Padel"
+                  : view === "academia"
+                    ? "Inscrições Academia"
+                    : "Inscrições Aula Experimental"}
             </h1>
           </div>
           <button
@@ -146,6 +150,16 @@ export default function AdminDashboardPage() {
             Aulas
           </button>
           <button
+            onClick={() => setView("pt")}
+            className={`flex items-center gap-2 font-display uppercase text-xs tracking-wide px-5 py-2.5 rounded-full border transition-colors ${
+              view === "pt"
+                ? "bg-white text-black border-white"
+                : "border-white/15 text-[var(--color-text-muted)] hover:border-white/30 hover:text-white"
+            }`}
+          >
+            <CalendarDays size={14} /> PT & Padel
+          </button>
+          <button
             onClick={() => setView("academia")}
             className={`flex items-center gap-2 font-display uppercase text-xs tracking-wide px-5 py-2.5 rounded-full border transition-colors ${
               view === "academia"
@@ -166,6 +180,8 @@ export default function AdminDashboardPage() {
             <Sparkles size={14} /> Aula Experimental
           </button>
         </div>
+
+        {view === "pt" && <PtCalendar />}
 
         {view === "academia" && <AcademiaInscricoesSection />}
 

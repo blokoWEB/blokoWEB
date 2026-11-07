@@ -5,7 +5,7 @@ export const ADMIN_COOKIE = "bloko_admin_session";
 const SESSION_DURATION_SECONDS = 60 * 60 * 8; // 8h
 const REMEMBER_DURATION_SECONDS = 60 * 60 * 24 * 30; // 30 dias
 
-function getSecret() {
+export function getSecret() {
   const secret = process.env.ADMIN_SESSION_SECRET;
   if (!secret) {
     throw new Error("ADMIN_SESSION_SECRET não está definido em .env.local");
@@ -43,8 +43,10 @@ export async function isAdminAuthenticated(): Promise<boolean> {
   if (!token) return false;
 
   try {
-    await jwtVerify(token, getSecret());
-    return true;
+    // Só vale um cookie de administração: o cookie dos professores usa o mesmo segredo mas outro "role",
+    // e não pode servir (nem copiado à mão para este cookie) para entrar no painel.
+    const { payload } = await jwtVerify(token, getSecret());
+    return payload.role === "admin";
   } catch {
     return false;
   }

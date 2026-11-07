@@ -157,9 +157,16 @@ export default function TeacherPortal(props: Props) {
                 {busy === t.id && <Loader2 className="animate-spin" size={14} />}
               </button>
             ))}
-            {props.teachers.length === 0 && !props.error && (
-              <p className="text-sm text-[var(--color-text-muted)]">Ainda não há professores. Fala com a administração.</p>
-            )}
+            <button
+              disabled={busy !== null}
+              onClick={() => choose("admin")}
+              className="w-full flex items-center gap-3 rounded-xl border border-white/10 px-4 py-3.5 text-left hover:border-[var(--color-lime)]/60 transition-colors disabled:opacity-60"
+            >
+              <span className="h-3 w-3 rounded-full shrink-0 bg-white/70" />
+              <span className="flex-1">Administração</span>
+              <span className="text-xs text-[var(--color-text-muted)]">equipa</span>
+              {busy === "admin" && <Loader2 className="animate-spin" size={14} />}
+            </button>
           </div>
           {(error || props.error) && <p className="text-sm text-red-400 mt-4">{error || props.error}</p>}
           <button onClick={logout} className="mt-6 text-sm text-[var(--color-text-muted)] hover:text-white">

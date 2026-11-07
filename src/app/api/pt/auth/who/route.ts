@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { createPtSessionCookie, getPtSession } from "@/lib/pt-session";
-import { listTeachers } from "@/lib/pt-service";
+import { PT_ACTOR, listTeachers } from "@/lib/pt-service";
+
+/** Valor enviado por quem entra como "Administração" (não é nenhum dos professores). */
+const ADMIN_CHOICE = "admin";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +16,11 @@ export async function POST(request: Request) {
   const { teacher_id } = await request.json().catch(() => ({}));
   if (typeof teacher_id !== "string") {
     return NextResponse.json({ error: "Escolhe o teu nome." }, { status: 400 });
+  }
+
+  if (teacher_id === ADMIN_CHOICE) {
+    await createPtSessionCookie({ name: PT_ACTOR, remember: session.remember });
+    return NextResponse.json({ ok: true, name: PT_ACTOR });
   }
 
   try {

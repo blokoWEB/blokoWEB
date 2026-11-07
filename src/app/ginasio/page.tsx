@@ -1,11 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock } from "lucide-react";
+import BlackFridayOffer from "@/components/BlackFridayOffer";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import VideoShowcase from "@/components/VideoShowcase";
+import { isBlackFridayActive } from "@/lib/promos";
 import { classTypes, site } from "@/lib/site-data";
 import { pageMetadata } from "@/lib/seo";
+
+// A página é gerada de hora a hora: passado o fim da promoção (22 de novembro) a secção Black Friday desaparece.
+export const revalidate = 3600;
 
 export const metadata = pageMetadata({
   title: "Ginásio em Bragança",
@@ -36,6 +41,8 @@ export default function GinasioPage() {
           Ver Preços <ArrowRight size={16} />
         </Link>
       </ParallaxDive>
+
+      {isBlackFridayActive() && <BlackFridayOffer />}
 
       <section className="container-bloko pt-24">
         <ScrollReveal className="max-w-2xl mb-10">

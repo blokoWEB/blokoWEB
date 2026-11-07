@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { ArrowRight, MessageCircle, ShieldCheck, Sparkles, Users } from "lucide-react";
+import BlackFridayBanner from "@/components/BlackFridayBanner";
 import ParallaxDive from "@/components/ParallaxDive";
 import ScrollReveal from "@/components/ScrollReveal";
 import FaqSection from "@/components/FaqSection";
+import { isBlackFridayActive } from "@/lib/promos";
 import {
   gymFamilyPack,
   gymMembership,
@@ -42,6 +44,9 @@ const faqs = [
   },
 ];
 
+// A página é gerada de hora a hora: passado o fim da promoção (22 de novembro) o aviso Black Friday desaparece.
+export const revalidate = 3600;
+
 export const metadata = pageMetadata({
   title: "Preços do Ginásio em Bragança",
   description:
@@ -70,6 +75,7 @@ export default function GinasioPrecarioPage() {
 
       {/* MENSALIDADE */}
       <section className="container-bloko py-24">
+        {isBlackFridayActive() && <BlackFridayBanner />}
         <ScrollReveal className="max-w-2xl mb-14">
           <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
             Mensalidade

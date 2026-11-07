@@ -19,6 +19,8 @@ type Campaign = {
   height: number;
   /** Depois desta data (ms) a campanha deixa de aparecer e passa a seguinte. */
   endsAt?: number;
+  /** Linha por baixo do cartaz, para o que o cartaz não diz (ex.: a inscrição). */
+  caption?: string;
 };
 
 // Aparece a primeira campanha da lista que ainda esteja ativa. Se a pessoa a fechar, não mostramos a seguinte
@@ -32,6 +34,7 @@ const CAMPAIGNS: Campaign[] = [
     width: 800,
     height: 1000,
     endsAt: BLACK_FRIDAY.endsAt,
+    caption: `${BLACK_FRIDAY.yearPriceEur}€ + ${BLACK_FRIDAY.enrollmentEur}€ de inscrição · até ${BLACK_FRIDAY.untilLabel}`,
   },
   {
     key: "aula-experimental-padel",
@@ -119,10 +122,13 @@ export default function CampaignPopup() {
                     width={campaign.width}
                     height={campaign.height}
                     sizes="(max-width: 640px) 92vw, 384px"
-                    className="w-full h-auto max-h-[90vh] object-contain"
+                    className="w-full h-auto max-h-[calc(90vh-2.75rem)] object-contain"
                     priority
                   />
                 </Link>
+                {campaign.caption && (
+                  <p className="bg-[#0c1230] px-4 py-2.5 text-center text-xs font-semibold text-white">{campaign.caption}</p>
+                )}
               </div>
             </motion.div>
           </motion.div>

@@ -7,7 +7,10 @@ import { BLACK_FRIDAY } from "@/lib/promos";
 /** Secção da promoção Black Friday / 2º aniversário na página do ginásio (os valores vêm do cartaz da campanha). */
 export default function BlackFridayOffer() {
   const stats = [
-    { value: `${BLACK_FRIDAY.yearPriceEur}€`, label: "1 ano de ginásio, pagamento único" },
+    {
+      value: `${BLACK_FRIDAY.yearPriceEur}€`,
+      label: `1 ano de ginásio, pagamento único (+ ${BLACK_FRIDAY.enrollmentEur}€ de inscrição)`,
+    },
     { value: `${BLACK_FRIDAY.monthPriceEur}€/mês`, label: "Acesso livre, de segunda a sexta" },
     { value: `${BLACK_FRIDAY.spots} vagas`, label: "Só para novos clientes" },
   ];
@@ -30,7 +33,8 @@ export default function BlackFridayOffer() {
               Ginásio durante <span className="text-gradient-lime">1 ano</span> por {BLACK_FRIDAY.yearPriceEur}€
             </h2>
             <p className="mt-4 max-w-xl text-[var(--color-text-muted)]">
-              Pagamento único: fica a {BLACK_FRIDAY.monthPriceEur}€ por mês, com acesso livre de segunda a sexta.
+              Pagamento único de {BLACK_FRIDAY.yearPriceEur}€, mais {BLACK_FRIDAY.enrollmentEur}€ de inscrição: fica a{" "}
+              {BLACK_FRIDAY.monthPriceEur}€ por mês, com acesso livre de segunda a sexta.
             </p>
 
             <div className="mt-8 grid grid-cols-3 gap-2 sm:gap-3">

@@ -11,6 +11,10 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
     cache: "no-store",
   });
   const data = await res.json().catch(() => ({}));
+  if (res.status === 401 && typeof window !== "undefined") {
+    // Sessão expirada (ex.: ecrã deixado aberto): recarrega para mostrar o login / "Quem és tu?".
+    window.location.reload();
+  }
   if (!res.ok) throw new Error(data.error || "Algo correu mal. Tenta outra vez.");
   return data as T;
 }

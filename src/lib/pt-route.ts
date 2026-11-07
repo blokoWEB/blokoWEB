@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { isAdminAuthenticated } from "@/lib/session";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { getPtSession } from "@/lib/pt-session";
+import { getPtSession, touchPtSession } from "@/lib/pt-session";
 import { PT_ACTOR, PtError } from "@/lib/pt-service";
 import type { PtScope } from "@/lib/pt-types";
 
@@ -35,8 +35,12 @@ async function run(action: Action, actor: string, status: number): Promise<NextR
 export async function withPtUser(action: Action, status = 200): Promise<NextResponse> {
   if (await isAdminAuthenticated()) return run(action, PT_ACTOR, status);
   const teacher = await getPtSession();
-  if (teacher) return run(action, teacher.name ?? "Professor", status);
-  return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
+  if (teacher?.name) {
+    await touchPtSession(teacher); // cada pedido renova a "última atividade"
+    return run(action, teacher.name, status);
+  }
+  // Sem sessão, ou parada tempo demais (tem de escolher quem é outra vez): o ecrã recarrega e mostra o passo certo.
+  return NextResponse.json({ error: "A sessão expirou. Entra ou escolhe quem és outra vez." }, { status: 401 });
 }
 
 /** Só a administração (ex.: gerir professores). */

@@ -4,10 +4,18 @@
  * Área dos professores (/admin/professores): entrar com o login partilhado, dizer quem é e ver/alterar o
  * calendário de aulas e PTs. O nome escolhido fica no histórico de cada alteração.
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Lock, LogOut, UserRound } from "lucide-react";
+import { PT_IDENTITY_IDLE_SECONDS } from "@/lib/pt-idle";
 import PtCalendar from "./PtCalendar";
+
+// Enquanto a pessoa usa o ecrã avisamos o servidor de tempos a tempos (para ele não a dar como parada).
+// Sem mexer durante o tempo de inatividade, recarregamos: o servidor já terá expirado e mostra "Quem és tu?".
+const HEARTBEAT_MS = Math.min(30, Math.floor(PT_IDENTITY_IDLE_SECONDS / 4)) * 1000;
+const IDLE_MS = PT_IDENTITY_IDLE_SECONDS * 1000 + HEARTBEAT_MS + 5000;
+const TICK_MS = Math.max(1000, Math.min(15000, HEARTBEAT_MS / 2));
+const ACTIVITY_EVENTS = ["pointerdown", "pointermove", "keydown", "scroll", "wheel", "touchstart"] as const;
 
 export type PortalTeacher = { id: string; name: string; color: string; kind: "ginasio" | "padel" };
 
@@ -31,16 +39,47 @@ export default function TeacherPortal(props: Props) {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const inCalendar = props.step === "calendar";
+
+  useEffect(() => {
+    if (!inCalendar) return;
+    let last = Date.now(); // última vez que a pessoa mexeu
+    let lastBeat = Date.now(); // última vez que avisámos o servidor
+    const bump = () => {
+      last = Date.now();
+    };
+    const tick = () => {
+      const now = Date.now();
+      if (now - last >= IDLE_MS) {
+        router.refresh();
+        return;
+      }
+      if (last > lastBeat && now - lastBeat >= HEARTBEAT_MS) {
+        lastBeat = now;
+        fetch("/api/pt/teachers", { cache: "no-store" })
+          .then((res) => res.status === 401 && router.refresh())
+          .catch(() => {});
+      }
+    };
+    const onVisible = () => !document.hidden && tick();
+    for (const ev of ACTIVITY_EVENTS) window.addEventListener(ev, bump, { passive: true, capture: true });
+    document.addEventListener("visibilitychange", onVisible);
+    const id = setInterval(tick, TICK_MS);
+    return () => {
+      for (const ev of ACTIVITY_EVENTS) window.removeEventListener(ev, bump, { capture: true });
+      document.removeEventListener("visibilitychange", onVisible);
+      clearInterval(id);
+    };
+  }, [inCalendar, router]);
 
   async function login(e: React.FormEvent) {
     e.preventDefault();
     setBusy("login");
     setError(null);
     try {
-      await post("/api/pt/auth/login", { username, password, remember });
+      await post("/api/pt/auth/login", { username, password });
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro inesperado.");
@@ -108,15 +147,9 @@ export default function TeacherPortal(props: Props) {
                 className={fieldClass}
               />
             </div>
-            <label className="flex items-center gap-2.5 text-sm text-[var(--color-text-muted)] cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
-                className="w-4 h-4 rounded accent-[var(--color-lime)]"
-              />
-              Manter sessão neste telemóvel
-            </label>
+            <p className="text-xs text-[var(--color-text-muted)]">
+              Por segurança, a sessão fecha sozinha se ficar parada.
+            </p>
             {error && <p className="text-sm text-red-400">{error}</p>}
             <button
               type="submit"
@@ -141,7 +174,8 @@ export default function TeacherPortal(props: Props) {
           </div>
           <h1 className="font-display uppercase text-2xl mb-1">Quem és tu?</h1>
           <p className="text-sm text-[var(--color-text-muted)] mb-6">
-            O teu nome fica registado no histórico de cada alteração que fizeres.
+            O teu nome fica registado no histórico de cada alteração que fizeres. Depois de uns minutos sem mexer,
+            voltamos a perguntar quem és.
           </p>
           <div className="space-y-2">
             {props.teachers.map((t) => (

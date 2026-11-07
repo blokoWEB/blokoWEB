@@ -19,14 +19,14 @@ export async function POST(request: Request) {
   }
 
   if (teacher_id === ADMIN_CHOICE) {
-    await createPtSessionCookie({ name: PT_ACTOR, remember: session.remember });
+    await createPtSessionCookie({ name: PT_ACTOR, startedAt: session.startedAt });
     return NextResponse.json({ ok: true, name: PT_ACTOR });
   }
 
   try {
     const teacher = (await listTeachers(getSupabaseAdmin())).find((t) => t.id === teacher_id && t.active);
     if (!teacher) return NextResponse.json({ error: "Professor não encontrado." }, { status: 404 });
-    await createPtSessionCookie({ teacherId: teacher.id, name: teacher.name, remember: session.remember });
+    await createPtSessionCookie({ teacherId: teacher.id, name: teacher.name, startedAt: session.startedAt });
     return NextResponse.json({ ok: true, name: teacher.name });
   } catch (e) {
     console.error("[pt/who]", e);

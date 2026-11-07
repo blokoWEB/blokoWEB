@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
  * Mesmo entrando com as credenciais do admin por aqui, a sessão é só de professor (calendário de aulas/PTs).
  */
 export async function POST(request: Request) {
-  const { username, password, remember } = await request.json().catch(() => ({}));
+  const { username, password } = await request.json().catch(() => ({}));
 
   const accepted = [
     [process.env.PT_USERNAME, process.env.PT_PASSWORD_HASH_B64],
@@ -36,6 +36,6 @@ export async function POST(request: Request) {
   }
 
   // Ainda sem nome: o professor escolhe quem é no passo seguinte.
-  await createPtSessionCookie({ remember: remember === true });
+  await createPtSessionCookie();
   return NextResponse.json({ ok: true });
 }

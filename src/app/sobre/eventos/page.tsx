@@ -29,7 +29,8 @@ export default function EventosPage() {
         </p>
       </ParallaxDive>
 
-      <section className="container-bloko py-24">
+      {/* id="eventos": o link /sobre/eventos#eventos vai direto a esta secção (scroll-mt deixa espaço para o menu fixo). */}
+      <section id="eventos" className="container-bloko py-24 scroll-mt-16">
         <ScrollReveal className="max-w-2xl mb-10">
           <p className="font-display text-xs tracking-[0.3em] uppercase text-[var(--color-blue-soft)] mb-4">
             Histórico

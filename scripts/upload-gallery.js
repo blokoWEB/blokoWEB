@@ -4,6 +4,7 @@
  *   node scripts/upload-gallery.js <pasta-local> <destino> [--upload] [--out <pasta>]
  *
  * <destino> = torneios/<slug>/<dia>  (ex.: torneios/torneio-social-outubro-2026/dia-1)
+ *           ou eventos/<slug>[/<dia>]  (ex.: eventos/i-aniversario-bloko)
  * Cada foto gera <destino>/full/<nome>.jpg (1600 px, mozjpeg) e <destino>/thumb/<nome>.jpg (500 px).
  *
  * Sem --upload só simula: calcula tamanhos e a previsão de uso. Com --out grava o resultado numa
@@ -22,8 +23,11 @@ const [srcDir, dest] = positional;
 const UPLOAD = flag("--upload");
 const OUT_DIR = opt("--out");
 
-if (!srcDir || !dest || !/^(torneios|eventos)\/[a-z0-9-]+\/[a-z0-9-]+$/.test(dest)) {
-  console.error("Uso: node scripts/upload-gallery.js <pasta-local> <torneios|eventos>/<slug>/<dia> [--upload] [--out <pasta>]");
+// Torneios têm sempre dia (torneios/<slug>/<dia>); eventos podem não ter (eventos/<slug>, como o I Aniversário).
+if (!srcDir || !dest || !/^(torneios\/[a-z0-9-]+\/[a-z0-9-]+|eventos\/[a-z0-9-]+(\/[a-z0-9-]+)?)$/.test(dest)) {
+  console.error(
+    "Uso: node scripts/upload-gallery.js <pasta-local> <torneios/<slug>/<dia> | eventos/<slug>[/<dia>]> [--upload] [--out <pasta>]"
+  );
   process.exit(1);
 }
 

@@ -606,6 +606,26 @@ export const pastTournaments: TournamentEntry[] = [
 // Ordenados do mais recente para o mais antigo.
 export const events: TournamentEntry[] = [
   {
+    slug: "ii-aniversario-bloko",
+    name: "II Aniversário BLOKO",
+    dates: "22 de Novembro de 2026",
+    tag: "Aniversário",
+    summary: "O dia do 2º aniversário do BLOKO: jogos de padel e convívio no lounge.",
+    poster:
+      "https://jucvqopkwuwgkvguupqy.supabase.co/storage/v1/object/public/gallery/eventos/ii-aniversario-bloko/full/DSC08568.jpg",
+    gallerySlug: "ii-aniversario-bloko",
+  },
+  {
+    slug: "padel-training-experience",
+    name: "Padel Training Experience",
+    dates: "21 de Novembro de 2026",
+    tag: "Treino",
+    summary: "Sessão de treino de padel com treinador e grupo, nos campos do BLOKO.",
+    poster:
+      "https://jucvqopkwuwgkvguupqy.supabase.co/storage/v1/object/public/gallery/eventos/padel-training-experience/full/DSC08547.jpg",
+    gallerySlug: "padel-training-experience",
+  },
+  {
     slug: "bloko-em-festa-edicao-2",
     name: "BLOKO em Festa — 1ª Maratona de Padel",
     dates: "5 e 6 de Setembro",

@@ -624,6 +624,7 @@ export const events: TournamentEntry[] = [
     poster:
       "https://jucvqopkwuwgkvguupqy.supabase.co/storage/v1/object/public/gallery/eventos/padel-training-experience/full/DSC08547.jpg",
     gallerySlug: "padel-training-experience",
+    hasVideo: true,
   },
   {
     slug: "bloko-em-festa-edicao-2",

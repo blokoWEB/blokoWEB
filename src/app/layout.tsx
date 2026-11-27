@@ -7,7 +7,7 @@ import ReviewPopup from "@/components/ReviewPopup";
 import CampaignPopup from "@/components/CampaignPopup";
 import ChatWidget from "@/components/ChatWidget";
 import BackToTop from "@/components/BackToTop";
-import { site } from "@/lib/site-data";
+import { gymMembership, site } from "@/lib/site-data";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bloko.com.pt";
@@ -78,28 +78,63 @@ export const metadata: Metadata = {
   },
 };
 
+const address = {
+  "@type": "PostalAddress",
+  streetAddress: "Rua Coronel Teófilo Morais 40",
+  addressLocality: "Bragança",
+  addressRegion: "Bragança",
+  postalCode: "5300-427",
+  addressCountry: "PT",
+};
+
+const geo = {
+  "@type": "GeoCoordinates",
+  latitude: 41.78974969392072,
+  longitude: -6.7826687937787,
+};
+
+// O ginásio vai descrito como "departamento" da BLOKO, com horário e preços próprios, para os motores de busca
+// o reconhecerem como ginásio e não só como clube de padel.
+const gymOffers = [gymMembership.plans[0], gymMembership.plans[1], gymMembership.trial[0]].map((p) => ({
+  "@type": "Offer",
+  name: p.name,
+  price: p.price.replace("€", "").replace(",", "."),
+  priceCurrency: "EUR",
+}));
+
+const gymDepartment = {
+  "@type": "ExerciseGym",
+  "@id": `${siteUrl}/ginasio#ginasio`,
+  name: "BLOKO — Ginásio",
+  url: `${siteUrl}/ginasio`,
+  telephone: site.phone,
+  image: `${siteUrl}/images/real-gym-interior.jpg`,
+  address,
+  geo,
+  priceRange: "€€",
+  makesOffer: gymOffers,
+  openingHoursSpecification: [
+    { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "07:00", closes: "13:00" },
+    { days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "14:00", closes: "22:00" },
+    { days: ["Saturday", "Sunday"], opens: "09:30", closes: "13:00" },
+    { days: ["Saturday", "Sunday"], opens: "15:00", closes: "19:30" },
+  ].map(({ days, opens, closes }) => ({ "@type": "OpeningHoursSpecification", dayOfWeek: days, opens, closes })),
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SportsActivityLocation",
+  "@id": `${siteUrl}/#bloko`,
   name: "BLOKO",
   description: defaultDescription,
   url: siteUrl,
   telephone: site.phone,
   email: site.email,
   image: `${siteUrl}/images/og-image.jpg`,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "Rua Coronel Teófilo Morais 40",
-    addressLocality: "Bragança",
-    addressRegion: "Bragança",
-    postalCode: "5300-427",
-    addressCountry: "PT",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: 41.78974969392072,
-    longitude: -6.7826687937787,
-  },
+  priceRange: "€€",
+  department: gymDepartment,
+  address,
+  geo,
   sameAs: [site.instagramUrl, site.facebookUrl, site.youtubeUrl],
   openingHoursSpecification: [
     {

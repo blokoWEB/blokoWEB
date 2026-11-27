@@ -612,7 +612,7 @@ export const events: TournamentEntry[] = [
     tag: "Aniversário",
     summary: "O dia do 2º aniversário do BLOKO: jogos de padel e convívio no lounge.",
     poster:
-      "https://jucvqopkwuwgkvguupqy.supabase.co/storage/v1/object/public/gallery/eventos/ii-aniversario-bloko/full/DSC08568.jpg",
+      "https://jucvqopkwuwgkvguupqy.supabase.co/storage/v1/object/public/gallery/eventos/ii-aniversario-bloko/full/2anivbloko-01.jpg",
     gallerySlug: "ii-aniversario-bloko",
   },
   {
